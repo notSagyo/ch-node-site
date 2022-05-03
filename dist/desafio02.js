@@ -14,9 +14,9 @@ class Container {
       file = exists ? fs.readFileSync(this.name, 'utf-8') : '';
       file = file && file.length > 0 ? file : '[]';
       const parsedFile = JSON.parse(file);
-      parsedFile.push(obj);
+      id = parsedFile[parsedFile.length - 1]?.id + 1 || 0;
+      parsedFile.push({ id, ...obj });
       file = JSON.stringify(parsedFile, null, 2);
-      id = parsedFile.length - 1;
       fs.writeFileSync(this.name, file);
     }
     catch (err) {
@@ -29,7 +29,7 @@ class Container {
     try {
       const file = fs.readFileSync(this.name, 'utf-8');
       const parsedFile = JSON.parse(file);
-      const result = parsedFile[id];
+      const result = parsedFile.find((item) => item.id === id);
       return result;
     }
     catch (err) {
@@ -52,7 +52,8 @@ class Container {
     try {
       const file = fs.readFileSync(this.name, 'utf-8');
       const parsedFile = JSON.parse(file);
-      parsedFile.splice(id, 1);
+      const objIndex = parsedFile.findIndex((item) => item.id === id);
+      parsedFile.splice(objIndex, 1);
       const newFile = JSON.stringify(parsedFile, null, 2);
       fs.writeFileSync(this.name, newFile);
     }
