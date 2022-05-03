@@ -1,15 +1,5 @@
-interface Book {
-  title: string;
-  author: string;
-}
-
 class User {
-  name: string;
-  lastName: string;
-  books: Book[];
-  pets: string[];
-
-  constructor(name: string, lastName: string, books: Book[], pets: string[]) {
+  constructor(name, lastName, books, pets) {
     this.name = name;
     this.lastName = lastName;
     this.books = books;
@@ -20,7 +10,7 @@ class User {
     return `${this.name} ${this.lastName}`;
   }
 
-  addPet(pet: string) {
+  addPet(pet) {
     this.pets.push(pet);
   }
 
@@ -28,8 +18,8 @@ class User {
     return this.pets.length;
   }
 
-  addBook(book: Book) {
-    this.books.push(book);
+  addBook({ title, author }) {
+    this.books.push({ title, author });
   }
 
   getBookNames() {
@@ -37,7 +27,7 @@ class User {
   }
 }
 
-const books: Book[] = [
+const books = [
   {
     title: 'Percy Jackson and the Lightning Thief',
     author: 'Rick Riordan'
@@ -49,7 +39,6 @@ const books: Book[] = [
 ];
 
 const user = new User('Boris', 'Stecko', books, ['Nietzsche', 'Freud']);
-
 console.log('Full name:', user.getFullName());
 
 user.addPet('Foucault');
