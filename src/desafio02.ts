@@ -78,11 +78,11 @@ const cats = new Container('cats.txt');
 cats.deleteAll();
 
 // Fill the file with some data
-cats.save({ breed: 'Siamese', age: 3 });
-cats.save({ breed: 'Sphynx', age: 1 });
-cats.save({ breed: 'Egyptian', age: 4 });
-cats.save({ breed: 'Persian', age: 7 });
-cats.save({ breed: 'Savannah', age: 2 });
+cats.save({ breed: 'Siamese', age: 3, thumbnail: 'http://placekitten.com/300/300' });
+cats.save({ breed: 'Sphynx', age: 1, thumbnail: 'http://placekitten.com/301/301' });
+cats.save({ breed: 'Egyptian', age: 4, thumbnail: 'http://placekitten.com/299/299' });
+cats.save({ breed: 'Persian', age: 7, thumbnail: 'http://placekitten.com/300/301' });
+cats.save({ breed: 'Savannah', age: 2, thumbnail: 'http://placekitten.com/301/300'});
 
 console.log('Cat ID[0]:', cats.getbyId(0));
 console.log('All cats:', cats.getAll());

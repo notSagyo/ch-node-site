@@ -2,21 +2,25 @@
   {
     "id": 1,
     "breed": "Sphynx",
-    "age": 1
+    "age": 1,
+    "thumbnail": "http://placekitten.com/301/301"
   },
   {
     "id": 2,
     "breed": "Egyptian",
-    "age": 4
+    "age": 4,
+    "thumbnail": "http://placekitten.com/299/299"
   },
   {
     "id": 3,
     "breed": "Persian",
-    "age": 7
+    "age": 7,
+    "thumbnail": "http://placekitten.com/300/301"
   },
   {
     "id": 4,
     "breed": "Savannah",
-    "age": 2
+    "age": 2,
+    "thumbnail": "http://placekitten.com/301/300"
   }
 ]
