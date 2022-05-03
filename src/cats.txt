@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "breed": "Sphynx",
+    "age": 1
+  },
+  {
+    "id": 2,
+    "breed": "Egyptian",
+    "age": 4
+  },
+  {
+    "id": 3,
+    "breed": "Persian",
+    "age": 7
+  },
+  {
+    "id": 4,
+    "breed": "Savannah",
+    "age": 2
+  }
+]

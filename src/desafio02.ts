@@ -74,7 +74,7 @@ class Container {
 }
 
 // Test Methods ==============================================================//
-const cats = new Container('cats.json');
+const cats = new Container('cats.txt');
 cats.deleteAll();
 
 // Fill the file with some data
