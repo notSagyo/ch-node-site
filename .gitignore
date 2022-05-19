@@ -1,6 +1,6 @@
 # Custom
-*.ignore.*
-*clase*.ts
+*.ignore
+clase*
 
 # Logs
 logs

@@ -1,33 +1,16 @@
 import * as express from 'express';
-import { Container } from './container';
+import ProductsAPI from './products-api';
 
+// INIT ======================================================================//
 const PORT = 8080;
 const app = express();
-const container = new Container('./data/products.json');
+const productsApi = new ProductsAPI();
 
-app.get('/productos', async (req, res) => {
-  const prods = await container.getAll();
-  res.send(prods);
-});
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.get('/productoRandom', async (req, res) => {
-  const prods = await container.getAll();
-  const rand = Math.floor(Math.random() * prods.length);
-  const randomProd = prods[rand];
-  res.send(randomProd);
-});
-
-const fillMockData = async () => {
-  await container.deleteAll();
-  await container.save({ name: 'shirt', price: 10 });
-  await container.save({ name: 'jeans', price: 20 });
-  await container.save({ name: 'shoes', price: 30 });
-  await container.save({ name: 'hat', price: 25 });
-  await container.save({ name: 'glasses', price: 15 });
-  await container.save({ name: 'shorts', price: 20 });
-  await container.save({ name: 'socks', price: 2 });
-};
-fillMockData();
+app.use('/api', productsApi.router);
+app.use(express.static('public'));
 
 // listen ====================================================================//
 app.listen(PORT, () => {

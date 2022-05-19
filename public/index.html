@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: #1A1B1E;
+      color: #C1C2C5;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <form action="/api/productos" enctype="multipart/form-data" method="post">
+    <div>
+      <label for="name">Product name:</label>
+      <input type="text" name="name">
+    </div>
+    <div>
+      <label for="price">Price:</label>
+      <input type="number" name="price">
+    </div>
+    <div>
+      <label for="thumbnail">Thumbnail URL:</label>
+      <input type="url" name="thumbnail">
+    </div>
+    <input type="submit" value="Añadir producto">
+  </form>
+</body>
+</html>

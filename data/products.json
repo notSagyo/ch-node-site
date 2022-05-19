@@ -33,5 +33,11 @@
     "id": 6,
     "name": "socks",
     "price": 2
+  },
+  {
+    "id": 7,
+    "name": "test prod",
+    "price": 1,
+    "thumbnail": "https://via.placeholder.com/256"
   }
 ]
