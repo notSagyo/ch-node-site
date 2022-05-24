@@ -17,4 +17,5 @@
     "noImplicitAny": true
   },
   "include": ["src"],
+  "exclude": ["src/clases"]
 }
