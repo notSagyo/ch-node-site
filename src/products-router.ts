@@ -23,7 +23,7 @@ export default class ProductsRouter {
   private getProducts() {
     this.router.get('/', async (req, res) => {
       const prods = await this.container.getAll();
-      res.json(prods);
+      res.render('pages/products.ejs', { productList: prods });
     });
   }
 
@@ -48,7 +48,7 @@ export default class ProductsRouter {
         return res.status(400).send('400: Error parsing product, malformed request body');
 
       await this.container.save(newProd);
-      res.status(201).send(`201: Product created succesfully: ${JSON.stringify(newProd)}`);
+      res.status(201).redirect('/productos');
     });
   }
 

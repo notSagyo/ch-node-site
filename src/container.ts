@@ -46,7 +46,7 @@ export class Container<T extends Record<string, any>> {
   async getAll() {
     try {
       const file = await fs.promises.readFile(this.path, 'utf-8');
-      const parsedFile = JSON.parse(file) as T[];
+      const parsedFile = file.length > 0 ? JSON.parse(file) as T[] : [];
       return parsedFile;
     } catch (err) {
       console.error(err);
