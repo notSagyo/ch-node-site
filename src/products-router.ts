@@ -3,7 +3,7 @@ import * as multer from 'multer';
 import { Container } from './container';
 import { Product } from './product';
 
-export default class ProductsAPI {
+export default class ProductsRouter {
   router = express.Router();
   container: Container<Product>;
 
@@ -21,14 +21,14 @@ export default class ProductsAPI {
   }
 
   private getProducts() {
-    this.router.get('/productos', async (req, res) => {
+    this.router.get('/', async (req, res) => {
       const prods = await this.container.getAll();
       res.json(prods);
     });
   }
 
   private getProductsById() {
-    this.router.get('/productos/:id', async (req, res) => {
+    this.router.get('/:id', async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
@@ -41,7 +41,7 @@ export default class ProductsAPI {
 
   private postProduct() {
     const upload = multer();
-    this.router.post('/productos', upload.none(), async (req, res) => {
+    this.router.post('/', upload.none(), async (req, res) => {
       const newProd = Product.parseProduct(req.body);
 
       if (!newProd)
@@ -53,7 +53,7 @@ export default class ProductsAPI {
   }
 
   private deleteProductById() {
-    this.router.delete('/productos/:id', async (req, res) => {
+    this.router.delete('/:id', async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
@@ -65,7 +65,7 @@ export default class ProductsAPI {
   }
 
   private putProductById() {
-    this.router.put('/productos/:id', async (req, res) => {
+    this.router.put('/:id', async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 

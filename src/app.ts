@@ -1,15 +1,15 @@
 import * as express from 'express';
-import ProductsAPI from './products-api';
+import ProductsRouter from './products-router';
 
 // INIT ======================================================================//
 const PORT = 8080;
 const app = express();
-const productsApi = new ProductsAPI();
+const productsRouter = new ProductsRouter();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/api', productsApi.router);
+app.use('/productos', productsRouter.router);
 app.use(express.static('public'));
 
 // listen ====================================================================//
