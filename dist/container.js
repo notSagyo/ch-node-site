@@ -41,7 +41,7 @@ class Container {
     async getAll() {
         try {
             const file = await fs.promises.readFile(this.path, 'utf-8');
-            const parsedFile = JSON.parse(file);
+            const parsedFile = file.length > 0 ? JSON.parse(file) : [];
             return parsedFile;
         }
         catch (err) {
