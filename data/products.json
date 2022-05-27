@@ -1,0 +1,44 @@
+[
+  {
+    "id": 0,
+    "name": "shirt",
+    "price": 10,
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/80/clothing_accesories_clothes_fabric-11-512.png"
+  },
+  {
+    "id": 1,
+    "name": "jeans",
+    "price": 20,
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/80/clothing_accesories_clothes_fabric-18-512.png"
+  },
+  {
+    "id": 2,
+    "name": "shoes",
+    "price": 30,
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/80/clothing_accesories_clothes_fabric-26-512.png"
+  },
+  {
+    "id": 3,
+    "name": "hat",
+    "price": 25,
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/80/clothing_accesories_clothes_fabric-29-512.png"
+  },
+  {
+    "id": 4,
+    "name": "tie",
+    "price": 15,
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/70/clothing_accesories_clothes_fabric-27-512.png"
+  },
+  {
+    "id": 5,
+    "name": "shorts",
+    "price": 20,
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/80/clothing_accesories_clothes_fabric-19-512.png"
+  },
+  {
+    "id": 6,
+    "name": "scarf",
+    "price": 2,
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/80/clothing_accesories_clothes_fabric-28-512.png"
+  }
+]
