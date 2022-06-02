@@ -28,12 +28,7 @@ export class Message {
     if (!parsedMsg)
       return;
 
-    const time = new Date(parsedMsg.time);
-    const timeString = `${time.getDay()}`
-      + `/${time.getMonth()}`
-      + `/${time.getFullYear()}`
-      + ` ${time.getHours().toString().padStart(2, '0')}:`
-      + `${time.getMinutes().toString().padEnd(2, '0')}`;
+    const timeString = new Date(parsedMsg.time).toLocaleString();
 
     return (`
       <li>

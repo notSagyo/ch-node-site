@@ -55,12 +55,7 @@ var Message = /** @class */ (function () {
             var parsedMsg = this.parseMessage(message);
             if (!parsedMsg)
                 return;
-            var time = new Date(parsedMsg.time);
-            var timeString = "".concat(time.getDay())
-                + "/".concat(time.getMonth())
-                + "/".concat(time.getFullYear())
-                + " ".concat(time.getHours().toString().padStart(2, '0'), ":")
-                + "".concat(time.getMinutes().toString().padEnd(2, '0'));
+            var timeString = new Date(parsedMsg.time).toLocaleString();
             return ("\n      <li>\n        [<span class=\"text-danger\">".concat(timeString, "</span>]\n        <span class=\"text-primary fw-bold\"> ").concat(parsedMsg.author, ": </span>\n        <span class=\"text-success\">").concat(parsedMsg.content, "</span>\n      </li>\n    "));
         }
     });
