@@ -1,14 +1,14 @@
 import { Container } from './container';
-import { Product } from './product';
+import { Message } from './message';
 
-export default class ProductContainer extends Container<Product> {
+export default class MessageContainer extends Container<Message> {
   constructor(filePath: string) {
     super(filePath);
   }
 
-  async save(prod: Product) {
+  async save(prod: Message) {
     try {
-      const newProd = Product.parseProduct(prod as unknown as Record<string, unknown>);
+      const newProd = Message.parseMessage(prod as unknown as Record<string, unknown>);
       if (!newProd)
         throw new Error('Error parsing product');
       return await super.save(newProd);

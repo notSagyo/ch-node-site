@@ -47,6 +47,12 @@ var ProductsRouter = /** @class */ (function () {
             writable: true,
             value: express.Router()
         });
+        Object.defineProperty(this, "apiRouter", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: express.Router()
+        });
         Object.defineProperty(this, "container", {
             enumerable: true,
             configurable: true,
@@ -68,6 +74,9 @@ var ProductsRouter = /** @class */ (function () {
         configurable: true,
         writable: true,
         value: function () {
+            // Router
+            this.getProductsPage();
+            // API Router
             this.getProducts();
             this.getProductsById();
             this.postProduct();
@@ -75,7 +84,7 @@ var ProductsRouter = /** @class */ (function () {
             this.putProductById();
         }
     });
-    Object.defineProperty(ProductsRouter.prototype, "getProducts", {
+    Object.defineProperty(ProductsRouter.prototype, "getProductsPage", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -95,13 +104,33 @@ var ProductsRouter = /** @class */ (function () {
             }); });
         }
     });
+    Object.defineProperty(ProductsRouter.prototype, "getProducts", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () {
+            var _this = this;
+            this.apiRouter.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var prods;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.container.getAll()];
+                        case 1:
+                            prods = _a.sent();
+                            res.json(prods);
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
+        }
+    });
     Object.defineProperty(ProductsRouter.prototype, "getProductsById", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function () {
             var _this = this;
-            this.router.get('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.get('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var prodID, prod;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -128,7 +157,7 @@ var ProductsRouter = /** @class */ (function () {
         value: function () {
             var _this = this;
             var upload = multer();
-            this.router.post('/', upload.none(), function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.post('/', upload.none(), function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var newProd;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -152,7 +181,7 @@ var ProductsRouter = /** @class */ (function () {
         writable: true,
         value: function () {
             var _this = this;
-            this.router.delete('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.delete('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var prodID, success;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -178,7 +207,7 @@ var ProductsRouter = /** @class */ (function () {
         writable: true,
         value: function () {
             var _this = this;
-            this.router.put('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.put('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var prodID, newProd, success;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

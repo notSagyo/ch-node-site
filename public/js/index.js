@@ -3,7 +3,7 @@ const socket = io();
 console.log('Socket connected');
 
 // On socket events ==========================================================//
-socket.on('product_created', (productList) => {
+socket.on('products_updated', (productList) => {
   const productsTable = document.getElementById('productsTable');
   const productsTableBody = document.getElementById('productsTableBody');
   const noProductAlert = document.getElementById('noProductAlert');
@@ -26,17 +26,17 @@ socket.on('product_created', (productList) => {
   productsTableBody.innerHTML =  newTableContent;
 });
 
-socket.on('message_created', (messageList) => {
+socket.on('messages_updated', (messageList) => {
   const messagesWindow = document.getElementById('messagesWindow');
   let newMessagesWindowContent = '';
 
   messageList.forEach((message) => {
     const time = new Date(message.time);
-    const timeString = `${time.getFullYear()}`
+    const timeString = `${time.getDay()}`
       + `/${time.getMonth()}`
-      + `/${time.getDay()}`
+      + `/${time.getFullYear()}`
       + ` ${time.getHours().toString().padStart(2, 0)}:`
-      + `${time.getMinutes().toString().padEnd(2, 0)}:`;
+      + `${time.getMinutes().toString().padEnd(2, 0)}`;
 
     newMessagesWindowContent += `
       <li>

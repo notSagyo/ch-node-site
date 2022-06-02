@@ -29,11 +29,11 @@ export class Message {
       return;
 
     const time = new Date(parsedMsg.time);
-    const timeString = `${time.getFullYear()}`
+    const timeString = `${time.getDay()}`
       + `/${time.getMonth()}`
-      + `/${time.getDay()}`
+      + `/${time.getFullYear()}`
       + ` ${time.getHours().toString().padStart(2, '0')}:`
-      + `${time.getMinutes().toString().padEnd(2, '0')}:`;
+      + `${time.getMinutes().toString().padEnd(2, '0')}`;
 
     return (`
       <li>

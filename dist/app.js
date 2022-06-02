@@ -43,14 +43,14 @@ var socket_io_1 = require("socket.io");
 var products_router_1 = require("./products-router");
 var product_container_1 = require("./product-container");
 var message_1 = require("./message");
-var container_1 = require("./container");
+var message_container_1 = require("./message-container");
 // INIT ======================================================================//
 // Constants
 var PORT = 8080;
 var app = express();
 var httpServer = new http_1.Server(app);
 var ioServer = new socket_io_1.Server(httpServer);
-var messageContainer = new container_1.Container('./data/messages.json');
+var messageContainer = new message_container_1.default('./data/messages.json');
 var productContainer = new product_container_1.default('./data/products.json');
 var productsRouter = new products_router_1.default(productContainer, 'pages/products.ejs');
 var baseDir = path.join(__dirname, '..');
@@ -61,6 +61,7 @@ app.set('views', path.join(baseDir, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/productos', productsRouter.router);
+app.use('/api/productos', productsRouter.apiRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 // Routes
 app.get('/', function (req, res) {
@@ -81,41 +82,51 @@ app.get('/chat', function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); });
 // Websockets
 ioServer.on('connection', function (socket) { return __awaiter(void 0, void 0, void 0, function () {
+    var updateProducts, updateMessages;
     return __generator(this, function (_a) {
-        console.log('New client connected');
-        socket.on('create_product', function (product) { return __awaiter(void 0, void 0, void 0, function () {
+        console.log('New client connected:', socket.id);
+        updateProducts = function () { return __awaiter(void 0, void 0, void 0, function () {
             var newProductList;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, productContainer.getAll()];
+                    case 1:
+                        newProductList = _a.sent();
+                        ioServer.emit('products_updated', newProductList);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        updateMessages = function () { return __awaiter(void 0, void 0, void 0, function () {
+            var newMessageList;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, messageContainer.getAll()];
+                    case 1:
+                        newMessageList = _a.sent();
+                        ioServer.emit('messages_updated', newMessageList);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        socket.on('create_product', function (product) { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, productContainer.save(product)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, productContainer.getAll()];
-                    case 2:
-                        newProductList = _a.sent();
-                        ioServer.emit('product_created', newProductList);
+                        updateProducts();
                         return [2 /*return*/];
                 }
             });
         }); });
         socket.on('create_message', function (message) { return __awaiter(void 0, void 0, void 0, function () {
-            var parsedMessage, newMessageList;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(message);
-                        parsedMessage = message_1.Message.parseMessage(message);
-                        if (!parsedMessage) {
-                            console.log('Error parsing message');
-                            return [2 /*return*/];
-                        }
-                        return [4 /*yield*/, messageContainer.save(parsedMessage)];
+                    case 0: return [4 /*yield*/, messageContainer.save(message)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, messageContainer.getAll()];
-                    case 2:
-                        newMessageList = _a.sent();
-                        ioServer.emit('message_created', newMessageList);
+                        updateMessages();
                         return [2 /*return*/];
                 }
             });
