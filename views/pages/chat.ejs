@@ -1,0 +1,16 @@
+<%- include('../partials/head', { pageTitle: 'Load product' }) %>
+<div class="p-2">
+  <ul id="messagesWindow">
+    <%- messageListHTML %>
+  </ul>
+  <form
+    id="messageForm"
+    enctype="multipart/form-data"
+    class="d-flex"
+    style="gap: 8px;"
+  >
+    <input id="messageEmail" class="form-control" type="email" placeholder="email" size="18" style="width: auto;" required>
+    <input id="messageContent" class="form-control" type="text" placeholder="message" size="32" style="width: auto;" required autocomplete="off">
+    <input class="btn btn-primary d-inline-block" type="submit" value="Send">
+  </form>
+</div>

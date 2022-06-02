@@ -1,18 +1,20 @@
 import * as express from 'express';
 import * as multer from 'multer';
-import { Container } from './container';
 import { Product } from './product';
+import ProductContainer from './product-container';
 
 export default class ProductsRouter {
   router = express.Router();
-  container: Container<Product>;
+  container: ProductContainer;
+  htmlPath: string;
 
-  constructor(container?: Container<Product>) {
-    this.container = container || new Container('./data/products.json');
+  constructor(container: ProductContainer, productsHtmlPath: string) {
+    this.container = container;
+    this.htmlPath = productsHtmlPath;
     this.initRoutes();
   }
 
-  private initRoutes() {
+  initRoutes() {
     this.getProducts();
     this.getProductsById();
     this.postProduct();
@@ -23,7 +25,7 @@ export default class ProductsRouter {
   private getProducts() {
     this.router.get('/', async (req, res) => {
       const prods = await this.container.getAll();
-      res.render('pages/products.ejs', { productList: prods });
+      res.render(this.htmlPath, { productList: prods });
     });
   }
 

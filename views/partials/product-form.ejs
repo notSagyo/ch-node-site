@@ -1,0 +1,27 @@
+<form
+  id="productForm"
+  class="product-form mx-auto p-3 border rounded-bottom shadow-md"
+  method="post"
+  action="/productos"
+  enctype="multipart/form-data"
+>
+  <div>
+    <label class="form-label" for="productNameInput" >Product name:</label>
+    <input id="productNameInput" class="form-control mb-3" type="text" name="productNameInput" placeholder="Name" required>
+  </div>
+
+  <div>
+    <label class="form-label" for="productPriceInput">Price:</label>
+    <input id="productPriceInput" class="form-control mb-3" type="number" name="productPriceInput" placeholder="Price" min="1" value="1" required>
+  </div>
+
+  <div>
+    <label class="form-label" for="productThumbnailInput">Thumbnail URL:</label>
+    <input id="productThumbnailInput" class="form-control mb-3" type="url" name="productThumbnailInput" placeholder="Thumbnail">
+  </div>
+
+  <input class="btn btn-success d-inline-block" type="submit" value="Add product"">
+  <a href="/productos" onclick="window.location.href = '/productos'">
+    <button class="btn btn-outline-secondary d-inline-block">View products</button>
+  </a>
+</form>

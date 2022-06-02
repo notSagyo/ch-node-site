@@ -40,5 +40,17 @@
     "name": "scarf",
     "price": 2,
     "thumbnail": "https://cdn2.iconfinder.com/data/icons/clothing-and-accessories-1/80/clothing_accesories_clothes_fabric-28-512.png"
+  },
+  {
+    "id": 7,
+    "name": "asdfasd",
+    "price": 1,
+    "thumbnail": "https://via.placeholder.com/256"
+  },
+  {
+    "id": 8,
+    "name": "asdfasd",
+    "price": 1,
+    "thumbnail": "https://via.placeholder.com/256"
   }
 ]
