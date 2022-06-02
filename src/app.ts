@@ -5,7 +5,7 @@ import { Server as IOServer } from 'socket.io';
 import ProductsRouter from './products-router';
 import ProductContainer from './product-container';
 import { Message } from './message';
-import { Container } from './container';
+import MessageContainer from './message-container';
 
 // INIT ======================================================================//
 // Constants
@@ -15,7 +15,7 @@ const app = express();
 const httpServer = new HttpServer(app);
 const ioServer = new IOServer(httpServer);
 
-const messageContainer = new Container('./data/messages.json');
+const messageContainer = new MessageContainer('./data/messages.json');
 const productContainer = new ProductContainer('./data/products.json');
 const productsRouter = new ProductsRouter(productContainer, 'pages/products.ejs');
 const baseDir = path.join(__dirname, '..');
@@ -29,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use('/productos', productsRouter.router);
+app.use('/api/productos', productsRouter.apiRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 
 // Routes
@@ -44,25 +45,26 @@ app.get('/chat', async (req, res) => {
 
 // Websockets
 ioServer.on('connection', async (socket) => {
-  console.log('New client connected');
+  console.log('New client connected:', socket.id);
+
+  const updateProducts = async () => {
+    const newProductList = await productContainer.getAll();
+    ioServer.emit('products_updated', newProductList);
+  };
+
+  const updateMessages = async () => {
+    const newMessageList = await messageContainer.getAll();
+    ioServer.emit('messages_updated', newMessageList);
+  };
+
   socket.on('create_product', async (product) => {
     await productContainer.save(product);
-    const newProductList = await productContainer.getAll();
-    ioServer.emit('product_created', newProductList);
+    updateProducts();
   });
 
   socket.on('create_message', async (message) => {
-    console.log(message);
-
-    const parsedMessage = Message.parseMessage(message);
-    if (!parsedMessage) {
-      console.log('Error parsing message');
-      return;
-    }
-
-    await messageContainer.save(parsedMessage);
-    const newMessageList = await messageContainer.getAll();
-    ioServer.emit('message_created', newMessageList);
+    await messageContainer.save(message);
+    updateMessages();
   });
 });
 

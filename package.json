@@ -4,9 +4,9 @@
   "description": "Sitio desarrollado para la cursada de Backend de Coderhouse",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --ignore data/* --exec ts-node src/app.ts",
     "preview": "node dist/app.js",
+    "start": "npm run preview",
     "watch": "nodemon --ignore data/* --exec ts-node",
     "watchjs": "nodemon --ignore data/* --exec node"
   },

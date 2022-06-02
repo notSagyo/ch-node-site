@@ -5,6 +5,7 @@ import ProductContainer from './product-container';
 
 export default class ProductsRouter {
   router = express.Router();
+  apiRouter = express.Router();
   container: ProductContainer;
   htmlPath: string;
 
@@ -15,6 +16,10 @@ export default class ProductsRouter {
   }
 
   initRoutes() {
+    // Router
+    this.getProductsPage();
+
+    // API Router
     this.getProducts();
     this.getProductsById();
     this.postProduct();
@@ -22,15 +27,22 @@ export default class ProductsRouter {
     this.putProductById();
   }
 
-  private getProducts() {
+  private getProductsPage() {
     this.router.get('/', async (req, res) => {
       const prods = await this.container.getAll();
       res.render(this.htmlPath, { productList: prods });
     });
   }
 
+  private getProducts() {
+    this.apiRouter.get('/', async (req, res) => {
+      const prods = await this.container.getAll();
+      res.json(prods);
+    });
+  }
+
   private getProductsById() {
-    this.router.get('/:id', async (req, res) => {
+    this.apiRouter.get('/:id', async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
@@ -43,7 +55,7 @@ export default class ProductsRouter {
 
   private postProduct() {
     const upload = multer();
-    this.router.post('/', upload.none(), async (req, res) => {
+    this.apiRouter.post('/', upload.none(), async (req, res) => {
       const newProd = Product.parseProduct(req.body);
 
       if (!newProd)
@@ -55,7 +67,7 @@ export default class ProductsRouter {
   }
 
   private deleteProductById() {
-    this.router.delete('/:id', async (req, res) => {
+    this.apiRouter.delete('/:id', async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
@@ -67,7 +79,7 @@ export default class ProductsRouter {
   }
 
   private putProductById() {
-    this.router.put('/:id', async (req, res) => {
+    this.apiRouter.put('/:id', async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 

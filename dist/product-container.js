@@ -71,7 +71,7 @@ var ProductContainer = /** @class */ (function (_super) {
                             _a.trys.push([0, 2, , 3]);
                             newProd = product_1.Product.parseProduct(prod);
                             if (!newProd)
-                                throw new Error('Error parsing product, malformed body');
+                                throw new Error('Error parsing product');
                             return [4 /*yield*/, _super.prototype.save.call(this, newProd)];
                         case 1: return [2 /*return*/, _a.sent()];
                         case 2:
