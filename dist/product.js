@@ -18,7 +18,7 @@ class Product {
         const isValidPrice = !isNaN(Number(obj?.price)) && Number(obj?.price) > 0;
         const name = typeof obj?.name === 'string' && obj?.name ? obj.name : null;
         const price = isValidPrice ? Number(obj.price) : null;
-        const thumbnail = typeof obj?.thumbnail === 'string' ? obj.thumbnail : placeholder;
+        const thumbnail = typeof obj?.thumbnail === 'string' && obj?.thumbnail.length > 0 ? obj.thumbnail : placeholder;
         const id = typeof obj?.id === 'number' ? obj.id : 0;
         if (name != null && price != null)
             return new Product(name, price, thumbnail, id);

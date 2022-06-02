@@ -1,32 +1,7 @@
 <%- include('../partials/head', { pageTitle: 'Load product' }) %>
 <body>
-  <div class="w-100 vh-100 d-flex align-items-center">
-    <form
-      class="product-form mx-auto p-3 rounded shadow-md border"
-      method="post"
-      action="/productos"
-      enctype="multipart/form-data"
-    >
-      <div>
-        <label class="form-label" for="name" >Product name:</label>
-        <input class="form-control mb-3" type="text" name="name" required>
-      </div>
-
-      <div>
-        <label class="form-label" for="price">Price:</label>
-        <input class="form-control mb-3" type="number" name="price" required>
-      </div>
-
-      <div>
-        <label class="form-label" for="thumbnail">Thumbnail URL:</label>
-        <input class="form-control mb-3" type="url" name="thumbnail">
-      </div>
-
-      <input class="btn btn-success d-inline-block" type="submit" value="Add product">
-      <a href="/productos" onclick="window.location.href = '/productos'">
-        <button class="btn btn-outline-secondary d-inline-block">View products</button>
-      </a>
-    </form>
-  </div>
+  <!-- PRODUCT FORM -->
+  <h2><a href="/chat">Chat</a></h2>
+  <h2><a href="/productos">Products</a></h2>
 </body>
 </html>

@@ -1,30 +1,32 @@
 <%- include('../partials/head', { pageTitle: 'Products' }) %>
 <body>
-  <div class="p-3">
-    <h1>Products</h1>
-    <% if (productList.length > 0) { %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Preview</th>
-            <th scope="col">Prod. Name</th>
-            <th scope="col">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% productList.forEach((elem) => { %>
-            <tr class="text-capitalize">
-              <th><%= elem.id %></th>
-              <td><img src="<%= elem.thumbnail %>" alt="<%= elem.name %>" class="img-fluid" width="32" /></td>
-              <td><%= elem.name %></td>
-              <td>$<%= elem.price %></td>
+  <div class="d-flex align-items-start">
+     <!-- PRODUCT TABLE -->
+      <div class="border rounded-bottom">
+        <table id="productsTable" class="table m-0 <%= productList.length > 0 ? "" : "d-none" %>">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Preview</th>
+              <th scope="col">Prod. Name</th>
+              <th scope="col">Price</th>
             </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    <% } else { %>
-      <div class="alert alert-warning" style="max-width: fit-content;">
+          </thead>
+
+          <tbody id="productsTableBody">
+            <% productList.forEach((elem) => { %>
+              <tr class="text-capitalize">
+                <th><%= elem.id %></th>
+                <td><img src="<%= elem.thumbnail %>" alt="<%= elem.name %>" class="img-fluid" width="32" /></td>
+                <td><%= elem.name %></td>
+                <td>$<%= elem.price %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="noProductAlert" class="alert alert-warning <%= productList.length > 0 ? "d-none" : "" %>" style="max-width: fit-content;">
           <h4 class="alert-heading">No products found</h4>
           <hr>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
@@ -32,12 +34,11 @@
           </svg>
           <span>Try adding some products first and come back...</span>
       </div>
-    <% } %>
-    <a href="/">
-      <button class="btn btn-success">
-        New product
-      </button>
-    </a>
+
+    <!-- PRODUCT FORM -->
+    <div class="d-flex align-items-center mx-3">
+      <%- include('../partials/product-form', { pageTitle: 'Load product' }) %>
+    </div>
   </div>
 </body>
 </html>
