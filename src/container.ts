@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 
 export default class Container<T extends Record<string, any>> {
-  path = 'output';
+  path = './data/output.json';
 
-  constructor(name: string) {
-    this.path = name;
+  constructor(filePath: string) {
+    this.path = filePath;
   }
 
   async save(obj: T) {

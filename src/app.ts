@@ -2,13 +2,13 @@ import * as express from 'express';
 import * as path from 'path';
 import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
-import ProductsRouter from './products-router';
-import ProductContainer from './product-container';
-import Message from './message';
-import MessageContainer from './message-container';
-import CartRouter from './cart-router';
+import ProductsRouter from './product/products-router';
+import ProductContainer from './product/product-container';
+import Message from './chat/message';
+import MessageContainer from './chat/message-container';
+import CartRouter from './cart/cart-router';
 import Container from './container';
-import Cart from './cart';
+import Cart from './cart/cart';
 
 // INIT ======================================================================//
 // Constants

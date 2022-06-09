@@ -16,6 +16,6 @@
     "outDir": "dist",
     "noImplicitAny": true
   },
-  "include": ["src"],
-  "exclude": ["src/clases"]
+  "include": ["src", "src/.clases"],
+  "exclude": ["src/.clases"]
 }

@@ -1,4 +1,4 @@
-import Container from './container';
+import Container from '../container';
 import Product from './product';
 
 export default class ProductContainer extends Container<Product> {

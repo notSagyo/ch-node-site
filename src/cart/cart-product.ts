@@ -1,4 +1,4 @@
-import Product from './product';
+import Product from '../product/product';
 
 export default class CartProduct extends Product {
   quantity: number;

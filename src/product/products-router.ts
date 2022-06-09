@@ -1,11 +1,11 @@
 import * as express from 'express';
+import { authn, authz } from '../middlewares';
 import Product from './product';
 import ProductContainer from './product-container';
 
 export default class ProductsRouter {
   router = express.Router();
-  apiRouter = express.Router();
-  container: ProductContainer;
+  apiRouter = express.Router(); container: ProductContainer;
   productsHtmlPath: string;
 
   constructor(container: ProductContainer, productsHtmlPath: string) {
@@ -53,7 +53,7 @@ export default class ProductsRouter {
   }
 
   private postProduct() {
-    this.apiRouter.post('/', async (req, res) => {
+    this.apiRouter.post('/', authn, authz, async (req, res) => {
       const newProd = Product.parseProduct(req.body);
 
       if (!newProd)
@@ -65,7 +65,7 @@ export default class ProductsRouter {
   }
 
   private deleteProductById() {
-    this.apiRouter.delete('/:id', async (req, res) => {
+    this.apiRouter.delete('/:id', authn, authz, async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
@@ -77,7 +77,7 @@ export default class ProductsRouter {
   }
 
   private putProductById() {
-    this.apiRouter.put('/:id', async (req, res) => {
+    this.apiRouter.put('/:id', authn, authz, async (req, res) => {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 

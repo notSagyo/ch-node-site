@@ -1,8 +1,8 @@
 import * as express from 'express';
 import Cart from './cart';
 import CartProduct from './cart-product';
-import Container from './container';
-import Product from './product';
+import Container from '../container';
+import Product from '../product/product';
 
 export default class CartRouter {
   apiRouter = express.Router();
