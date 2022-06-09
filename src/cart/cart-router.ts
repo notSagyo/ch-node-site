@@ -5,22 +5,38 @@ import Container from '../container';
 import Product from '../product/product';
 
 export default class CartRouter {
+  router = express.Router();
   apiRouter = express.Router();
   cartContainer: Container<Cart>;
   productContainer: Container<Product>;
+  cartHtmlPath: string;
 
-  constructor(container: Container<Cart>, productContainer: Container<Product>) {
+  constructor(
+    container: Container<Cart>,
+    productContainer: Container<Product>,
+    cartHtmlPath: string) {
     this.cartContainer = container;
     this.productContainer = productContainer;
+    this.cartHtmlPath = cartHtmlPath;
     this.initRoutes();
   }
 
   initRoutes() {
+    // Router
+    this.getProductsPage();
+
+    // API Router
     this.getCartProductsById();
     this.postCart();
     this.postCartProduct();
     this.deleteCartById();
     this.deleteCartProductById();
+  }
+
+  private getProductsPage() {
+    this.router.get('/', async (req, res) => {
+      res.render(this.cartHtmlPath);
+    });
   }
 
   private getCartProductsById() {

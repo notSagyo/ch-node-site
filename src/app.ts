@@ -13,7 +13,6 @@ import Cart from './cart/cart';
 // INIT ======================================================================//
 // Constants
 const PORT = 8080;
-
 const app = express();
 const httpServer = new HttpServer(app);
 const ioServer = new IOServer(httpServer);
@@ -23,7 +22,7 @@ const messageContainer = new MessageContainer('./data/messages.json');
 const productContainer = new ProductContainer('./data/products.json');
 const productsRouter = new ProductsRouter(productContainer, 'pages/products.ejs');
 const cartContainer = new Container<Cart>('./data/cart.json');
-const cartRouter = new CartRouter(cartContainer, productContainer);
+const cartRouter = new CartRouter(cartContainer, productContainer, 'pages/cart.ejs');
 
 // Config
 app.set('view engine', 'ejs');
@@ -35,6 +34,7 @@ app.use(express.json());
 
 // Routers
 app.use('/productos', productsRouter.router);
+app.use('/carrito', cartRouter.router);
 app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
 app.use(express.static(path.join(baseDir, 'public')));
@@ -48,6 +48,13 @@ app.get('/chat', async (req, res) => {
   const msgList = await messageContainer.getAll();
   const msgListHTML = Message.getHtmlList(msgList as Message[]);
   res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
+});
+
+app.use((req, res) => {
+  res.status(404).json({
+    error: 404,
+    desc: `Route ${req.url} method ${req.method} not implemented`
+  });
 });
 
 // Websockets
