@@ -1,5 +1,5 @@
-import { Container } from './container';
-import { Message } from './message';
+import Container from './container';
+import Message from './message';
 
 export default class MessageContainer extends Container<Message> {
   constructor(filePath: string) {

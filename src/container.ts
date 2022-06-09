@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-export class Container<T extends Record<string, any>> {
+export default class Container<T extends Record<string, any>> {
   path = 'output';
 
   constructor(name: string) {

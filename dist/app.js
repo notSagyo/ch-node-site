@@ -44,23 +44,29 @@ var products_router_1 = require("./products-router");
 var product_container_1 = require("./product-container");
 var message_1 = require("./message");
 var message_container_1 = require("./message-container");
+var cart_router_1 = require("./cart-router");
+var container_1 = require("./container");
 // INIT ======================================================================//
 // Constants
 var PORT = 8080;
 var app = express();
 var httpServer = new http_1.Server(app);
 var ioServer = new socket_io_1.Server(httpServer);
+var baseDir = path.join(__dirname, '..');
 var messageContainer = new message_container_1.default('./data/messages.json');
 var productContainer = new product_container_1.default('./data/products.json');
 var productsRouter = new products_router_1.default(productContainer, 'pages/products.ejs');
-var baseDir = path.join(__dirname, '..');
+var cartContainer = new container_1.default('./data/cart.json');
+var cartRouter = new cart_router_1.default(cartContainer, productContainer);
 // Config
 app.set('view engine', 'ejs');
 app.set('views', path.join(baseDir, 'views'));
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// Routers
 app.use('/productos', productsRouter.router);
+app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 // Routes
@@ -74,7 +80,7 @@ app.get('/chat', function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 0: return [4 /*yield*/, messageContainer.getAll()];
             case 1:
                 msgList = _a.sent();
-                msgListHTML = message_1.Message.getHtmlList(msgList);
+                msgListHTML = message_1.default.getHtmlList(msgList);
                 res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
                 return [2 /*return*/];
         }

@@ -1,5 +1,5 @@
-import { Container } from './container';
-import { Product } from './product';
+import Container from './container';
+import Product from './product';
 
 export default class ProductContainer extends Container<Product> {
   constructor(filePath: string) {

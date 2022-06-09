@@ -47,7 +47,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Container = void 0;
 var fs = require("fs");
 var Container = /** @class */ (function () {
     function Container(name) {
@@ -246,4 +245,4 @@ var Container = /** @class */ (function () {
     });
     return Container;
 }());
-exports.Container = Container;
+exports.default = Container;

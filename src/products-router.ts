@@ -1,17 +1,16 @@
 import * as express from 'express';
-import * as multer from 'multer';
-import { Product } from './product';
+import Product from './product';
 import ProductContainer from './product-container';
 
 export default class ProductsRouter {
   router = express.Router();
   apiRouter = express.Router();
   container: ProductContainer;
-  htmlPath: string;
+  productsHtmlPath: string;
 
   constructor(container: ProductContainer, productsHtmlPath: string) {
     this.container = container;
-    this.htmlPath = productsHtmlPath;
+    this.productsHtmlPath = productsHtmlPath;
     this.initRoutes();
   }
 
@@ -30,7 +29,7 @@ export default class ProductsRouter {
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
       const prods = await this.container.getAll();
-      res.render(this.htmlPath, { productList: prods });
+      res.render(this.productsHtmlPath, { productList: prods });
     });
   }
 
@@ -54,8 +53,7 @@ export default class ProductsRouter {
   }
 
   private postProduct() {
-    const upload = multer();
-    this.apiRouter.post('/', upload.none(), async (req, res) => {
+    this.apiRouter.post('/', async (req, res) => {
       const newProd = Product.parseProduct(req.body);
 
       if (!newProd)

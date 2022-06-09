@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Product = void 0;
 var placeholder = 'https://via.placeholder.com/256';
 var Product = /** @class */ (function () {
-    function Product(name, price, thumbnail, id) {
-        // Manual ID will be ignored when saving in the container
+    function Product(name, price, description, thumbnail, id) {
+        // Manual ID input will be ignored when saved in the container
         Object.defineProperty(this, "id", {
             enumerable: true,
             configurable: true,
@@ -29,8 +28,15 @@ var Product = /** @class */ (function () {
             writable: true,
             value: void 0
         });
+        Object.defineProperty(this, "description", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         this.name = name;
         this.price = price;
+        this.description = description || '';
         this.thumbnail = thumbnail || placeholder;
         this.id = id || 0;
     }
@@ -39,16 +45,20 @@ var Product = /** @class */ (function () {
         configurable: true,
         writable: true,
         value: function (obj) {
+            var isValidName = typeof (obj === null || obj === void 0 ? void 0 : obj.name) === 'string' && obj.name.length > 0;
             var isValidPrice = !isNaN(Number(obj === null || obj === void 0 ? void 0 : obj.price)) && Number(obj === null || obj === void 0 ? void 0 : obj.price) > 0;
-            var name = typeof (obj === null || obj === void 0 ? void 0 : obj.name) === 'string' && (obj === null || obj === void 0 ? void 0 : obj.name) ? obj.name : null;
+            var isValidThumbnail = typeof (obj === null || obj === void 0 ? void 0 : obj.thumbnail) === 'string' && (obj === null || obj === void 0 ? void 0 : obj.thumbnail.length) > 0;
+            var isValidDescription = typeof (obj === null || obj === void 0 ? void 0 : obj.description) === 'string';
+            var name = isValidName ? obj.name : null;
             var price = isValidPrice ? Number(obj.price) : null;
-            var thumbnail = typeof (obj === null || obj === void 0 ? void 0 : obj.thumbnail) === 'string' && (obj === null || obj === void 0 ? void 0 : obj.thumbnail.length) > 0 ? obj.thumbnail : placeholder;
-            var id = typeof (obj === null || obj === void 0 ? void 0 : obj.id) === 'number' ? obj.id : 0;
+            var description = isValidDescription ? obj.description : undefined;
+            var thumbnail = isValidThumbnail ? obj.thumbnail : undefined;
+            var id = typeof (obj === null || obj === void 0 ? void 0 : obj.id) === 'number' ? obj.id : undefined;
             if (name != null && price != null)
-                return new Product(name, price, thumbnail, id);
+                return new Product(name, price, description, thumbnail, id);
             return null;
         }
     });
     return Product;
 }());
-exports.Product = Product;
+exports.default = Product;

@@ -4,8 +4,11 @@ import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import ProductsRouter from './products-router';
 import ProductContainer from './product-container';
-import { Message } from './message';
+import Message from './message';
 import MessageContainer from './message-container';
+import CartRouter from './cart-router';
+import Container from './container';
+import Cart from './cart';
 
 // INIT ======================================================================//
 // Constants
@@ -14,11 +17,13 @@ const PORT = 8080;
 const app = express();
 const httpServer = new HttpServer(app);
 const ioServer = new IOServer(httpServer);
+const baseDir = path.join(__dirname, '..');
 
 const messageContainer = new MessageContainer('./data/messages.json');
 const productContainer = new ProductContainer('./data/products.json');
 const productsRouter = new ProductsRouter(productContainer, 'pages/products.ejs');
-const baseDir = path.join(__dirname, '..');
+const cartContainer = new Container<Cart>('./data/cart.json');
+const cartRouter = new CartRouter(cartContainer, productContainer);
 
 // Config
 app.set('view engine', 'ejs');
@@ -28,7 +33,9 @@ app.set('views', path.join(baseDir, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Routers
 app.use('/productos', productsRouter.router);
+app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 

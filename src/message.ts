@@ -1,4 +1,4 @@
-export class Message {
+export default class Message {
   // Manual ID will be ignored when saving in the container
   id: number;
   time: number;

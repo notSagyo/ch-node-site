@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
-var multer = require("multer");
 var product_1 = require("./product");
 var ProductsRouter = /** @class */ (function () {
     function ProductsRouter(container, productsHtmlPath) {
@@ -59,14 +58,14 @@ var ProductsRouter = /** @class */ (function () {
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "htmlPath", {
+        Object.defineProperty(this, "productsHtmlPath", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
         this.container = container;
-        this.htmlPath = productsHtmlPath;
+        this.productsHtmlPath = productsHtmlPath;
         this.initRoutes();
     }
     Object.defineProperty(ProductsRouter.prototype, "initRoutes", {
@@ -97,7 +96,7 @@ var ProductsRouter = /** @class */ (function () {
                         case 0: return [4 /*yield*/, this.container.getAll()];
                         case 1:
                             prods = _a.sent();
-                            res.render(this.htmlPath, { productList: prods });
+                            res.render(this.productsHtmlPath, { productList: prods });
                             return [2 /*return*/];
                     }
                 });
@@ -156,13 +155,12 @@ var ProductsRouter = /** @class */ (function () {
         writable: true,
         value: function () {
             var _this = this;
-            var upload = multer();
-            this.apiRouter.post('/', upload.none(), function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var newProd;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            newProd = product_1.Product.parseProduct(req.body);
+                            newProd = product_1.default.parseProduct(req.body);
                             if (!newProd)
                                 return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
                             return [4 /*yield*/, this.container.save(newProd)];
@@ -215,7 +213,7 @@ var ProductsRouter = /** @class */ (function () {
                             prodID = parseInt(req.params.id);
                             if (isNaN(prodID))
                                 return [2 /*return*/, res.send('ID must be an integer number')];
-                            newProd = product_1.Product.parseProduct(req.body);
+                            newProd = product_1.default.parseProduct(req.body);
                             if (!newProd)
                                 return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
                             return [4 /*yield*/, this.container.updateById(prodID, newProd)];

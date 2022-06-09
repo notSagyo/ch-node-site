@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Message = void 0;
 var Message = /** @class */ (function () {
     function Message(time, author, content, id) {
         // Manual ID will be ignored when saving in the container
@@ -73,4 +72,4 @@ var Message = /** @class */ (function () {
     });
     return Message;
 }());
-exports.Message = Message;
+exports.default = Message;

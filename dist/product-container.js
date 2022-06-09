@@ -69,7 +69,7 @@ var ProductContainer = /** @class */ (function (_super) {
                     switch (_a.label) {
                         case 0:
                             _a.trys.push([0, 2, , 3]);
-                            newProd = product_1.Product.parseProduct(prod);
+                            newProd = product_1.default.parseProduct(prod);
                             if (!newProd)
                                 throw new Error('Error parsing product');
                             return [4 /*yield*/, _super.prototype.save.call(this, newProd)];
@@ -85,5 +85,5 @@ var ProductContainer = /** @class */ (function (_super) {
         }
     });
     return ProductContainer;
-}(container_1.Container));
+}(container_1.default));
 exports.default = ProductContainer;
