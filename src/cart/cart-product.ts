@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import Product from '../product/product';
 
 export default class CartProduct extends Product {
@@ -18,8 +19,7 @@ export default class CartProduct extends Product {
     super(name, price, description, thumbnail, id);
     this.quantity = quantity || 1;
     this.timestamp = timestamp || Date.now();
-    // TODO: Replace with uuidv4
-    this.code = code || (Math.random()*1000000).toFixed(0);
+    this.code = code || v4();
   }
 
   static parseProduct(obj: Record<string, unknown> | CartProduct | Product) {
