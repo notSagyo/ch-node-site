@@ -1,5 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.messagesTable = void 0;
+var container_knex_1 = require("../container-knex");
+var sqlite3_1 = require("../settings/sqlite3");
+exports.messagesTable = new container_knex_1.default('ecommerce', 'messages', sqlite3_1.options);
+exports.messagesTable.createTable(function (table) {
+    table.increments('id').primary();
+    table.integer('time');
+    table.string('author');
+    table.string('content');
+});
 var Message = /** @class */ (function () {
     function Message(time, author, content, id) {
         // Manual ID will be ignored when saving in the container

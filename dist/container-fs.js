@@ -48,15 +48,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 var Container = /** @class */ (function () {
-    function Container(name) {
+    function Container(filePath) {
         Object.defineProperty(this, "path", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: 'output'
+            value: './data/output.json'
         });
-        this.path = name;
+        this.path = filePath;
     }
     Object.defineProperty(Container.prototype, "save", {
         enumerable: false,
@@ -214,7 +215,7 @@ var Container = /** @class */ (function () {
                             return [4 /*yield*/, fs.promises.writeFile(this.path, newFile)];
                         case 2:
                             _a.sent();
-                            return [2 /*return*/, true];
+                            return [2 /*return*/, id];
                         case 3:
                             err_5 = _a.sent();
                             console.error(err_5);
@@ -234,9 +235,11 @@ var Container = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     try {
                         fs.promises.writeFile(this.path, '');
+                        return [2 /*return*/, true];
                     }
                     catch (err) {
                         console.error(err);
+                        return [2 /*return*/, null];
                     }
                     return [2 /*return*/];
                 });

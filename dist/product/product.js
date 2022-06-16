@@ -1,5 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.productsTable = void 0;
+var container_knex_1 = require("../container-knex");
+var mariadb_1 = require("../settings/mariadb");
+exports.productsTable = new container_knex_1.default(mariadb_1.options.connection.database, 'messages', mariadb_1.options);
+exports.productsTable.createTable(function (table) {
+    table.increments('id').primary();
+    table.string('name');
+    table.integer('price');
+    table.string('thumbnail');
+    table.string('description');
+});
 var placeholder = 'https://via.placeholder.com/256';
 var Product = /** @class */ (function () {
     function Product(name, price, description, thumbnail, id) {

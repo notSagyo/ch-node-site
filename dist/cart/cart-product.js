@@ -15,7 +15,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var product_1 = require("./product");
+var uuid_1 = require("uuid");
+var product_1 = require("../product/product");
 var CartProduct = /** @class */ (function (_super) {
     __extends(CartProduct, _super);
     function CartProduct(name, price, quantity, timestamp, code, description, thumbnail, id) {
@@ -40,8 +41,7 @@ var CartProduct = /** @class */ (function (_super) {
         });
         _this.quantity = quantity || 1;
         _this.timestamp = timestamp || Date.now();
-        // TODO: Replace with uuidv4
-        _this.code = code || (Math.random() * 1000000).toFixed(0);
+        _this.code = code || (0, uuid_1.v4)();
         return _this;
     }
     Object.defineProperty(CartProduct, "parseProduct", {

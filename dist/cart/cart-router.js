@@ -39,13 +39,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var cart_1 = require("./cart");
 var cart_product_1 = require("./cart-product");
+var product_1 = require("../product/product");
 var CartRouter = /** @class */ (function () {
-    function CartRouter(container, productContainer) {
+    function CartRouter(container, cartHtmlPath) {
+        Object.defineProperty(this, "router", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: express.Router()
+        });
         Object.defineProperty(this, "apiRouter", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: express.Router()
+        });
+        Object.defineProperty(this, "productsTable", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: product_1.productsTable
         });
         Object.defineProperty(this, "cartContainer", {
             enumerable: true,
@@ -53,14 +66,14 @@ var CartRouter = /** @class */ (function () {
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "productContainer", {
+        Object.defineProperty(this, "cartHtmlPath", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
         this.cartContainer = container;
-        this.productContainer = productContainer;
+        this.cartHtmlPath = cartHtmlPath;
         this.initRoutes();
     }
     Object.defineProperty(CartRouter.prototype, "initRoutes", {
@@ -68,11 +81,28 @@ var CartRouter = /** @class */ (function () {
         configurable: true,
         writable: true,
         value: function () {
+            // Router
+            this.getProductsPage();
+            // API Router
             this.getCartProductsById();
             this.postCart();
             this.postCartProduct();
             this.deleteCartById();
             this.deleteCartProductById();
+        }
+    });
+    Object.defineProperty(CartRouter.prototype, "getProductsPage", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () {
+            var _this = this;
+            this.router.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    res.render(this.cartHtmlPath);
+                    return [2 /*return*/];
+                });
+            }); });
         }
     });
     Object.defineProperty(CartRouter.prototype, "getCartProductsById", {
@@ -165,9 +195,9 @@ var CartRouter = /** @class */ (function () {
                             productId = parseInt(req.body.id);
                             if (isNaN(cartId) || isNaN(productId))
                                 return [2 /*return*/, res.status(400).send('400: ID must be an integer number')];
-                            return [4 /*yield*/, this.productContainer.getbyId(productId)];
+                            return [4 /*yield*/, this.productsTable.selectWhere('*', ['id', '=', productId])];
                         case 1:
-                            product = _a.sent();
+                            product = (_a.sent())[0];
                             if (!product)
                                 return [2 /*return*/, res.status(404).send("404: Product with ID:".concat(productId, " not found"))];
                             cartProduct = cart_product_1.default.parseProduct(product);

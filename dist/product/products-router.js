@@ -37,9 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var middlewares_1 = require("../middlewares");
 var product_1 = require("./product");
+var product_2 = require("./product");
 var ProductsRouter = /** @class */ (function () {
-    function ProductsRouter(container, productsHtmlPath) {
+    function ProductsRouter(productsHtmlPath) {
         Object.defineProperty(this, "router", {
             enumerable: true,
             configurable: true,
@@ -52,11 +54,11 @@ var ProductsRouter = /** @class */ (function () {
             writable: true,
             value: express.Router()
         });
-        Object.defineProperty(this, "container", {
+        Object.defineProperty(this, "table", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: void 0
+            value: product_2.productsTable
         });
         Object.defineProperty(this, "productsHtmlPath", {
             enumerable: true,
@@ -64,7 +66,6 @@ var ProductsRouter = /** @class */ (function () {
             writable: true,
             value: void 0
         });
-        this.container = container;
         this.productsHtmlPath = productsHtmlPath;
         this.initRoutes();
     }
@@ -93,7 +94,7 @@ var ProductsRouter = /** @class */ (function () {
                 var prods;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.getAll()];
+                        case 0: return [4 /*yield*/, this.table.select('*')];
                         case 1:
                             prods = _a.sent();
                             res.render(this.productsHtmlPath, { productList: prods });
@@ -113,7 +114,7 @@ var ProductsRouter = /** @class */ (function () {
                 var prods;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.getAll()];
+                        case 0: return [4 /*yield*/, this.table.select('*')];
                         case 1:
                             prods = _a.sent();
                             res.json(prods);
@@ -137,7 +138,7 @@ var ProductsRouter = /** @class */ (function () {
                             prodID = parseInt(req.params.id);
                             if (isNaN(prodID))
                                 return [2 /*return*/, res.send('ID must be an integer number')];
-                            return [4 /*yield*/, this.container.getbyId(prodID)];
+                            return [4 /*yield*/, this.table.selectWhere('*', ['id', '=', prodID])];
                         case 1:
                             prod = _a.sent();
                             if (!prod)
@@ -155,7 +156,7 @@ var ProductsRouter = /** @class */ (function () {
         writable: true,
         value: function () {
             var _this = this;
-            this.apiRouter.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.post('/', middlewares_1.authn, middlewares_1.authz, function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var newProd;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -163,7 +164,7 @@ var ProductsRouter = /** @class */ (function () {
                             newProd = product_1.default.parseProduct(req.body);
                             if (!newProd)
                                 return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
-                            return [4 /*yield*/, this.container.save(newProd)];
+                            return [4 /*yield*/, this.table.insert(newProd)];
                         case 1:
                             _a.sent();
                             res.status(201).redirect('/productos');
@@ -179,7 +180,7 @@ var ProductsRouter = /** @class */ (function () {
         writable: true,
         value: function () {
             var _this = this;
-            this.apiRouter.delete('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.delete('/:id', middlewares_1.authn, middlewares_1.authz, function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var prodID, success;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -187,7 +188,7 @@ var ProductsRouter = /** @class */ (function () {
                             prodID = parseInt(req.params.id);
                             if (isNaN(prodID))
                                 return [2 /*return*/, res.send('ID must be an integer number')];
-                            return [4 /*yield*/, this.container.deleteById(prodID)];
+                            return [4 /*yield*/, this.table.deleteWhere(['id', '=', prodID])];
                         case 1:
                             success = _a.sent();
                             if (success == null)
@@ -205,7 +206,7 @@ var ProductsRouter = /** @class */ (function () {
         writable: true,
         value: function () {
             var _this = this;
-            this.apiRouter.put('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.apiRouter.put('/:id', middlewares_1.authn, middlewares_1.authz, function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var prodID, newProd, success;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -216,7 +217,7 @@ var ProductsRouter = /** @class */ (function () {
                             newProd = product_1.default.parseProduct(req.body);
                             if (!newProd)
                                 return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
-                            return [4 /*yield*/, this.container.updateById(prodID, newProd)];
+                            return [4 /*yield*/, this.table.updateWhere(['id', '=', prodID], newProd)];
                         case 1:
                             success = _a.sent();
                             if (success == null)
