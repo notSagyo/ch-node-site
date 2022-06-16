@@ -15,8 +15,9 @@ export default class Container<T extends Record<string, any>> implements iKnexCo
 
   async createTable(schemaBuilder: (table: Knex.Knex.TableBuilder) => void) {
     const knex = Knex.knex(this.options);
-    let success = false;
-    await knex.schema.createTableIfNotExists(this.table, schemaBuilder)
+    const exists = await knex.schema.hasTable(this.table);
+    let success = exists;
+    if (!exists) await knex.schema.createTable(this.table, schemaBuilder)
       .then(() => success = true)
       .catch(err => console.log(err))
       .finally(() => knex.destroy());
