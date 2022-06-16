@@ -1,3 +1,14 @@
+import Container from '../container-knex';
+import { options } from '../settings/sqlite3';
+
+export const messagesTable = new Container<Message>('ecommerce', 'messages', options);
+messagesTable.createTable(table => {
+  table.increments('id').primary();
+  table.integer('time');
+  table.string('author');
+  table.string('content');
+});
+
 export default class Message {
   // Manual ID will be ignored when saving in the container
   id: number;

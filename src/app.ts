@@ -3,11 +3,10 @@ import * as path from 'path';
 import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import ProductsRouter from './product/products-router';
-import ProductContainer from './product/product-container';
-import Message from './chat/message';
-import MessageContainer from './chat/message-container';
+import Product, { productsTable } from './product/product';
+import Message, { messagesTable } from './chat/message';
 import CartRouter from './cart/cart-router';
-import Container from './container';
+import Container from './container-fs';
 import Cart from './cart/cart';
 
 // INIT ======================================================================//
@@ -18,11 +17,9 @@ const httpServer = new HttpServer(app);
 const ioServer = new IOServer(httpServer);
 const baseDir = path.join(__dirname, '..');
 
-const messageContainer = new MessageContainer('./data/messages.json');
-const productContainer = new ProductContainer('./data/products.json');
-const productsRouter = new ProductsRouter(productContainer, 'pages/products.ejs');
+const productsRouter = new ProductsRouter('pages/products.ejs');
 const cartContainer = new Container<Cart>('./data/cart.json');
-const cartRouter = new CartRouter(cartContainer, productContainer, 'pages/cart.ejs');
+const cartRouter = new CartRouter(cartContainer, 'pages/cart.ejs');
 
 // Config
 app.set('view engine', 'ejs');
@@ -45,7 +42,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/chat', async (req, res) => {
-  const msgList = await messageContainer.getAll();
+  const msgList = await messagesTable.select('*');
   const msgListHTML = Message.getHtmlList(msgList as Message[]);
   res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
 });
@@ -62,22 +59,34 @@ ioServer.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
 
   const updateProducts = async () => {
-    const newProductList = await productContainer.getAll();
+    const newProductList = await productsTable.select('*');
     ioServer.emit('products_updated', newProductList);
   };
 
   const updateMessages = async () => {
-    const newMessageList = await messageContainer.getAll();
+    const newMessageList = await messagesTable.select('*');
     ioServer.emit('messages_updated', newMessageList);
   };
 
   socket.on('create_product', async (product) => {
-    await productContainer.save(product);
+    const parsedProduct = Product.parseProduct(product);
+    // TODO: Check if message is valid
+    if (!parsedProduct)
+      return socket.emit('message_error', 'Invalid product');
+
+    const { id, ...prodNoID } = parsedProduct;
+    await productsTable.insert(prodNoID as Product);
     updateProducts();
   });
 
   socket.on('create_message', async (message) => {
-    await messageContainer.save(message);
+    const parsedMessage = Message.parseMessage(message);
+    // TODO: Check if message is valid
+    if (!parsedMessage)
+      return socket.emit('message_error', 'Invalid message');
+
+    const { id, ...msgNoID } = parsedMessage;
+    await messagesTable.insert(msgNoID as Message);
     updateMessages();
   });
 });

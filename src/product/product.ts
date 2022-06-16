@@ -1,5 +1,16 @@
-const placeholder = 'https://via.placeholder.com/256';
+import Container from '../container-knex';
+import { options } from '../settings/mariadb';
 
+export const productsTable = new Container<Product>(options.connection.database, 'messages', options);
+productsTable.createTable(table => {
+  table.increments('id').primary();
+  table.string('name');
+  table.integer('price');
+  table.string('thumbnail');
+  table.string('description');
+});
+
+const placeholder = 'https://via.placeholder.com/256';
 export default class Product {
   // Manual ID input will be ignored when saved in the container
   id: number;

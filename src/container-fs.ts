@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Container<T extends Record<string, any>> {
   path = './data/output.json';
 
@@ -86,7 +87,7 @@ export default class Container<T extends Record<string, any>> {
       parsedFile.splice(objIndex, 1);
       const newFile = JSON.stringify(parsedFile, null, 2);
       await fs.promises.writeFile(this.path, newFile);
-      return true;
+      return id;
     } catch (err) {
       console.error(err);
       return null;
@@ -94,7 +95,13 @@ export default class Container<T extends Record<string, any>> {
   }
 
   async deleteAll() {
-    try { fs.promises.writeFile(this.path, ''); }
-    catch (err) { console.error(err); }
+    try {
+      fs.promises.writeFile(this.path, '');
+      return true;
+    }
+    catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 }
