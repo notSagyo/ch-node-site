@@ -35,7 +35,7 @@ export default class Container<T extends Record<string, any>> {
     return res;
   }
 
-  async update(filter: filterFirebase, data: Partial<T>): Promise<boolean> {
+  async update(filter: filterFirebase, data: Partial<T> | {[x: string]: unknown}) {
     let success = false;
     try {
       const q = filter === '*'

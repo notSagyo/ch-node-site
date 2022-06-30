@@ -19,8 +19,6 @@ export const testContainerMongo = async () => {
     await container.insert({ id: v4(), name: 'Test', price: 100 });
     await container.insert({ id: v4(), name: 'Test2', price: 100 });
     await container.insert({ id: v4(), name: 'Test3', price: 100 });
-    await container.insert({ id: v4(), name: 'Test4', price: 100 });
-    await container.insert({ id: v4(), name: 'Test5', price: 100 });
   });
 
   await testFunction('find() ALL', async () => {

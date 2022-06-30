@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { productsDao } from '../daos/productsDaoMongo';
 import { authn, authz } from '../middlewares';
-import { parseProduct } from './product';
+import { parseProduct } from '../product/product';
 
 export default class ProductsRouter {
   router = express.Router();

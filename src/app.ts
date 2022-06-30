@@ -6,8 +6,6 @@ import ProductsRouter from './product/products-router';
 import { parseProduct } from './product/product';
 import Message, { messagesTable } from './chat/message';
 import CartRouter from './cart/cart-router';
-import Container from './containers/container-fs';
-import Cart from './cart/cart';
 import { productsDao } from './daos/productsDaoMongo';
 
 // INIT ======================================================================//
@@ -19,8 +17,7 @@ const ioServer = new IOServer(httpServer);
 const baseDir = path.join(__dirname, '..');
 
 const productsRouter = new ProductsRouter('pages/products.ejs');
-const cartContainer = new Container<Cart>('./data/cart.json');
-const cartRouter = new CartRouter(cartContainer, 'pages/cart.ejs');
+const cartRouter = new CartRouter('pages/cart.ejs');
 
 // Config
 app.set('view engine', 'ejs');

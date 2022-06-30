@@ -1,8 +1,8 @@
 import * as express from 'express';
-import Cart from '../cart/cart';
+import Cart from './cart';
 import Container from '../containers/container-fs';
 import { productsTable } from '../product/product-knex';
-import { parseCartProduct } from '../cart/cart-product';
+import { parseCartProduct } from './cart-product';
 
 export default class CartRouter {
   router = express.Router();

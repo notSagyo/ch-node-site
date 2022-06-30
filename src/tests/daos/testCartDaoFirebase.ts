@@ -16,7 +16,7 @@ export const testCartDaoFirebase = async () => {
   });
 
   await testFunction('getById()', async () => {
-    const res = await cartsDao.getById('0');
+    const res = await cartsDao.getById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc');
     console.log(res);
   });
 
@@ -24,9 +24,21 @@ export const testCartDaoFirebase = async () => {
     const newCartProd = parseCartProduct({ id: v4(), quantity: 1 });
     if (!newCartProd)
       return;
-    await cartsDao.updateById('0', { products: [newCartProd] });
+    await cartsDao.updateById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', { products: [newCartProd] });
     const updated = await cartsDao.getAll();
     console.log('After update id:"0" {id: v4(), quantity: 1}:', updated);
+  });
+
+  await testFunction('addProductById()', async () => {
+    await cartsDao.addProductById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', '6666666');
+    const updated = await cartsDao.getAll();
+    console.log('After add product "id":6666666 :', updated);
+  });
+
+  await testFunction('removeProductById()', async () => {
+    await cartsDao.removeProductById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', '6666666');
+    const updated = await cartsDao.getAll();
+    console.log('After remove product "id":6666666 :', updated);
   });
 
   await testFunction('deleteById()', async () => {
@@ -36,10 +48,11 @@ export const testCartDaoFirebase = async () => {
   });
 
 
-  await testFunction('deleteAll()', async () => {
-    await cartsDao.deleteAll();
-    const res = await cartsDao.getAll();
-    console.log('After delete:', res);
-  });
+  // await testFunction('deleteAll()', async () => {
+  //   await cartsDao.deleteAll();
+  //   const res = await cartsDao.getAll();
+  //   console.log('After delete:', res);
+  // });
+
   console.log('\nFinished testing cartDaoFirebase\n');
 };

@@ -1,4 +1,4 @@
-import mongoose, { Connection, Model } from 'mongoose';
+import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
 import { filterMongo } from '../types';
 
 export default class Container<T> {
@@ -54,7 +54,7 @@ export default class Container<T> {
     return result;
   }
 
-  async update(filter: filterMongo<T>, data: Partial<T>) {
+  async update(filter: filterMongo<T>, data: UpdateQuery<T>) {
     await this.connect();
     let success = false;
     const allOrFilter = filter == '*' ? {} : filter;
