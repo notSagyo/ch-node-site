@@ -1,52 +1,27 @@
-import { v4 } from 'uuid';
-import Product from '../product/product';
+import { parseProduct } from '../product/product';
+import { iCartProduct } from '../types';
 
-export default class CartProduct extends Product {
-  quantity: number;
-  timestamp: number;
-  code: string;
+export const parseCartProduct = (obj: Record<string, unknown> | Partial<iCartProduct>): iCartProduct | null => {
+  const parsedProd = parseProduct(obj);
+  if (!parsedProd)
+    return null;
 
-  constructor(
-    name: string,
-    price: number,
-    quantity?: number,
-    timestamp?: number,
-    code?: string,
-    description?: string,
-    thumbnail?: string,
-    id?: number) {
+  const isValidQuantity = typeof obj?.quantity === 'number' && obj.quantity > 0;
+  const isValidTimestamp = typeof obj?.timestamp === 'number' && obj.timestamp > 0;
+  const isValidCode = typeof obj?.code === 'string' && obj.code.length > 0;
 
-    super(name, price, description, thumbnail, id);
-    this.quantity = quantity || 1;
-    this.timestamp = timestamp || Date.now();
-    this.code = code || v4();
-  }
+  const quantity = isValidQuantity ? obj.quantity as number : 1;
+  const timestamp = isValidTimestamp ? obj.timestamp as number : Date.now();
+  const code = isValidCode ? obj.code as string : '-1';
 
-  static parseProduct(obj: Record<string, unknown> | CartProduct | Product) {
-    const parsedProd = Product.parseProduct(obj);
-    if (!parsedProd)
-      return null;
-
-    // TS assertion because not not all params have the same signature
-    obj = obj as Record<string, unknown>;
-
-    const isValidQuantity = typeof obj?.quantity === 'number' && obj.quantity > 0;
-    const isValidTimestamp = typeof obj?.timestamp === 'number' && obj.timestamp > 0;
-    const isValidCode = typeof obj?.code === 'string' && obj.code.length > 0;
-
-    const quantity = isValidQuantity ? obj.quantity as number : undefined;
-    const timestamp = isValidTimestamp ? obj.timestamp as number : undefined;
-    const code = isValidCode ? obj.code as string : undefined;
-
-    return new CartProduct(
-      parsedProd.name,
-      parsedProd.price,
-      quantity,
-      timestamp,
-      code,
-      parsedProd.description,
-      parsedProd.thumbnail,
-      parsedProd.id
-    );
-  }
-}
+  return({
+    id: parsedProd.id,
+    name: parsedProd.name,
+    price: parsedProd.price,
+    thumbnail: parsedProd.thumbnail,
+    description: parsedProd.description,
+    code,
+    quantity,
+    timestamp
+  });
+};

@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
-var middlewares_1 = require("../middlewares");
+var middlewares_1 = require("../middleware/middlewares");
 var product_1 = require("./product");
 var ProductsRouter = /** @class */ (function () {
     function ProductsRouter(productsHtmlPath) {
@@ -93,7 +93,7 @@ var ProductsRouter = /** @class */ (function () {
                 var prods;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.table.find({})];
+                        case 0: return [4 /*yield*/, this.table.select('*')];
                         case 1:
                             prods = _a.sent();
                             res.render(this.productsHtmlPath, { productList: prods });
@@ -113,7 +113,7 @@ var ProductsRouter = /** @class */ (function () {
                 var prods;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.table.find({})];
+                        case 0: return [4 /*yield*/, this.table.select('*')];
                         case 1:
                             prods = _a.sent();
                             res.json(prods);
@@ -137,7 +137,7 @@ var ProductsRouter = /** @class */ (function () {
                             prodID = parseInt(req.params.id);
                             if (isNaN(prodID))
                                 return [2 /*return*/, res.send('ID must be an integer number')];
-                            return [4 /*yield*/, this.table.find(['id', '=', prodID])];
+                            return [4 /*yield*/, this.table.selectWhere('*', ['id', '=', prodID])];
                         case 1:
                             prod = _a.sent();
                             if (!prod)
@@ -187,7 +187,7 @@ var ProductsRouter = /** @class */ (function () {
                             prodID = parseInt(req.params.id);
                             if (isNaN(prodID))
                                 return [2 /*return*/, res.send('ID must be an integer number')];
-                            return [4 /*yield*/, this.table.delete(['id', '=', prodID])];
+                            return [4 /*yield*/, this.table.deleteWhere(['id', '=', prodID])];
                         case 1:
                             success = _a.sent();
                             if (success == null)
@@ -216,7 +216,7 @@ var ProductsRouter = /** @class */ (function () {
                             newProd = (0, product_1.parseProduct)(req.body);
                             if (!newProd)
                                 return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
-                            return [4 /*yield*/, this.table.update(['id', '=', prodID], newProd)];
+                            return [4 /*yield*/, this.table.updateWhere(['id', '=', prodID], newProd)];
                         case 1:
                             success = _a.sent();
                             if (success == null)

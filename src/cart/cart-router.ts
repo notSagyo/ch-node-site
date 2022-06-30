@@ -1,8 +1,8 @@
 import * as express from 'express';
-import Cart from './cart';
-import CartProduct from './cart-product';
-import Container from '../container-fs';
+import Cart from '../cart/cart';
+import Container from '../containers/container-fs';
 import { productsTable } from '../product/product';
+import { parseCartProduct } from '../cart/cart-product';
 
 export default class CartRouter {
   router = express.Router();
@@ -84,12 +84,12 @@ export default class CartRouter {
         return res.status(400).send('400: ID must be an integer number');
 
       // Get Product from product container
-      const product = (await this.productsTable.selectWhere('*', ['id', '=', productId]))[0];
+      const product = (await this.productsTable.find(['id', '=', productId]))[0];
       if (!product)
         return res.status(404).send(`404: Product with ID:${productId} not found`);
 
       // Create a CartProduct from Product
-      const cartProduct = CartProduct.parseProduct(product);
+      const cartProduct = parseCartProduct(product);
       const cart = await this.cartContainer.getbyId(cartId);
 
       if (!cart)

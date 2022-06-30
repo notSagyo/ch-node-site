@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseProduct = exports.productsTable = void 0;
-var container_knex_1 = require("../containers/container-knex");
+var container_knex_1 = require("../container-knex");
 var mariadb_1 = require("../settings/mariadb");
 exports.productsTable = new container_knex_1.default(mariadb_1.options.connection.database, 'products', mariadb_1.options);
 exports.productsTable.createTable(function (table) {

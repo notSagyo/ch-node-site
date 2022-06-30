@@ -3,10 +3,10 @@ import * as path from 'path';
 import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import ProductsRouter from './product/products-router';
-import Product, { productsTable } from './product/product';
+import { parseProduct, productsTable } from './product/product';
 import Message, { messagesTable } from './chat/message';
 import CartRouter from './cart/cart-router';
-import Container from './container-fs';
+import Container from './containers/container-fs';
 import Cart from './cart/cart';
 
 // INIT ======================================================================//
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/chat', async (req, res) => {
-  const msgList = await messagesTable.select('*');
+  const msgList = await messagesTable.find({});
   const msgListHTML = Message.getHtmlList(msgList as Message[]);
   res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
 });
@@ -59,23 +59,23 @@ ioServer.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
 
   const updateProducts = async () => {
-    const newProductList = await productsTable.select('*');
+    const newProductList = await productsTable.find({});
     ioServer.emit('products_updated', newProductList);
   };
 
   const updateMessages = async () => {
-    const newMessageList = await messagesTable.select('*');
+    const newMessageList = await messagesTable.find({});
     ioServer.emit('messages_updated', newMessageList);
   };
 
   socket.on('create_product', async (product) => {
-    const parsedProduct = Product.parseProduct(product);
-    // TODO: Check if message is valid
+    let parsedProduct = parseProduct(product);
+    // TODO: Check if product is valid
     if (!parsedProduct)
       return socket.emit('message_error', 'Invalid product');
 
-    const { id, ...prodNoID } = parsedProduct;
-    await productsTable.insert(prodNoID as Product);
+    delete parsedProduct.id;
+    await productsTable.insert(parsedProduct);
     updateProducts();
   });
 

@@ -1,4 +1,4 @@
-import Container from '../container-knex';
+import Container from '../containers/container-knex';
 import { options } from '../settings/sqlite3';
 
 export const messagesTable = new Container<Message>('ecommerce', 'messages', options);

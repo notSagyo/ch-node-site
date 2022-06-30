@@ -55,7 +55,7 @@ var products_router_1 = require("./product/products-router");
 var product_1 = require("./product/product");
 var message_1 = require("./chat/message");
 var cart_router_1 = require("./cart/cart-router");
-var container_fs_1 = require("./container-fs");
+var container_fs_1 = require("./containers/container-fs");
 // INIT ======================================================================//
 // Constants
 var PORT = 8080;
@@ -86,7 +86,7 @@ app.get('/chat', function (req, res) { return __awaiter(void 0, void 0, void 0, 
     var msgList, msgListHTML;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, message_1.messagesTable.select('*')];
+            case 0: return [4 /*yield*/, message_1.messagesTable.find({})];
             case 1:
                 msgList = _a.sent();
                 msgListHTML = message_1.default.getHtmlList(msgList);
@@ -110,7 +110,7 @@ ioServer.on('connection', function (socket) { return __awaiter(void 0, void 0, v
             var newProductList;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, product_1.productsTable.select('*')];
+                    case 0: return [4 /*yield*/, product_1.productsTable.find({})];
                     case 1:
                         newProductList = _a.sent();
                         ioServer.emit('products_updated', newProductList);
@@ -122,7 +122,7 @@ ioServer.on('connection', function (socket) { return __awaiter(void 0, void 0, v
             var newMessageList;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, message_1.messagesTable.select('*')];
+                    case 0: return [4 /*yield*/, message_1.messagesTable.find({})];
                     case 1:
                         newMessageList = _a.sent();
                         ioServer.emit('messages_updated', newMessageList);
@@ -131,16 +131,16 @@ ioServer.on('connection', function (socket) { return __awaiter(void 0, void 0, v
             });
         }); };
         socket.on('create_product', function (product) { return __awaiter(void 0, void 0, void 0, function () {
-            var parsedProduct, id, prodNoID;
+            var parsedProduct;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        parsedProduct = product_1.default.parseProduct(product);
-                        // TODO: Check if message is valid
+                        parsedProduct = (0, product_1.parseProduct)(product);
+                        // TODO: Check if product is valid
                         if (!parsedProduct)
                             return [2 /*return*/, socket.emit('message_error', 'Invalid product')];
-                        id = parsedProduct.id, prodNoID = __rest(parsedProduct, ["id"]);
-                        return [4 /*yield*/, product_1.productsTable.insert(prodNoID)];
+                        delete parsedProduct.id;
+                        return [4 /*yield*/, product_1.productsTable.insert(parsedProduct)];
                     case 1:
                         _a.sent();
                         updateProducts();

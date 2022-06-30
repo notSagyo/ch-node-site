@@ -1,7 +1,6 @@
 import * as express from 'express';
 import { authn, authz } from '../middlewares';
-import Product from './product';
-import { productsTable } from './product';
+import { parseProduct, productsTable } from './product';
 
 export default class ProductsRouter {
   router = express.Router();
@@ -28,14 +27,14 @@ export default class ProductsRouter {
 
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
-      const prods = await this.table.select('*');
+      const prods = await this.table.find({});
       res.render(this.productsHtmlPath, { productList: prods });
     });
   }
 
   private getProducts() {
     this.apiRouter.get('/', async (req, res) => {
-      const prods = await this.table.select('*');
+      const prods = await this.table.find({});
       res.json(prods);
     });
   }
@@ -45,7 +44,7 @@ export default class ProductsRouter {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
-      const prod = await this.table.selectWhere('*', ['id', '=', prodID]);
+      const prod = await this.table.find(['id', '=', prodID]);
       if (!prod) return res.status(404).send('404: Product not found');
 
       res.json(prod);
@@ -54,7 +53,7 @@ export default class ProductsRouter {
 
   private postProduct() {
     this.apiRouter.post('/', authn, authz, async (req, res) => {
-      const newProd = Product.parseProduct(req.body);
+      const newProd = parseProduct(req.body);
 
       if (!newProd)
         return res.status(400).send('400: Error parsing product, malformed request body');
@@ -69,7 +68,7 @@ export default class ProductsRouter {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
-      const success = await this.table.deleteWhere(['id', '=', prodID]);
+      const success = await this.table.delete(['id', '=', prodID]);
       if (success == null)
         return res.status(400).send('400: Error while deleting product');
       res.status(200).send('200: Product deleted succesfully');
@@ -81,11 +80,11 @@ export default class ProductsRouter {
       const prodID = parseInt(req.params.id);
       if (isNaN(prodID)) return res.send('ID must be an integer number');
 
-      const newProd = Product.parseProduct(req.body);
+      const newProd = parseProduct(req.body);
       if (!newProd)
         return res.status(400).send('400: Error parsing product, malformed request body');
 
-      const success = await this.table.updateWhere(['id', '=', prodID], newProd);
+      const success = await this.table.update(['id', '=', prodID], newProd);
       if (success == null)
         return res.status(400).send('400: Error while updating product');
       res.status(200).send('200: Product updated succesfully');
