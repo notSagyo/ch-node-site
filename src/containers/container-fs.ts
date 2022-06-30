@@ -10,7 +10,7 @@ export default class Container<T extends Record<string, any>> {
 
   async save(obj: T) {
     let file: string;
-    let newId: number;
+    let newId: string;
 
     try {
       const exists = fs.existsSync(this.path);
@@ -32,7 +32,7 @@ export default class Container<T extends Record<string, any>> {
     return newId;
   }
 
-  async getbyId(id: number) {
+  async getbyId(id: string) {
     try {
       const file = await fs.promises.readFile(this.path, 'utf-8');
       const parsedFile = JSON.parse(file);
@@ -55,7 +55,7 @@ export default class Container<T extends Record<string, any>> {
     }
   }
 
-  async updateById(id: number, obj: T) {
+  async updateById(id: string, obj: T) {
     obj = { ...obj, id };
     try {
       const file = await fs.promises.readFile(this.path, 'utf-8');
@@ -76,7 +76,7 @@ export default class Container<T extends Record<string, any>> {
     }
   }
 
-  async deleteById(id: number) {
+  async deleteById(id: string) {
     try {
       const file = await fs.promises.readFile(this.path, 'utf-8');
       const parsedFile = JSON.parse(file);

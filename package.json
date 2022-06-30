@@ -8,7 +8,8 @@
     "preview": "node dist/app.js",
     "start": "npm run preview",
     "watch": "nodemon --ignore data/* --exec ts-node",
-    "watchjs": "nodemon --ignore data/* --exec node"
+    "watchjs": "nodemon --ignore data/* --exec node",
+    "test": "ts-node src/tests/tests.ts"
   },
   "repository": {
     "type": "git",

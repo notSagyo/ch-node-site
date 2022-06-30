@@ -1,18 +1,20 @@
 import * as express from 'express';
 import Cart from '../cart/cart';
 import Container from '../containers/container-fs';
+import { productsTable } from '../product/product-knex';
 import { parseCartProduct } from '../cart/cart-product';
-import { cartsDao } from '../daos/cartsDaoMongo';
-import { productsDao } from '../daos/productsDaoMongo';
 
 export default class CartRouter {
   router = express.Router();
   apiRouter = express.Router();
+  productsTable = productsTable;
+  cartContainer: Container<Cart>;
   cartHtmlPath: string;
 
   constructor(
     container: Container<Cart>,
     cartHtmlPath: string) {
+    this.cartContainer = container;
     this.cartHtmlPath = cartHtmlPath;
     this.initRoutes();
   }
@@ -38,7 +40,8 @@ export default class CartRouter {
   private getCartProductsById() {
     this.apiRouter.get('/:id/productos', async (req, res) => {
       const cartId = req.params.id;
-      const cart = await cartsDao.getById(cartId);
+
+      const cart = await this.cartContainer.getbyId(cartId);
       if (!cart)
         return res.status(404).send(`404: Cart with ID:${cartId} not found`);
 
@@ -48,7 +51,7 @@ export default class CartRouter {
 
   private postCart() {
     this.apiRouter.post('/', async (req, res) => {
-      const newCartId = await cartsDao.save(new Cart());
+      const newCartId = await this.cartContainer.save(new Cart());
 
       if (newCartId == null)
         return res.status(400).send('400: Error while saving cart');
@@ -59,7 +62,8 @@ export default class CartRouter {
   private deleteCartById() {
     this.apiRouter.delete('/:id', async (req, res) => {
       const cartId = req.params.id;
-      const success = await cartsDao.deleteById(cartId);
+
+      const success = await this.cartContainer.deleteById(cartId);
       if (success == null)
         return res.status(400).send('400: Error while deleting cart');
       res.status(200).send(`200: Cart N°${cartId} deleted succesfully`);
@@ -69,17 +73,17 @@ export default class CartRouter {
   // Sample POST body: { "id": 1 }
   private postCartProduct() {
     this.apiRouter.post('/:id/productos', async (req, res) => {
-      const cartId: string = req.params.id;
+      const cartId = req.params.id;
       const productId = req.body.id;
 
       // Get Product from product container
-      const product = await productsDao.getById(productId);
+      const product = (await this.productsTable.find(['id', '=', productId]))[0];
       if (!product)
         return res.status(404).send(`404: Product with ID:${productId} not found`);
 
       // Create a CartProduct from Product
       const cartProduct = parseCartProduct(product);
-      const cart = await cartsDao.getById(cartId);
+      const cart = await this.cartContainer.getbyId(cartId);
 
       if (!cart)
         return res.status(404).send(`404: Cart with ID:${cartId} not found`);
@@ -88,7 +92,7 @@ export default class CartRouter {
 
       // Add product to cart
       Cart.addProduct(cart, cartProduct);
-      const success = await cartsDao.updateById(cart.id, cart);
+      const success = await this.cartContainer.updateById(cart.id, cart);
 
       if (success == null)
         return res.status(400).send('400: Error while saving cart');
@@ -102,13 +106,13 @@ export default class CartRouter {
       const productId = req.params.productId;
 
       // Find cart
-      const cart = await cartsDao.getById(cartId);
+      const cart = await this.cartContainer.getbyId(cartId);
       if (cart == null)
         return res.status(404).send(`404: Cart with ID:${cartId} not found`);
 
       // Delete product from cart
       Cart.deleteProduct(cart, productId);
-      const success = await cartsDao.updateById(cart.id, cart);
+      const success = await this.cartContainer.updateById(cart.id, cart);
 
       if (success == null)
         return res.status(400).send('400: Error while saving cart');

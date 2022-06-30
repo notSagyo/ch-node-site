@@ -1,11 +1,11 @@
 import * as express from 'express';
-import { productsDao } from '../daos/productsDaoMongo';
 import { authn, authz } from '../middlewares';
-import { parseProduct } from './product';
+import { parseProduct, productsTable } from './product-knex';
 
 export default class ProductsRouter {
   router = express.Router();
   apiRouter = express.Router();
+  table = productsTable;
   productsHtmlPath: string;
 
   constructor(productsHtmlPath: string) {
@@ -27,22 +27,24 @@ export default class ProductsRouter {
 
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
-      const prods = await productsDao.getAll();
+      const prods = await this.table.find({});
       res.render(this.productsHtmlPath, { productList: prods });
     });
   }
 
   private getProducts() {
     this.apiRouter.get('/', async (req, res) => {
-      const prods = await productsDao.getAll();
+      const prods = await this.table.find({});
       res.json(prods);
     });
   }
 
   private getProductsById() {
     this.apiRouter.get('/:id', async (req, res) => {
-      const prodId = req.params.id;
-      const prod = await productsDao.getById(prodId);
+      const prodID = parseInt(req.params.id);
+      if (isNaN(prodID)) return res.send('ID must be an integer number');
+
+      const prod = await this.table.find(['id', '=', prodID]);
       if (!prod) return res.status(404).send('404: Product not found');
 
       res.json(prod);
@@ -56,15 +58,17 @@ export default class ProductsRouter {
       if (!newProd)
         return res.status(400).send('400: Error parsing product, malformed request body');
 
-      await productsDao.save(newProd);
+      await this.table.insert(newProd);
       res.status(201).redirect('/productos');
     });
   }
 
   private deleteProductById() {
     this.apiRouter.delete('/:id', authn, authz, async (req, res) => {
-      const prodId = req.params.id;
-      const success = await productsDao.deleteById(prodId);
+      const prodID = parseInt(req.params.id);
+      if (isNaN(prodID)) return res.send('ID must be an integer number');
+
+      const success = await this.table.delete(['id', '=', prodID]);
       if (success == null)
         return res.status(400).send('400: Error while deleting product');
       res.status(200).send('200: Product deleted succesfully');
@@ -73,17 +77,15 @@ export default class ProductsRouter {
 
   private putProductById() {
     this.apiRouter.put('/:id', authn, authz, async (req, res) => {
-      const prodId = req.params.id;
+      const prodID = parseInt(req.params.id);
+      if (isNaN(prodID)) return res.send('ID must be an integer number');
+
       const newProd = parseProduct(req.body);
       if (!newProd)
         return res.status(400).send('400: Error parsing product, malformed request body');
 
-      let success = false;
-      const exists = await productsDao.getById(prodId) != null ? true : false;
-      if (exists) success = await productsDao.updateById(prodId, newProd);
-      else success = await productsDao.save(newProd);
-
-      if (success == false)
+      const success = await this.table.update(['id', '=', prodID], newProd);
+      if (success == null)
         return res.status(400).send('400: Error while updating product');
       res.status(200).send('200: Product updated succesfully');
     });

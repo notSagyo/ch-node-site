@@ -1,8 +1,8 @@
 import * as Knex from 'knex';
-import { conditionSql, iKnexContainer } from '../types';
+import { filterSql } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default class Container<T extends Record<string, any>> implements iKnexContainer<T> {
+export default class Container<T extends Record<string, any>> {
   options: Knex.Knex.Config;
   table: string;
   schema: string;
@@ -35,11 +35,11 @@ export default class Container<T extends Record<string, any>> implements iKnexCo
     return success;
   }
 
-  async find(condition: conditionSql<T>, sortColumn?: string, ascending?: boolean) {
+  async find(condition: filterSql<T>, sortColumn?: string, ascending?: boolean) {
     const knex = Knex.knex(this.options);
     let rows: T[] = [];
     if (sortColumn != null) {
-      await knex.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
+      await knex.from(this.table).where('condition').orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
         .then(res => rows = res)
         .catch(err => console.log(err))
         .finally(() => knex.destroy());
@@ -53,7 +53,7 @@ export default class Container<T extends Record<string, any>> implements iKnexCo
     return rows;
   }
 
-  async update(condition: conditionSql<T>, update: Partial<T>) {
+  async update(condition: filterSql<T>, update: Partial<T>) {
     const knex = Knex.knex(this.options);
     let success = false;
     await knex(this.table).where(condition).update(update)
@@ -63,7 +63,7 @@ export default class Container<T extends Record<string, any>> implements iKnexCo
     return success;
   }
 
-  async delete(condition?: conditionSql<T>, limit?: number) {
+  async delete(condition?: filterSql<T>, limit?: number) {
     const knex = Knex.knex(this.options);
     let success = false;
     if (limit != null) {

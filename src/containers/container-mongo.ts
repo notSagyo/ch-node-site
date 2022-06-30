@@ -1,83 +1,82 @@
-import { conditionMongo, iMongoContainer } from '../types';
-import * as mongoose from 'mongoose';
+import mongoose, { Connection, Model } from 'mongoose';
+import { filterMongo } from '../types';
 
-export class Container<T extends Record<string, unknown>> implements iMongoContainer<T> {
-  model: mongoose.Model<T>;
-  connection: mongoose.Connection | undefined;
+export default class Container<T> {
+  connection: Connection | undefined;
+  model: Model<T>;
 
-  constructor(model: mongoose.Model<T>) {
+  constructor(model: Model<T>) {
     this.model = model;
   }
 
   async connect() {
-    try { this.connection = (await mongoose.connect('mongodb://localhost:27017/ecommerce')).connection; }
-    catch (err) { console.error(err); }
+    try {
+      this.connection = (await mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')).connection;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async close() {
-    if (!this.connection) return;
-    try { await this.connection.close(); }
-    catch (err) { console.error(err); }
-  }
-
-  async insert(obj: T | T[]): Promise<boolean> {
-    this.connect();
+    if (!this.connection)
+      return;
     try {
-      const newObj = new this.model(obj);
-      await newObj.save();
-      return true;
-    } catch (err) {
-      console.error(err);
-      return false;
-    } finally {
-      this.close();
-    }
-  }
-
-  async find(query: conditionMongo<T>, sortField?: string, ascending?: boolean) {
-    this.connect();
-    let results: mongoose.Document[] = [];
-    try {
-      if (sortField != null)
-        results = await this.model.find(query).sort(ascending ? sortField : `-${sortField}`);
-      else
-        results = await this.model.find(query);
+      await this.connection.close();
+      this.connection = undefined;
     } catch (err) {
       console.error(err);
     }
-    this.close();
-    return results;
   }
 
-  async update(query: conditionMongo<T>, obj: Partial<T>, limit?: number) {
-    this.connect();
+  async insert(data: T): Promise<boolean> {
+    await this.connect();
     let success = false;
     try {
-      if (limit != null)
-        await this.model.updateMany(query, obj, { limit });
-      else
-        await this.model.updateMany(query, obj);
+      await this.model.create(data);
       success = true;
     } catch (err) {
       console.error(err);
-      success = false;
     }
     this.close();
     return success;
   }
 
-  async delete(query: conditionMongo<T>, limit?: number) {
-    this.connect();
-    let success = false;
+  async find(filter: filterMongo<T>): Promise<T[] | null> {
+    await this.connect();
+    let result: T[] | null = null;
+    const allOrFilter = filter === '*' ? {} : filter;
     try {
-      if (limit != null)
-        await this.model.deleteMany(query, { limit });
-      else
-        await this.model.deleteMany(query);
-      success = true;
-    } catch(err) {
+      result = await this.model.find(allOrFilter).exec();
+    } catch (err) {
       console.error(err);
-      success = false;
+    }
+    this.close();
+    return result;
+  }
+
+  async update(filter: filterMongo<T>, data: Partial<T>) {
+    await this.connect();
+    let success = false;
+    const allOrFilter = filter == '*' ? {} : filter;
+    try {
+      await this.model.updateMany(allOrFilter, data);
+      success = true;
+    } catch (err) {
+      console.error(err);
+    }
+    this.close();
+    return success;
+  }
+
+  async delete(filter: filterMongo<T>) {
+    await this.connect();
+    let success = false;
+    const allOrFilter = filter === '*' ? {} : filter;
+    try {
+      await this.model.deleteMany(allOrFilter);
+      success = true;
+    } catch (err) {
+      console.error(err);
     }
     this.close();
     return success;

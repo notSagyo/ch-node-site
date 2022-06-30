@@ -4,7 +4,7 @@ import * as express from 'express';
 export const authn: express.RequestHandler = (req: any, res, next) => {
   req.user = {
     fullName: 'John Doe',
-    isAdmin: false
+    isAdmin: true
   };
   next();
 };

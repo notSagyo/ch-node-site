@@ -3,11 +3,12 @@ import * as path from 'path';
 import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import ProductsRouter from './product/products-router';
-import { parseProduct, productsTable } from './product/product';
+import { parseProduct } from './product/product';
 import Message, { messagesTable } from './chat/message';
 import CartRouter from './cart/cart-router';
 import Container from './containers/container-fs';
 import Cart from './cart/cart';
+import { productsDao } from './daos/productsDaoMongo';
 
 // INIT ======================================================================//
 // Constants
@@ -59,7 +60,7 @@ ioServer.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
 
   const updateProducts = async () => {
-    const newProductList = await productsTable.find({});
+    const newProductList = await productsDao.getAll();
     ioServer.emit('products_updated', newProductList);
   };
 
@@ -74,8 +75,7 @@ ioServer.on('connection', async (socket) => {
     if (!parsedProduct)
       return socket.emit('message_error', 'Invalid product');
 
-    delete parsedProduct.id;
-    await productsTable.insert(parsedProduct);
+    await productsDao.save(parsedProduct);
     updateProducts();
   });
 
