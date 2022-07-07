@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import * as norm from 'normalizr';
 import { iMessage, iUser } from '../types';
 
-const normalizrAuthorSchema: norm.Schema<iUser> = new norm.schema.Entity('authors');
+const normalizrAuthorSchema: norm.Schema<iUser> = new norm.schema.Entity('authors', {}, { idAttribute: 'email' });
 const normalizrMessageSchema: norm.Schema<iMessage> = new norm.schema.Entity('messages', {
   author: normalizrAuthorSchema,
 });

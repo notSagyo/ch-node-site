@@ -26,6 +26,7 @@ export interface iUser {
   id: string;
   age: number;
   name: string;
+  email: string;
   avatar: string;
   lastName: string;
   username: string;
