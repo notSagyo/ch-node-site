@@ -32,6 +32,7 @@ app.use('/productos', productsRouter.router);
 app.use('/carrito', cartRouter.router);
 app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
+app.use('/api', productsRouter.testRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 
 // Routes

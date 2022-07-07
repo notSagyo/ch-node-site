@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-export const options = {
+export const sqliteOptions = {
   client: 'sqlite3',
   connection: {
     filename: path.join(__dirname, '../../db/ecommerce.sqlite3'),

@@ -3,7 +3,6 @@ import { cartModel } from '../models/cart';
 import { iCart, iCartProduct } from '../types';
 import { v4 } from 'uuid';
 
-// !TODO: Add product!
 export default class CartsDao {
   container = new Container(cartModel);
 

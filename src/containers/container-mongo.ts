@@ -1,4 +1,5 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
+import { mongooseOptions } from '../settings/mongoose';
 import { filterMongo } from '../types';
 
 export default class Container<T> {
@@ -10,8 +11,9 @@ export default class Container<T> {
   }
 
   async connect() {
+    const { uri, options: connectOptions } = mongooseOptions;
     try {
-      this.connection = (await mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')).connection;
+      this.connection = (await mongoose.connect(uri, connectOptions)).connection;
     } catch (err) {
       console.error(err);
     }

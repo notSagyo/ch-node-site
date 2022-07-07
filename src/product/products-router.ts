@@ -1,11 +1,14 @@
 import * as express from 'express';
+import { faker } from '@faker-js/faker';
 import { productsDao } from '../daos/productsDaoMongo';
 import { authn, authz } from '../middlewares';
 import { parseProduct } from '../product/product';
+import { iProduct } from '../types';
 
 export default class ProductsRouter {
   router = express.Router();
   apiRouter = express.Router();
+  testRouter = express.Router();
   productsHtmlPath: string;
 
   constructor(productsHtmlPath: string) {
@@ -23,6 +26,9 @@ export default class ProductsRouter {
     this.postProduct();
     this.deleteProductById();
     this.putProductById();
+
+    // API router with test data
+    this.productsTest();
   }
 
   private getProductsPage() {
@@ -86,6 +92,23 @@ export default class ProductsRouter {
       if (success == false)
         return res.status(400).send('400: Error while updating product');
       res.status(200).send('200: Product updated succesfully');
+    });
+  }
+
+  private productsTest() {
+    this.testRouter.get('/productos-test', async (req, res) => {
+      const products: iProduct[] = [];
+      for (let i = 0; i < 5; i++) {
+        const prod: iProduct = {
+          id: '0',
+          name: faker.commerce.product(),
+          price: Number(faker.commerce.price()),
+          description: faker.commerce.productDescription(),
+          thumbnail: faker.image.abstract()
+        };
+        products.push(prod);
+      }
+      res.status(200).json(products);
     });
   }
 }

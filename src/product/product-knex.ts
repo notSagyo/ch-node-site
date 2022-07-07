@@ -1,8 +1,8 @@
 import Container from '../containers/container-knex';
-import { options } from '../settings/mariadb';
+import { maridadbOptions } from '../settings/mariadb';
 import { iProduct } from '../types';
 
-export const productsTable = new Container<iProduct>(options.connection.database, 'products', options);
+export const productsTable = new Container<iProduct>(maridadbOptions.connection.database, 'products', maridadbOptions);
 productsTable.createTable(table => {
   table.increments('id').primary();
   table.string('name');

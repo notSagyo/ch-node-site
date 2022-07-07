@@ -1,7 +1,7 @@
 import Container from '../containers/container-knex';
-import { options } from '../settings/sqlite3';
+import { sqliteOptions } from '../settings/sqlite3';
 
-export const messagesTable = new Container<Message>('ecommerce', 'messages', options);
+export const messagesTable = new Container<Message>('ecommerce', 'messages', sqliteOptions);
 messagesTable.createTable(table => {
   table.increments('id').primary();
   table.integer('time');
