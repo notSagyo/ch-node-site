@@ -14,6 +14,7 @@ export default class Container<T> {
     const { uri, options: connectOptions } = mongooseOptions;
     try {
       this.connection = (await mongoose.connect(uri, connectOptions)).connection;
+      console.log('Connected to mongoDB');
     } catch (err) {
       console.error(err);
     }
@@ -25,6 +26,7 @@ export default class Container<T> {
     try {
       await this.connection.close();
       this.connection = undefined;
+      console.log('Disconected from mongoDB\n');
     } catch (err) {
       console.error(err);
     }
@@ -36,6 +38,8 @@ export default class Container<T> {
     try {
       await this.model.create(data);
       success = true;
+      console.log('Inserted new data:', data);
+
     } catch (err) {
       console.error(err);
     }
@@ -49,6 +53,7 @@ export default class Container<T> {
     const allOrFilter = filter === '*' ? {} : filter;
     try {
       result = await this.model.find(allOrFilter).exec();
+      console.log(`Found data matching ${filter}: ${result}`);
     } catch (err) {
       console.error(err);
     }
@@ -63,6 +68,8 @@ export default class Container<T> {
     try {
       await this.model.updateMany(allOrFilter, data);
       success = true;
+      console.log('Updated elements matching:', filter);
+
     } catch (err) {
       console.error(err);
     }
@@ -77,6 +84,7 @@ export default class Container<T> {
     try {
       await this.model.deleteMany(allOrFilter);
       success = true;
+      console.log('Deleted elements matching:', filter);
     } catch (err) {
       console.error(err);
     }
