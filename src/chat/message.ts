@@ -1,19 +1,10 @@
 import { v4 } from 'uuid';
-import Container from '../containers/container-knex';
-import { sqliteOptions } from '../settings/sqlite3';
+import { parseUser } from '../models/user';
 import { iMessage } from '../types';
 
-export const messagesTable = new Container<Message>('ecommerce', 'messages', sqliteOptions);
-messagesTable.createTable(table => {
-  table.increments('id').primary();
-  table.integer('time');
-  table.string('author');
-  table.string('content');
-});
-
 export const parseMessage = (obj: Record<string, unknown> | Partial<iMessage>): iMessage | null => {
+  const author = parseUser(obj?.author as Record<string, unknown>);
   const time = !isNaN(Number(obj?.time)) ? Number(obj.time) : Date.now();
-  const author = typeof obj?.author === 'string' && obj?.author ? obj.author : null;
   const content = typeof obj?.content === 'string' && obj?.content.length > 0 ? obj.content : '';
   const id = typeof obj?.id === 'string' ? obj.id : v4();
 
@@ -36,7 +27,7 @@ export default class Message {
     this.id = id || '-1';
   }
 
-  static getHtml(message: Message) {
+  static getHtml(message: iMessage) {
     const parsedMsg = parseMessage(message as unknown as Record<string, unknown>);
     if (!parsedMsg)
       return;
@@ -46,13 +37,13 @@ export default class Message {
     return (`
       <li>
         [<span class="text-danger">${timeString}</span>]
-        <span class="text-primary fw-bold"> ${parsedMsg.author}: </span>
+        <span class="text-primary fw-bold"> ${parsedMsg.author.username}: </span>
         <span class="text-success">${parsedMsg.content}</span>
       </li>
     `);
   }
 
-  static getHtmlList(messages: Message[]) {
+  static getHtmlList(messages: iMessage[]) {
     let html = '';
     messages.forEach(message => {
       html += Message.getHtml(message) || '';

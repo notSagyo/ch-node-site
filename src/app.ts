@@ -8,6 +8,7 @@ import Messages from './chat/message';
 import CartRouter from './cart/cart-router';
 import { productsDao } from './daos/productsDaoMongo';
 import { messagesDao } from './daos/messagesDaoMongo';
+import { iMessage } from './types';
 
 // INIT ======================================================================//
 // Constants
@@ -43,7 +44,7 @@ app.get('/', (req, res) => {
 
 app.get('/chat', async (req, res) => {
   const msgList = await messagesDao.getAll();
-  const msgListHTML = Messages.getHtmlList(msgList as Messages[]);
+  const msgListHTML = Messages.getHtmlList(msgList);
   res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
 });
 

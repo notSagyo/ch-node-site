@@ -35,7 +35,7 @@ export interface iUser {
 export interface iMessage {
   id: string;
   time: number;
-  author: string;
+  author: iUser;
   content: string;
 }
 

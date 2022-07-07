@@ -1,13 +1,19 @@
 import { parseMessage } from '../chat/message';
 import Container from '../containers/container-mongo';
 import { messageModel } from '../models/message';
+import { parseUser } from '../models/user';
 import { iDao, iMessage } from '../types';
+import { usersDao } from './userDaoMongo';
 
 export default class MessagesDao implements iDao<iMessage> {
   container = new Container(messageModel);
 
   async save(message: Partial<iMessage>): Promise<boolean> {
     const pasedMessage = parseMessage(message);
+    const parsedUser = parseUser(message?.author);
+
+    if (parsedUser !== null)
+      usersDao.save(parsedUser);
     if (pasedMessage != null)
       return await this.container.insert(pasedMessage);
     return false;

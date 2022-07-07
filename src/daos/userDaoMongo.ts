@@ -1,9 +1,9 @@
 import Container from '../containers/container-mongo';
-import { parseUser, userModel } from '../models/user';
+import { parseUser, usersModel } from '../models/user';
 import { iDao, iUser } from '../types';
 
 export class UserDao implements iDao<iUser> {
-  container = new Container(userModel);
+  container = new Container(usersModel);
 
   async save(user: Partial<iUser>): Promise<boolean> {
     const parsedUser = parseUser(user);
@@ -34,3 +34,5 @@ export class UserDao implements iDao<iUser> {
     return await this.container.delete('*');
   }
 }
+
+export const usersDao = new UserDao();

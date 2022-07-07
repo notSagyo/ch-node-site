@@ -9,7 +9,18 @@
     class="d-flex"
     style="gap: 8px;"
   >
-    <input id="messageEmail" class="form-control" type="email" placeholder="email" size="18" style="width: auto;" required>
+  <div>
+    <input id="messageAuthorEmail" class="form-control" type="email" placeholder="email" size="18" style="width: auto;" required>
+    <input id="messageAuthorUsername" class="form-control" type="text" placeholder="username" size="18" style="width: auto;" required>
+  </div>
+  <div>
+    <input id="messageAuthorName" class="form-control" type="text" placeholder="first name" size="18" style="width: auto;" required>
+    <input id="messageAuthorLastName" class="form-control" type="text" placeholder="last name" size="18" style="width: auto;" required>
+  </div>
+  <div>
+    <input id="messageAuthorAvatar" class="form-control" type="text" placeholder="avatar URL" size="18" style="width: auto;" required>
+    <input id="messageAuthorAge" class="form-control" type="number" placeholder="age" size="18" style="width: auto;" required>
+  </div>
     <input id="messageContent" class="form-control" type="text" placeholder="message" size="32" style="width: auto;" required autocomplete="off">
     <input class="btn btn-primary d-inline-block" type="submit" value="Send >">
   </form>

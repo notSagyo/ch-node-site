@@ -39,7 +39,6 @@ export default class Container<T> {
       await this.model.create(data);
       success = true;
       console.log('Inserted new data:', data);
-
     } catch (err) {
       console.error(err);
     }

@@ -36,7 +36,7 @@ socket.on('messages_updated', (messageList) => {
     newMessagesWindowContent += `
       <li>
         [<span class="text-danger">${timeString}</span>]
-        <span class="text-primary fw-bold"> ${message.author}: </span>
+        <span class="text-primary fw-bold"> ${message.author.username}: </span>
         <span class="text-success">${message.content}</span>
       </li>
     `;
@@ -63,7 +63,14 @@ messageForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const message = {
     time: Date.now(),
-    author: document.getElementById('messageEmail').value,
+    author: {
+      age: Number(document.getElementById('messageAuthorAge').value),
+      name: document.getElementById('messageAuthorName').value,
+      email: document.getElementById('messageAuthorEmail').value ,
+      avatar: document.getElementById('messageAuthorAvatar').value,
+      lastName: document.getElementById('messageAuthorLastName').value,
+      username: document.getElementById('messageAuthorUsername').value
+    },
     content: document.getElementById('messageContent').value,
   };
   messageContent && (messageContent.value = '');
