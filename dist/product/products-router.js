@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var faker_1 = require("@faker-js/faker");
 var productsDaoMongo_1 = require("../daos/productsDaoMongo");
 var middlewares_1 = require("../middlewares");
 var product_1 = require("../product/product");
@@ -49,6 +50,12 @@ var ProductsRouter = /** @class */ (function () {
             value: express.Router()
         });
         Object.defineProperty(this, "apiRouter", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: express.Router()
+        });
+        Object.defineProperty(this, "testRouter", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -76,6 +83,8 @@ var ProductsRouter = /** @class */ (function () {
             this.postProduct();
             this.deleteProductById();
             this.putProductById();
+            // API router with test data
+            this.productsTest();
         }
     });
     Object.defineProperty(ProductsRouter.prototype, "getProductsPage", {
@@ -224,6 +233,32 @@ var ProductsRouter = /** @class */ (function () {
                             res.status(200).send('200: Product updated succesfully');
                             return [2 /*return*/];
                     }
+                });
+            }); });
+        }
+    });
+    Object.defineProperty(ProductsRouter.prototype, "productsTest", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () {
+            var _this = this;
+            this.testRouter.get('/productos-test', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var products, i, prod;
+                return __generator(this, function (_a) {
+                    products = [];
+                    for (i = 0; i < 5; i++) {
+                        prod = {
+                            id: '0',
+                            name: faker_1.faker.commerce.product(),
+                            price: Number(faker_1.faker.commerce.price()),
+                            description: faker_1.faker.commerce.productDescription(),
+                            thumbnail: faker_1.faker.image.abstract()
+                        };
+                        products.push(prod);
+                    }
+                    res.status(200).json(products);
+                    return [2 /*return*/];
                 });
             }); });
         }

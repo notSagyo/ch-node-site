@@ -4,9 +4,10 @@ import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import ProductsRouter from './product/products-router';
 import { parseProduct } from './product/product';
-import Message, { messagesTable } from './chat/message';
+import Messages from './chat/message';
 import CartRouter from './cart/cart-router';
 import { productsDao } from './daos/productsDaoMongo';
+import { messagesDao } from './daos/messagesDaoMongo';
 
 // INIT ======================================================================//
 // Constants
@@ -41,8 +42,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/chat', async (req, res) => {
-  const msgList = await messagesTable.find({});
-  const msgListHTML = Message.getHtmlList(msgList as Message[]);
+  const msgList = await messagesDao.getAll();
+  const msgListHTML = Messages.getHtmlList(msgList as Messages[]);
   res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
 });
 
@@ -63,7 +64,7 @@ ioServer.on('connection', async (socket) => {
   };
 
   const updateMessages = async () => {
-    const newMessageList = await messagesTable.find({});
+    const newMessageList = await messagesDao.getAll();
     ioServer.emit('messages_updated', newMessageList);
   };
 
@@ -78,13 +79,9 @@ ioServer.on('connection', async (socket) => {
   });
 
   socket.on('create_message', async (message) => {
-    const parsedMessage = Message.parseMessage(message);
-    // TODO: Check if message is valid
-    if (!parsedMessage)
+    const success = await messagesDao.save(message);
+    if (!success)
       return socket.emit('message_error', 'Invalid message');
-
-    const { id, ...msgNoID } = parsedMessage;
-    await messagesTable.insert(msgNoID as Message);
     updateMessages();
   });
 });

@@ -39,7 +39,7 @@ export default class Container<T extends Record<string, any>> {
     const knex = Knex.knex(this.options);
     let rows: T[] = [];
     if (sortColumn != null) {
-      await knex.from(this.table).where('condition').orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
+      await knex.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
         .then(res => rows = res)
         .catch(err => console.log(err))
         .finally(() => knex.destroy());

@@ -40,7 +40,6 @@ exports.cartsDao = void 0;
 var container_mongo_1 = require("../containers/container-mongo");
 var cart_1 = require("../models/cart");
 var uuid_1 = require("uuid");
-// !TODO: Add product!
 var CartsDao = /** @class */ (function () {
     function CartsDao() {
         Object.defineProperty(this, "container", {

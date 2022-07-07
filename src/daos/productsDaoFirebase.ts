@@ -1,9 +1,9 @@
 import Container from '../containers/container-firebase';
-import { iProduct } from '../types';
+import { iDao, iProduct } from '../types';
 import { v4 } from 'uuid';
 import { where } from '@firebase/firestore';
 
-export default class ProductsDao {
+export default class ProductsDao implements iDao<iProduct> {
   container = new Container<iProduct>('products');
 
   async save(product: iProduct): Promise<boolean> {

@@ -1,9 +1,9 @@
 import Container from '../containers/container-firebase';
 import { arrayRemove, arrayUnion, where } from '@firebase/firestore';
-import { iCart, iCartProduct } from '../types';
+import { iCart, iCartProduct, iDao } from '../types';
 import { v4 } from 'uuid';
 
-export default class CartsDao {
+export default class CartsDao implements iDao<iCart> {
   container = new Container<iCart>('carts');
 
   async save(cart: Partial<iCart>): Promise<boolean> {

@@ -1,11 +1,8 @@
-import { testContainerFirebase } from './containers/testContainerFirebase';
-import { testContainerMongo } from './containers/testContainerMongo';
-import { testCartDaoFirebase } from './daos/testCartDaoFirebase';
-import { testCartDaoMongo } from './daos/testCartDaoMongo';
-import { testProductDaoFirebase } from './daos/testProductDaoFirebase';
-import { testProductDaoMongo } from './daos/testProductDaoMongo';
+import { testContainers } from './containers/testContainers';
+import { testDaos } from './daos/testDaos';
+import { testNormalizr } from './normalize.ignore/testNormalizr';
 
-export const testFunction = async (name: string, callback: () => Promise<void>) => {
+export const testFunction = async (name: string, callback: () => Promise<void> | void) => {
   try {
     console.log(`> START test ${name} ------------------------------------<`);
     await callback();
@@ -16,17 +13,8 @@ export const testFunction = async (name: string, callback: () => Promise<void>) 
 };
 
 (async () => {
-  console.log('\n> testContainerMongo ==============================================<');
-  await testContainerMongo();
-  console.log('\n> testContainerFirebase ==============================================<');
-  await testContainerFirebase();
-  console.log('\n> testProductDaoMongo ==============================================<');
-  await testProductDaoMongo();
-  console.log('\n> testProductDaoFirebase ==============================================<');
-  await testProductDaoFirebase();
-  console.log('\n> testCartDaoMongo ==============================================<');
-  await testCartDaoMongo();
-  console.log('\n> testCartDaoFirebase ==============================================<');
-  await testCartDaoFirebase();
+  await testContainers();
+  await testDaos();
+  await testNormalizr();
   console.log('> FINISHED ALL TESTS');
 })();

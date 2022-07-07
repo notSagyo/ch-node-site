@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
+var mongoose_2 = require("../settings/mongoose");
 var Container = /** @class */ (function () {
     function Container(model) {
         Object.defineProperty(this, "connection", {
@@ -59,21 +60,25 @@ var Container = /** @class */ (function () {
         writable: true,
         value: function () {
             return __awaiter(this, void 0, void 0, function () {
-                var _a, err_1;
+                var uri, connectOptions, _a, err_1;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            _b.trys.push([0, 2, , 3]);
-                            _a = this;
-                            return [4 /*yield*/, mongoose_1.default.connect('mongodb://127.0.0.1:27017/ecommerce')];
+                            uri = mongoose_2.mongooseOptions.uri, connectOptions = mongoose_2.mongooseOptions.options;
+                            _b.label = 1;
                         case 1:
-                            _a.connection = (_b.sent()).connection;
-                            return [3 /*break*/, 3];
+                            _b.trys.push([1, 3, , 4]);
+                            _a = this;
+                            return [4 /*yield*/, mongoose_1.default.connect(uri, connectOptions)];
                         case 2:
+                            _a.connection = (_b.sent()).connection;
+                            console.log('Connected to mongoDB');
+                            return [3 /*break*/, 4];
+                        case 3:
                             err_1 = _b.sent();
                             console.error(err_1);
-                            return [3 /*break*/, 3];
-                        case 3: return [2 /*return*/];
+                            return [3 /*break*/, 4];
+                        case 4: return [2 /*return*/];
                     }
                 });
             });
@@ -98,6 +103,7 @@ var Container = /** @class */ (function () {
                         case 2:
                             _a.sent();
                             this.connection = undefined;
+                            console.log('Disconected from mongoDB\n');
                             return [3 /*break*/, 4];
                         case 3:
                             err_2 = _a.sent();
@@ -129,6 +135,7 @@ var Container = /** @class */ (function () {
                         case 3:
                             _a.sent();
                             success = true;
+                            console.log('Inserted new data:', data);
                             return [3 /*break*/, 5];
                         case 4:
                             err_3 = _a.sent();
@@ -162,6 +169,7 @@ var Container = /** @class */ (function () {
                             return [4 /*yield*/, this.model.find(allOrFilter).exec()];
                         case 3:
                             result = _a.sent();
+                            console.log("Found data matching ".concat(filter, ": ").concat(result));
                             return [3 /*break*/, 5];
                         case 4:
                             err_4 = _a.sent();
@@ -196,6 +204,7 @@ var Container = /** @class */ (function () {
                         case 3:
                             _a.sent();
                             success = true;
+                            console.log('Updated elements matching:', filter);
                             return [3 /*break*/, 5];
                         case 4:
                             err_5 = _a.sent();
@@ -230,6 +239,7 @@ var Container = /** @class */ (function () {
                         case 3:
                             _a.sent();
                             success = true;
+                            console.log('Deleted elements matching:', filter);
                             return [3 /*break*/, 5];
                         case 4:
                             err_6 = _a.sent();

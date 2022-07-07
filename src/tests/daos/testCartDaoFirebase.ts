@@ -47,7 +47,6 @@ export const testCartDaoFirebase = async () => {
     console.log('After delete id:"0":', res);
   });
 
-
   // await testFunction('deleteAll()', async () => {
   //   await cartsDao.deleteAll();
   //   const res = await cartsDao.getAll();

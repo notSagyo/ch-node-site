@@ -1,9 +1,9 @@
 import Container from '../containers/container-mongo';
 import { productsModel } from '../models/product';
-import { iProduct } from '../types';
+import { iDao, iProduct } from '../types';
 import { v4 } from 'uuid';
 
-export default class ProductsDao {
+export default class ProductsDao implements iDao<iProduct>{
   container = new Container(productsModel);
 
   async save(product: iProduct): Promise<boolean> {
