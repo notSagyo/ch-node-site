@@ -1,4 +1,15 @@
+import Container from '../containers/container-knex';
+import { options } from '../settings/mariadb';
 import { iProduct } from '../types';
+
+export const productsTable = new Container<iProduct>(options.connection.database, 'products', options);
+productsTable.createTable(table => {
+  table.increments('id').primary();
+  table.string('name');
+  table.integer('price');
+  table.string('thumbnail');
+  table.string('description');
+});
 
 export const parseProduct = (obj: Record<string, unknown> | Partial<iProduct>): iProduct | null => {
   const placeholder = 'https://via.placeholder.com/256';
@@ -15,6 +26,6 @@ export const parseProduct = (obj: Record<string, unknown> | Partial<iProduct>): 
   const id = typeof obj?.id === 'string' ? obj.id : '-1';
 
   if (name != null && price != null)
-    return { id, name, price, thumbnail, description };
+    return { id: id, name, price, thumbnail, description };
   return null;
 };

@@ -1,52 +1,23 @@
-import Product from '../product/product';
+import { iCartProduct } from '../types';
+import { validate } from 'uuid';
 
-export default class CartProduct extends Product {
-  quantity: number;
-  timestamp: number;
-  code: string;
+export const parseCartProduct = (obj: Record<string, unknown> | Partial<iCartProduct>): iCartProduct | null => {
+  const isValidQuantity = typeof obj?.quantity === 'number' && obj.quantity > 0;
+  const isValidTimestamp = typeof obj?.timestamp === 'number' && obj.timestamp > 0;
+  const isValidCode = typeof obj?.code === 'string' && obj.code.length > 0;
+  const isValidId = typeof obj?.id === 'string' && validate(obj.id);
+  if (!isValidId)
+    return null;
 
-  constructor(
-    name: string,
-    price: number,
-    quantity?: number,
-    timestamp?: number,
-    code?: string,
-    description?: string,
-    thumbnail?: string,
-    id?: number) {
+  const quantity = isValidQuantity ? obj.quantity as number : 1;
+  const timestamp = isValidTimestamp ? obj.timestamp as number : Date.now();
+  const code = isValidCode ? obj.code as string : '-1';
+  const id = obj.id as string;
 
-    super(name, price, description, thumbnail, id);
-    this.quantity = quantity || 1;
-    this.timestamp = timestamp || Date.now();
-    // TODO: Replace with uuidv4
-    this.code = code || (Math.random()*1000000).toFixed(0);
-  }
-
-  static parseProduct(obj: Record<string, unknown> | CartProduct | Product) {
-    const parsedProd = Product.parseProduct(obj);
-    if (!parsedProd)
-      return null;
-
-    // TS assertion because not not all params have the same signature
-    obj = obj as Record<string, unknown>;
-
-    const isValidQuantity = typeof obj?.quantity === 'number' && obj.quantity > 0;
-    const isValidTimestamp = typeof obj?.timestamp === 'number' && obj.timestamp > 0;
-    const isValidCode = typeof obj?.code === 'string' && obj.code.length > 0;
-
-    const quantity = isValidQuantity ? obj.quantity as number : undefined;
-    const timestamp = isValidTimestamp ? obj.timestamp as number : undefined;
-    const code = isValidCode ? obj.code as string : undefined;
-
-    return new CartProduct(
-      parsedProd.name,
-      parsedProd.price,
-      quantity,
-      timestamp,
-      code,
-      parsedProd.description,
-      parsedProd.thumbnail,
-      parsedProd.id
-    );
-  }
-}
+  return({
+    id,
+    code,
+    quantity,
+    timestamp
+  });
+};

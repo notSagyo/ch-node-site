@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// TODO: Delete this class
 var Cart = /** @class */ (function () {
     function Cart(products, timestamp, id) {
         // Manual ID input will be ignored when saved in the container
@@ -34,7 +35,7 @@ var Cart = /** @class */ (function () {
         });
         this.products = products || [];
         this.timestamp = timestamp || Date.now();
-        this.id = id || 0;
+        this.id = id || '0';
     }
     Object.defineProperty(Cart.prototype, "addProduct", {
         enumerable: false,
@@ -58,8 +59,8 @@ var Cart = /** @class */ (function () {
         configurable: true,
         writable: true,
         value: function (cart, product) {
-            var _a;
-            var newId = ((_a = cart.products[cart.products.length - 1]) === null || _a === void 0 ? void 0 : _a.id) + 1 || 0;
+            var lastId = cart.products.length > 0 ? cart.products[cart.products.length - 1].id : '0';
+            var newId = (Number(lastId) + 1).toString();
             cart.products.push(__assign(__assign({}, product), { id: newId }));
             return newId;
         }

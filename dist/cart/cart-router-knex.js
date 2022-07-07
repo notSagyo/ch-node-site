@@ -37,9 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
-var product_1 = require("./product");
-var ProductsRouter = /** @class */ (function () {
-    function ProductsRouter(container, productsHtmlPath) {
+var cart_1 = require("./cart");
+var product_knex_1 = require("../product/product-knex");
+var cart_product_1 = require("./cart-product");
+var CartRouter = /** @class */ (function () {
+    function CartRouter(container, cartHtmlPath) {
         Object.defineProperty(this, "router", {
             enumerable: true,
             configurable: true,
@@ -52,23 +54,29 @@ var ProductsRouter = /** @class */ (function () {
             writable: true,
             value: express.Router()
         });
-        Object.defineProperty(this, "container", {
+        Object.defineProperty(this, "productsTable", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: product_knex_1.productsTable
+        });
+        Object.defineProperty(this, "cartContainer", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "productsHtmlPath", {
+        Object.defineProperty(this, "cartHtmlPath", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
-        this.container = container;
-        this.productsHtmlPath = productsHtmlPath;
+        this.cartContainer = container;
+        this.cartHtmlPath = cartHtmlPath;
         this.initRoutes();
     }
-    Object.defineProperty(ProductsRouter.prototype, "initRoutes", {
+    Object.defineProperty(CartRouter.prototype, "initRoutes", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -76,158 +84,170 @@ var ProductsRouter = /** @class */ (function () {
             // Router
             this.getProductsPage();
             // API Router
-            this.getProducts();
-            this.getProductsById();
-            this.postProduct();
-            this.deleteProductById();
-            this.putProductById();
+            this.getCartProductsById();
+            this.postCart();
+            this.postCartProduct();
+            this.deleteCartById();
+            this.deleteCartProductById();
         }
     });
-    Object.defineProperty(ProductsRouter.prototype, "getProductsPage", {
+    Object.defineProperty(CartRouter.prototype, "getProductsPage", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function () {
             var _this = this;
             this.router.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var prods;
                 return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.getAll()];
-                        case 1:
-                            prods = _a.sent();
-                            res.render(this.productsHtmlPath, { productList: prods });
-                            return [2 /*return*/];
-                    }
+                    res.render(this.cartHtmlPath);
+                    return [2 /*return*/];
                 });
             }); });
         }
     });
-    Object.defineProperty(ProductsRouter.prototype, "getProducts", {
+    Object.defineProperty(CartRouter.prototype, "getCartProductsById", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function () {
             var _this = this;
-            this.apiRouter.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var prods;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.getAll()];
-                        case 1:
-                            prods = _a.sent();
-                            res.json(prods);
-                            return [2 /*return*/];
-                    }
-                });
-            }); });
-        }
-    });
-    Object.defineProperty(ProductsRouter.prototype, "getProductsById", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () {
-            var _this = this;
-            this.apiRouter.get('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var prodID, prod;
+            this.apiRouter.get('/:id/productos', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var cartId, cart;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            prodID = parseInt(req.params.id);
-                            if (isNaN(prodID))
-                                return [2 /*return*/, res.send('ID must be an integer number')];
-                            return [4 /*yield*/, this.container.getbyId(prodID)];
+                            cartId = req.params.id;
+                            return [4 /*yield*/, this.cartContainer.getbyId(cartId)];
                         case 1:
-                            prod = _a.sent();
-                            if (!prod)
-                                return [2 /*return*/, res.status(404).send('404: Product not found')];
-                            res.json(prod);
+                            cart = _a.sent();
+                            if (!cart)
+                                return [2 /*return*/, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
+                            res.status(200).json(cart.products);
                             return [2 /*return*/];
                     }
                 });
             }); });
         }
     });
-    Object.defineProperty(ProductsRouter.prototype, "postProduct", {
+    Object.defineProperty(CartRouter.prototype, "postCart", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function () {
             var _this = this;
             this.apiRouter.post('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var newProd;
+                var newCartId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
-                            newProd = product_1.default.parseProduct(req.body);
-                            if (!newProd)
-                                return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
-                            return [4 /*yield*/, this.container.save(newProd)];
+                        case 0: return [4 /*yield*/, this.cartContainer.save(new cart_1.default())];
                         case 1:
-                            _a.sent();
-                            res.status(201).redirect('/productos');
+                            newCartId = _a.sent();
+                            if (newCartId == null)
+                                return [2 /*return*/, res.status(400).send('400: Error while saving cart')];
+                            res.status(201).send("201: Cart N\u00B0".concat(newCartId, " created succesfully"));
                             return [2 /*return*/];
                     }
                 });
             }); });
         }
     });
-    Object.defineProperty(ProductsRouter.prototype, "deleteProductById", {
+    Object.defineProperty(CartRouter.prototype, "deleteCartById", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function () {
             var _this = this;
             this.apiRouter.delete('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var prodID, success;
+                var cartId, success;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            prodID = parseInt(req.params.id);
-                            if (isNaN(prodID))
-                                return [2 /*return*/, res.send('ID must be an integer number')];
-                            return [4 /*yield*/, this.container.deleteById(prodID)];
+                            cartId = req.params.id;
+                            return [4 /*yield*/, this.cartContainer.deleteById(cartId)];
                         case 1:
                             success = _a.sent();
                             if (success == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while deleting product')];
-                            res.status(200).send('200: Product deleted succesfully');
+                                return [2 /*return*/, res.status(400).send('400: Error while deleting cart')];
+                            res.status(200).send("200: Cart N\u00B0".concat(cartId, " deleted succesfully"));
                             return [2 /*return*/];
                     }
                 });
             }); });
         }
     });
-    Object.defineProperty(ProductsRouter.prototype, "putProductById", {
+    // Sample POST body: { "id": 1 }
+    Object.defineProperty(CartRouter.prototype, "postCartProduct", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function () {
             var _this = this;
-            this.apiRouter.put('/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var prodID, newProd, success;
+            this.apiRouter.post('/:id/productos', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var cartId, productId, product, cartProduct, cart, success;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            prodID = parseInt(req.params.id);
-                            if (isNaN(prodID))
-                                return [2 /*return*/, res.send('ID must be an integer number')];
-                            newProd = product_1.default.parseProduct(req.body);
-                            if (!newProd)
-                                return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
-                            return [4 /*yield*/, this.container.updateById(prodID, newProd)];
+                            cartId = req.params.id;
+                            productId = req.body.id;
+                            return [4 /*yield*/, this.productsTable.find(['id', '=', productId])];
                         case 1:
+                            product = (_a.sent())[0];
+                            if (!product)
+                                return [2 /*return*/, res.status(404).send("404: Product with ID:".concat(productId, " not found"))];
+                            cartProduct = (0, cart_product_1.parseCartProduct)(product);
+                            return [4 /*yield*/, this.cartContainer.getbyId(cartId)];
+                        case 2:
+                            cart = _a.sent();
+                            if (!cart)
+                                return [2 /*return*/, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
+                            if (!cartProduct)
+                                return [2 /*return*/, res.status(400).send('400: Error while creating product')];
+                            // Add product to cart
+                            cart_1.default.addProduct(cart, cartProduct);
+                            return [4 /*yield*/, this.cartContainer.updateById(cart.id, cart)];
+                        case 3:
                             success = _a.sent();
                             if (success == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while updating product')];
-                            res.status(200).send('200: Product updated succesfully');
+                                return [2 /*return*/, res.status(400).send('400: Error while saving cart')];
+                            res.status(201).send('201: Product added succesfully');
                             return [2 /*return*/];
                     }
                 });
             }); });
         }
     });
-    return ProductsRouter;
+    Object.defineProperty(CartRouter.prototype, "deleteCartProductById", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () {
+            var _this = this;
+            this.apiRouter.delete('/:cartId/productos/:productId', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var cartId, productId, cart, success;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            cartId = req.params.cartId;
+                            productId = req.params.productId;
+                            return [4 /*yield*/, this.cartContainer.getbyId(cartId)];
+                        case 1:
+                            cart = _a.sent();
+                            if (cart == null)
+                                return [2 /*return*/, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
+                            // Delete product from cart
+                            cart_1.default.deleteProduct(cart, productId);
+                            return [4 /*yield*/, this.cartContainer.updateById(cart.id, cart)];
+                        case 2:
+                            success = _a.sent();
+                            if (success == null)
+                                return [2 /*return*/, res.status(400).send('400: Error while saving cart')];
+                            res.status(200).send('200: CartProduct deleted succesfully');
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
+        }
+    });
+    return CartRouter;
 }());
-exports.default = ProductsRouter;
+exports.default = CartRouter;
