@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var cart_1 = require("../cart/cart");
 var cartsDaoMongo_1 = require("../daos/cartsDaoMongo");
-var CartRouter = /** @class */ (function () {
+var CartRouter = (function () {
     function CartRouter(cartHtmlPath) {
         Object.defineProperty(this, "router", {
             enumerable: true,
@@ -67,9 +67,7 @@ var CartRouter = /** @class */ (function () {
         configurable: true,
         writable: true,
         value: function () {
-            // Router
             this.getCartPage();
-            // API Router
             this.postCart();
             this.getCartProducts();
             this.postCartProduct();
@@ -86,7 +84,7 @@ var CartRouter = /** @class */ (function () {
             this.router.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     res.render(this.cartHtmlPath);
-                    return [2 /*return*/];
+                    return [2];
                 });
             }); });
         }
@@ -101,13 +99,13 @@ var CartRouter = /** @class */ (function () {
                 var newCartId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, cartsDaoMongo_1.cartsDao.save(new cart_1.default())];
+                        case 0: return [4, cartsDaoMongo_1.cartsDao.save(new cart_1.default())];
                         case 1:
                             newCartId = _a.sent();
                             if (newCartId == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while saving cart')];
+                                return [2, res.status(400).send('400: Error while saving cart')];
                             res.status(201).send('201: Cart created succesfully');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -125,13 +123,13 @@ var CartRouter = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             cartId = req.params.id;
-                            return [4 /*yield*/, cartsDaoMongo_1.cartsDao.getById(cartId)];
+                            return [4, cartsDaoMongo_1.cartsDao.getById(cartId)];
                         case 1:
                             cart = _a.sent();
                             if (!cart)
-                                return [2 /*return*/, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
+                                return [2, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
                             res.status(200).json(cart.products);
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -149,19 +147,18 @@ var CartRouter = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             cartId = req.params.id;
-                            return [4 /*yield*/, cartsDaoMongo_1.cartsDao.deleteById(cartId)];
+                            return [4, cartsDaoMongo_1.cartsDao.deleteById(cartId)];
                         case 1:
                             success = _a.sent();
                             if (success == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while deleting cart')];
+                                return [2, res.status(400).send('400: Error while deleting cart')];
                             res.status(200).send("200: Cart N\u00B0".concat(cartId, " deleted succesfully"));
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
         }
     });
-    // Sample body: { "id": 1 }
     Object.defineProperty(CartRouter.prototype, "postCartProduct", {
         enumerable: false,
         configurable: true,
@@ -175,13 +172,13 @@ var CartRouter = /** @class */ (function () {
                         case 0:
                             cartId = req.params.id;
                             productId = req.body.id;
-                            return [4 /*yield*/, cartsDaoMongo_1.cartsDao.addProductById(cartId, productId)];
+                            return [4, cartsDaoMongo_1.cartsDao.addProductById(cartId, productId)];
                         case 1:
                             success = _a.sent();
                             if (!success)
-                                return [2 /*return*/, res.status(400).send('400: Error while saving product in cart')];
+                                return [2, res.status(400).send('400: Error while saving product in cart')];
                             res.status(201).send('201: Product added succesfully');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -200,13 +197,13 @@ var CartRouter = /** @class */ (function () {
                         case 0:
                             cartId = req.params.cartId;
                             productId = req.body.id;
-                            return [4 /*yield*/, cartsDaoMongo_1.cartsDao.removeProductById(cartId, productId)];
+                            return [4, cartsDaoMongo_1.cartsDao.removeProductById(cartId, productId)];
                         case 1:
                             success = _a.sent();
                             if (!success)
-                                return [2 /*return*/, res.status(400).send('400: Error while deleting product from cart')];
+                                return [2, res.status(400).send('400: Error while deleting product from cart')];
                             res.status(200).send('200: CartProduct deleted succesfully');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });

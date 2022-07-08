@@ -47,119 +47,119 @@ var testContainerFirebase = function () { return __awaiter(void 0, void 0, void 
         switch (_a.label) {
             case 0:
                 container = new container_firebase_1.default('products');
-                return [4 /*yield*/, (0, tests_1.testFunction)('insert()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('insert()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.insert({ id: (0, uuid_1.v4)(), name: 'Test', price: 100 })];
+                                case 0: return [4, container.insert({ id: (0, uuid_1.v4)(), name: 'Test', price: 100 })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.insert({ id: (0, uuid_1.v4)(), name: 'Test2', price: 100 })];
+                                    return [4, container.insert({ id: (0, uuid_1.v4)(), name: 'Test2', price: 100 })];
                                 case 2:
                                     _a.sent();
-                                    return [4 /*yield*/, container.insert({ id: (0, uuid_1.v4)(), name: 'Test3', price: 100 })];
+                                    return [4, container.insert({ id: (0, uuid_1.v4)(), name: 'Test3', price: 100 })];
                                 case 3:
                                     _a.sent();
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('find() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('find() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.find('*')];
+                                case 0: return [4, container.find('*')];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('find() {name: Test}', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('find() {name: Test}', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.find((0, firestore_1.where)('name', '==', 'Test'))];
+                                case 0: return [4, container.find((0, firestore_1.where)('name', '==', 'Test'))];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('find() NON-EXISTENT', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('find() NON-EXISTENT', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.find((0, firestore_1.where)('name', '==', 'guayaba'))];
+                                case 0: return [4, container.find((0, firestore_1.where)('name', '==', 'guayaba'))];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('update()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('update()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var updated;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.update((0, firestore_1.where)('name', '==', 'Test'), { name: 'Updated!' })];
+                                case 0: return [4, container.update((0, firestore_1.where)('name', '==', 'Test'), { name: 'Updated!' })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.find('*')];
+                                    return [4, container.find('*')];
                                 case 2:
                                     updated = _a.sent();
                                     console.log('After update name Test => Updated!:', updated);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('delete()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('delete()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.delete((0, firestore_1.where)('name', '==', 'Updated!'))];
+                                case 0: return [4, container.delete((0, firestore_1.where)('name', '==', 'Updated!'))];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.find('*')];
+                                    return [4, container.find('*')];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete {name: "Updated!"}:', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('delete() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('delete() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.delete('*')];
+                                case 0: return [4, container.delete('*')];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.find('*')];
+                                    return [4, container.find('*')];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete ALL', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 7:
                 _a.sent();
                 console.log('\nFinished testing containerFirebase\n');
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); };

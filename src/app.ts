@@ -4,11 +4,9 @@ import { Server as HttpServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import ProductsRouter from './product/products-router';
 import { parseProduct } from './product/product';
-import Messages from './chat/message';
 import CartRouter from './cart/cart-router';
 import { productsDao } from './daos/productsDaoMongo';
 import { messagesDao } from './daos/messagesDaoMongo';
-import { iMessage } from './types';
 
 // INIT ======================================================================//
 // Constants
@@ -43,9 +41,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/chat', async (req, res) => {
-  const msgList = await messagesDao.getAll();
-  const msgListHTML = Messages.getHtmlList(msgList);
-  res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
+  res.render('pages/chat.ejs');
 });
 
 app.use((req, res) => {
@@ -59,31 +55,20 @@ app.use((req, res) => {
 ioServer.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
 
-  const updateProducts = async () => {
-    const newProductList = await productsDao.getAll();
-    ioServer.emit('products_updated', newProductList);
-  };
-
-  const updateMessages = async () => {
-    const newMessageList = await messagesDao.getAll();
-    ioServer.emit('messages_updated', newMessageList);
-  };
-
+  // TODO: run the product parsing in the DAO
   socket.on('create_product', async (product) => {
     let parsedProduct = parseProduct(product);
-    // TODO: Check if product is valid
-    if (!parsedProduct)
+    if (parsedProduct == null)
       return socket.emit('message_error', 'Invalid product');
-
     await productsDao.save(parsedProduct);
-    updateProducts();
+    ioServer.emit('products_updated', await productsDao.getAll());
   });
 
+  ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
   socket.on('create_message', async (message) => {
     const success = await messagesDao.save(message);
-    if (!success)
-      return socket.emit('message_error', 'Invalid message');
-    updateMessages();
+    if (!success) return socket.emit('message_error', 'Invalid message');
+    ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
   });
 });
 

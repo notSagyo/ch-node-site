@@ -35,17 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var path = require("path");
@@ -56,8 +45,7 @@ var product_1 = require("./product/product");
 var message_1 = require("./chat/message");
 var cart_router_1 = require("./cart/cart-router");
 var productsDaoMongo_1 = require("./daos/productsDaoMongo");
-// INIT ======================================================================//
-// Constants
+var messagesDaoMongo_1 = require("./daos/messagesDaoMongo");
 var PORT = 8080;
 var app = express();
 var httpServer = new http_1.Server(app);
@@ -65,20 +53,16 @@ var ioServer = new socket_io_1.Server(httpServer);
 var baseDir = path.join(__dirname, '..');
 var productsRouter = new products_router_1.default('pages/products.ejs');
 var cartRouter = new cart_router_1.default('pages/cart.ejs');
-// Config
 app.set('view engine', 'ejs');
 app.set('views', path.join(baseDir, 'views'));
-// Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Routers
 app.use('/productos', productsRouter.router);
 app.use('/carrito', cartRouter.router);
 app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
 app.use('/api', productsRouter.testRouter);
 app.use(express.static(path.join(baseDir, 'public')));
-// Routes
 app.get('/', function (req, res) {
     res.render('pages/index.ejs');
 });
@@ -86,12 +70,12 @@ app.get('/chat', function (req, res) { return __awaiter(void 0, void 0, void 0, 
     var msgList, msgListHTML;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, message_1.messagesTable.find({})];
+            case 0: return [4, messagesDaoMongo_1.messagesDao.getAll()];
             case 1:
                 msgList = _a.sent();
                 msgListHTML = message_1.default.getHtmlList(msgList);
                 res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); });
@@ -101,74 +85,59 @@ app.use(function (req, res) {
         desc: "Route ".concat(req.url, " method ").concat(req.method, " not implemented")
     });
 });
-// Websockets
 ioServer.on('connection', function (socket) { return __awaiter(void 0, void 0, void 0, function () {
-    var updateProducts, updateMessages;
-    return __generator(this, function (_a) {
-        console.log('New client connected:', socket.id);
-        updateProducts = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var newProductList;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, productsDaoMongo_1.productsDao.getAll()];
-                    case 1:
-                        newProductList = _a.sent();
-                        ioServer.emit('products_updated', newProductList);
-                        return [2 /*return*/];
-                }
-            });
-        }); };
-        updateMessages = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var newMessageList;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, message_1.messagesTable.find({})];
-                    case 1:
-                        newMessageList = _a.sent();
-                        ioServer.emit('messages_updated', newMessageList);
-                        return [2 /*return*/];
-                }
-            });
-        }); };
-        socket.on('create_product', function (product) { return __awaiter(void 0, void 0, void 0, function () {
-            var parsedProduct;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        parsedProduct = (0, product_1.parseProduct)(product);
-                        // TODO: Check if product is valid
-                        if (!parsedProduct)
-                            return [2 /*return*/, socket.emit('message_error', 'Invalid product')];
-                        return [4 /*yield*/, productsDaoMongo_1.productsDao.save(parsedProduct)];
-                    case 1:
-                        _a.sent();
-                        updateProducts();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        socket.on('create_message', function (message) { return __awaiter(void 0, void 0, void 0, function () {
-            var parsedMessage, id, msgNoID;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        parsedMessage = message_1.default.parseMessage(message);
-                        // TODO: Check if message is valid
-                        if (!parsedMessage)
-                            return [2 /*return*/, socket.emit('message_error', 'Invalid message')];
-                        id = parsedMessage.id, msgNoID = __rest(parsedMessage, ["id"]);
-                        return [4 /*yield*/, message_1.messagesTable.insert(msgNoID)];
-                    case 1:
-                        _a.sent();
-                        updateMessages();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        return [2 /*return*/];
+    var _a, _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                console.log('New client connected:', socket.id);
+                _b = (_a = ioServer).emit;
+                _c = ['messages_updated'];
+                return [4, messagesDaoMongo_1.messagesDao.getNormalizedMessages()];
+            case 1:
+                _b.apply(_a, _c.concat([_d.sent()]));
+                socket.on('create_product', function (product) { return __awaiter(void 0, void 0, void 0, function () {
+                    var parsedProduct, _a, _b, _c;
+                    return __generator(this, function (_d) {
+                        switch (_d.label) {
+                            case 0:
+                                parsedProduct = (0, product_1.parseProduct)(product);
+                                if (!parsedProduct)
+                                    return [2, socket.emit('message_error', 'Invalid product')];
+                                return [4, productsDaoMongo_1.productsDao.save(parsedProduct)];
+                            case 1:
+                                _d.sent();
+                                _b = (_a = ioServer).emit;
+                                _c = ['products_updated'];
+                                return [4, productsDaoMongo_1.productsDao.getAll()];
+                            case 2:
+                                _b.apply(_a, _c.concat([_d.sent()]));
+                                return [2];
+                        }
+                    });
+                }); });
+                socket.on('create_message', function (message) { return __awaiter(void 0, void 0, void 0, function () {
+                    var success, _a, _b, _c;
+                    return __generator(this, function (_d) {
+                        switch (_d.label) {
+                            case 0: return [4, messagesDaoMongo_1.messagesDao.save(message)];
+                            case 1:
+                                success = _d.sent();
+                                if (!success)
+                                    return [2, socket.emit('message_error', 'Invalid message')];
+                                _b = (_a = ioServer).emit;
+                                _c = ['messages_updated'];
+                                return [4, messagesDaoMongo_1.messagesDao.getNormalizedMessages()];
+                            case 2:
+                                _b.apply(_a, _c.concat([_d.sent()]));
+                                return [2];
+                        }
+                    });
+                }); });
+                return [2];
+        }
     });
 }); });
-// Listen ====================================================================//
 httpServer.listen(PORT, function () {
     console.log("Server started at http://localhost:".concat(PORT, "/"));
 });

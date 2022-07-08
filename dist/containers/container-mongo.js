@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 var mongoose_2 = require("../settings/mongoose");
-var Container = /** @class */ (function () {
+var Container = (function () {
     function Container(model) {
         Object.defineProperty(this, "connection", {
             enumerable: true,
@@ -69,16 +69,16 @@ var Container = /** @class */ (function () {
                         case 1:
                             _b.trys.push([1, 3, , 4]);
                             _a = this;
-                            return [4 /*yield*/, mongoose_1.default.connect(uri, connectOptions)];
+                            return [4, mongoose_1.default.connect(uri, connectOptions)];
                         case 2:
                             _a.connection = (_b.sent()).connection;
                             console.log('Connected to mongoDB');
-                            return [3 /*break*/, 4];
+                            return [3, 4];
                         case 3:
                             err_1 = _b.sent();
                             console.error(err_1);
-                            return [3 /*break*/, 4];
-                        case 4: return [2 /*return*/];
+                            return [3, 4];
+                        case 4: return [2];
                     }
                 });
             });
@@ -95,21 +95,21 @@ var Container = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             if (!this.connection)
-                                return [2 /*return*/];
+                                return [2];
                             _a.label = 1;
                         case 1:
                             _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, this.connection.close()];
+                            return [4, this.connection.close()];
                         case 2:
                             _a.sent();
                             this.connection = undefined;
                             console.log('Disconected from mongoDB\n');
-                            return [3 /*break*/, 4];
+                            return [3, 4];
                         case 3:
                             err_2 = _a.sent();
                             console.error(err_2);
-                            return [3 /*break*/, 4];
-                        case 4: return [2 /*return*/];
+                            return [3, 4];
+                        case 4: return [2];
                     }
                 });
             });
@@ -124,26 +124,25 @@ var Container = /** @class */ (function () {
                 var success, err_3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.connect()];
+                        case 0: return [4, this.connect()];
                         case 1:
                             _a.sent();
                             success = false;
                             _a.label = 2;
                         case 2:
                             _a.trys.push([2, 4, , 5]);
-                            return [4 /*yield*/, this.model.create(data)];
+                            return [4, this.model.create(data)];
                         case 3:
                             _a.sent();
                             success = true;
-                            console.log('Inserted new data:', data);
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 4:
                             err_3 = _a.sent();
                             console.error(err_3);
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 5:
                             this.close();
-                            return [2 /*return*/, success];
+                            return [2, success];
                     }
                 });
             });
@@ -158,7 +157,7 @@ var Container = /** @class */ (function () {
                 var result, allOrFilter, err_4;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.connect()];
+                        case 0: return [4, this.connect()];
                         case 1:
                             _a.sent();
                             result = null;
@@ -166,18 +165,17 @@ var Container = /** @class */ (function () {
                             _a.label = 2;
                         case 2:
                             _a.trys.push([2, 4, , 5]);
-                            return [4 /*yield*/, this.model.find(allOrFilter).exec()];
+                            return [4, this.model.find(allOrFilter).lean().exec()];
                         case 3:
-                            result = _a.sent();
-                            console.log("Found data matching ".concat(filter, ": ").concat(result));
-                            return [3 /*break*/, 5];
+                            result = (_a.sent());
+                            return [3, 5];
                         case 4:
                             err_4 = _a.sent();
                             console.error(err_4);
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 5:
                             this.close();
-                            return [2 /*return*/, result];
+                            return [2, result];
                     }
                 });
             });
@@ -192,7 +190,7 @@ var Container = /** @class */ (function () {
                 var success, allOrFilter, err_5;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.connect()];
+                        case 0: return [4, this.connect()];
                         case 1:
                             _a.sent();
                             success = false;
@@ -200,19 +198,19 @@ var Container = /** @class */ (function () {
                             _a.label = 2;
                         case 2:
                             _a.trys.push([2, 4, , 5]);
-                            return [4 /*yield*/, this.model.updateMany(allOrFilter, data)];
+                            return [4, this.model.updateMany(allOrFilter, data)];
                         case 3:
                             _a.sent();
                             success = true;
                             console.log('Updated elements matching:', filter);
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 4:
                             err_5 = _a.sent();
                             console.error(err_5);
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 5:
                             this.close();
-                            return [2 /*return*/, success];
+                            return [2, success];
                     }
                 });
             });
@@ -227,7 +225,7 @@ var Container = /** @class */ (function () {
                 var success, allOrFilter, err_6;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.connect()];
+                        case 0: return [4, this.connect()];
                         case 1:
                             _a.sent();
                             success = false;
@@ -235,19 +233,19 @@ var Container = /** @class */ (function () {
                             _a.label = 2;
                         case 2:
                             _a.trys.push([2, 4, , 5]);
-                            return [4 /*yield*/, this.model.deleteMany(allOrFilter)];
+                            return [4, this.model.deleteMany(allOrFilter)];
                         case 3:
                             _a.sent();
                             success = true;
                             console.log('Deleted elements matching:', filter);
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 4:
                             err_6 = _a.sent();
                             console.error(err_6);
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 5:
                             this.close();
-                            return [2 /*return*/, success];
+                            return [2, success];
                     }
                 });
             });

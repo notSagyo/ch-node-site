@@ -47,143 +47,143 @@ var testContainerMongo = function () { return __awaiter(void 0, void 0, void 0, 
         switch (_a.label) {
             case 0:
                 container = new container_mongo_1.default(product_1.productsModel);
-                return [4 /*yield*/, (0, tests_1.testFunction)('connect()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('connect()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.connect()];
+                                case 0: return [4, container.connect()];
                                 case 1:
                                     _a.sent();
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('close()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('close()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.close()];
+                                case 0: return [4, container.close()];
                                 case 1:
                                     _a.sent();
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('insert()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('insert()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.insert({ id: (0, uuid_1.v4)(), name: 'Test', price: 100 })];
+                                case 0: return [4, container.insert({ id: (0, uuid_1.v4)(), name: 'Test', price: 100 })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.insert({ id: (0, uuid_1.v4)(), name: 'Test2', price: 100 })];
+                                    return [4, container.insert({ id: (0, uuid_1.v4)(), name: 'Test2', price: 100 })];
                                 case 2:
                                     _a.sent();
-                                    return [4 /*yield*/, container.insert({ id: (0, uuid_1.v4)(), name: 'Test3', price: 100 })];
+                                    return [4, container.insert({ id: (0, uuid_1.v4)(), name: 'Test3', price: 100 })];
                                 case 3:
                                     _a.sent();
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('find() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('find() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.find({})];
+                                case 0: return [4, container.find({})];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('find() {name: "Test"}', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('find() {name: "Test"}', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.find({ name: 'Test' })];
+                                case 0: return [4, container.find({ name: 'Test' })];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('find() NON-EXISTENT', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('find() NON-EXISTENT', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.find({ name: 'papaya' })];
+                                case 0: return [4, container.find({ name: 'papaya' })];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('update()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('update()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var updated;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.update({ name: 'Test' }, { name: 'Test999' })];
+                                case 0: return [4, container.update({ name: 'Test' }, { name: 'Test999' })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.find({})];
+                                    return [4, container.find({})];
                                 case 2:
                                     updated = _a.sent();
                                     console.log('After update name Test => Test999:', updated);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 7:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('delete()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('delete()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.delete({ name: 'Test999' })];
+                                case 0: return [4, container.delete({ name: 'Test999' })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.find({})];
+                                    return [4, container.find({})];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete Test999:', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 8:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('delete() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('delete() ALL', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, container.delete({})];
+                                case 0: return [4, container.delete({})];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, container.find({})];
+                                    return [4, container.find({})];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete ALL', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 9:
                 _a.sent();
                 console.log('\nFinished testing containerMongo\n');
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); };

@@ -40,7 +40,7 @@ var express = require("express");
 var cart_1 = require("./cart");
 var product_knex_1 = require("../product/product-knex");
 var cart_product_1 = require("./cart-product");
-var CartRouter = /** @class */ (function () {
+var CartRouter = (function () {
     function CartRouter(container, cartHtmlPath) {
         Object.defineProperty(this, "router", {
             enumerable: true,
@@ -81,9 +81,7 @@ var CartRouter = /** @class */ (function () {
         configurable: true,
         writable: true,
         value: function () {
-            // Router
             this.getProductsPage();
-            // API Router
             this.getCartProductsById();
             this.postCart();
             this.postCartProduct();
@@ -100,7 +98,7 @@ var CartRouter = /** @class */ (function () {
             this.router.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     res.render(this.cartHtmlPath);
-                    return [2 /*return*/];
+                    return [2];
                 });
             }); });
         }
@@ -117,13 +115,13 @@ var CartRouter = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             cartId = req.params.id;
-                            return [4 /*yield*/, this.cartContainer.getbyId(cartId)];
+                            return [4, this.cartContainer.getbyId(cartId)];
                         case 1:
                             cart = _a.sent();
                             if (!cart)
-                                return [2 /*return*/, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
+                                return [2, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
                             res.status(200).json(cart.products);
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -139,13 +137,13 @@ var CartRouter = /** @class */ (function () {
                 var newCartId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.cartContainer.save(new cart_1.default())];
+                        case 0: return [4, this.cartContainer.save(new cart_1.default())];
                         case 1:
                             newCartId = _a.sent();
                             if (newCartId == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while saving cart')];
+                                return [2, res.status(400).send('400: Error while saving cart')];
                             res.status(201).send("201: Cart N\u00B0".concat(newCartId, " created succesfully"));
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -163,19 +161,18 @@ var CartRouter = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             cartId = req.params.id;
-                            return [4 /*yield*/, this.cartContainer.deleteById(cartId)];
+                            return [4, this.cartContainer.deleteById(cartId)];
                         case 1:
                             success = _a.sent();
                             if (success == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while deleting cart')];
+                                return [2, res.status(400).send('400: Error while deleting cart')];
                             res.status(200).send("200: Cart N\u00B0".concat(cartId, " deleted succesfully"));
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
         }
     });
-    // Sample POST body: { "id": 1 }
     Object.defineProperty(CartRouter.prototype, "postCartProduct", {
         enumerable: false,
         configurable: true,
@@ -189,28 +186,27 @@ var CartRouter = /** @class */ (function () {
                         case 0:
                             cartId = req.params.id;
                             productId = req.body.id;
-                            return [4 /*yield*/, this.productsTable.find(['id', '=', productId])];
+                            return [4, this.productsTable.find(['id', '=', productId])];
                         case 1:
                             product = (_a.sent())[0];
                             if (!product)
-                                return [2 /*return*/, res.status(404).send("404: Product with ID:".concat(productId, " not found"))];
+                                return [2, res.status(404).send("404: Product with ID:".concat(productId, " not found"))];
                             cartProduct = (0, cart_product_1.parseCartProduct)(product);
-                            return [4 /*yield*/, this.cartContainer.getbyId(cartId)];
+                            return [4, this.cartContainer.getbyId(cartId)];
                         case 2:
                             cart = _a.sent();
                             if (!cart)
-                                return [2 /*return*/, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
+                                return [2, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
                             if (!cartProduct)
-                                return [2 /*return*/, res.status(400).send('400: Error while creating product')];
-                            // Add product to cart
+                                return [2, res.status(400).send('400: Error while creating product')];
                             cart_1.default.addProduct(cart, cartProduct);
-                            return [4 /*yield*/, this.cartContainer.updateById(cart.id, cart)];
+                            return [4, this.cartContainer.updateById(cart.id, cart)];
                         case 3:
                             success = _a.sent();
                             if (success == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while saving cart')];
+                                return [2, res.status(400).send('400: Error while saving cart')];
                             res.status(201).send('201: Product added succesfully');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -229,20 +225,19 @@ var CartRouter = /** @class */ (function () {
                         case 0:
                             cartId = req.params.cartId;
                             productId = req.params.productId;
-                            return [4 /*yield*/, this.cartContainer.getbyId(cartId)];
+                            return [4, this.cartContainer.getbyId(cartId)];
                         case 1:
                             cart = _a.sent();
                             if (cart == null)
-                                return [2 /*return*/, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
-                            // Delete product from cart
+                                return [2, res.status(404).send("404: Cart with ID:".concat(cartId, " not found"))];
                             cart_1.default.deleteProduct(cart, productId);
-                            return [4 /*yield*/, this.cartContainer.updateById(cart.id, cart)];
+                            return [4, this.cartContainer.updateById(cart.id, cart)];
                         case 2:
                             success = _a.sent();
                             if (success == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while saving cart')];
+                                return [2, res.status(400).send('400: Error while saving cart')];
                             res.status(200).send('200: CartProduct deleted succesfully');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });

@@ -38,7 +38,7 @@ export default class Container<T> {
     try {
       await this.model.create(data);
       success = true;
-      console.log('Inserted new data:', data);
+      // console.log('Inserted new data:', data);
     } catch (err) {
       console.error(err);
     }
@@ -51,8 +51,7 @@ export default class Container<T> {
     let result: T[] | null = null;
     const allOrFilter = filter === '*' ? {} : filter;
     try {
-      result = await this.model.find(allOrFilter).exec();
-      console.log(`Found data matching ${filter}: ${result}`);
+      result = await this.model.find(allOrFilter).lean().exec() as T[];
     } catch (err) {
       console.error(err);
     }

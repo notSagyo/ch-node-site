@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,57 +36,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.productsDao = void 0;
-var container_firebase_1 = require("../containers/container-firebase");
-var uuid_1 = require("uuid");
-var firestore_1 = require("@firebase/firestore");
-var ProductsDao = (function () {
-    function ProductsDao() {
+exports.usersDao = exports.UserDao = void 0;
+var container_mongo_1 = require("../containers/container-mongo");
+var user_1 = require("../models/user");
+var UserDao = (function () {
+    function UserDao() {
         Object.defineProperty(this, "container", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: new container_firebase_1.default('products')
+            value: new container_mongo_1.default(user_1.usersModel)
         });
     }
-    Object.defineProperty(ProductsDao.prototype, "save", {
+    Object.defineProperty(UserDao.prototype, "save", {
         enumerable: false,
         configurable: true,
         writable: true,
-        value: function (product) {
+        value: function (user) {
             return __awaiter(this, void 0, void 0, function () {
-                var prodWithId;
+                var parsedUser;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            prodWithId = __assign(__assign({}, product), { id: (0, uuid_1.v4)() });
-                            return [4, this.container.insert(prodWithId)];
+                            parsedUser = (0, user_1.parseUser)(user);
+                            if (!(parsedUser != null)) return [3, 2];
+                            return [4, this.container.insert(parsedUser)];
                         case 1: return [2, _a.sent()];
+                        case 2: return [2, false];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "getById", {
+    Object.defineProperty(UserDao.prototype, "getById", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function (id) {
             return __awaiter(this, void 0, void 0, function () {
-                var res, product;
+                var res, user;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4, this.container.find((0, firestore_1.where)('id', '==', id))];
+                        case 0: return [4, this.container.find({ id: id })];
                         case 1:
                             res = _a.sent();
-                            product = res ? res[0] : null;
-                            return [2, product];
+                            user = res ? res[0] : null;
+                            return [2, user];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "getAll", {
+    Object.defineProperty(UserDao.prototype, "getByEmail", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function (email) {
+            return __awaiter(this, void 0, void 0, function () {
+                var res, user;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4, this.container.find({ email: email })];
+                        case 1:
+                            res = _a.sent();
+                            user = res ? res[0] : null;
+                            return [2, user];
+                    }
+                });
+            });
+        }
+    });
+    Object.defineProperty(UserDao.prototype, "getAll", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -112,7 +121,7 @@ var ProductsDao = (function () {
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "updateById", {
+    Object.defineProperty(UserDao.prototype, "updateById", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -120,14 +129,14 @@ var ProductsDao = (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4, this.container.update((0, firestore_1.where)('id', '==', id), data)];
+                        case 0: return [4, this.container.update({ id: id }, data)];
                         case 1: return [2, _a.sent()];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "deleteById", {
+    Object.defineProperty(UserDao.prototype, "deleteById", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -135,14 +144,14 @@ var ProductsDao = (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4, this.container.delete((0, firestore_1.where)('id', '==', id))];
+                        case 0: return [4, this.container.delete({ id: id })];
                         case 1: return [2, _a.sent()];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "deleteAll", {
+    Object.defineProperty(UserDao.prototype, "deleteAll", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -157,7 +166,7 @@ var ProductsDao = (function () {
             });
         }
     });
-    return ProductsDao;
+    return UserDao;
 }());
-exports.default = ProductsDao;
-exports.productsDao = new ProductsDao();
+exports.UserDao = UserDao;
+exports.usersDao = new UserDao();

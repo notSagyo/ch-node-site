@@ -41,7 +41,7 @@ var faker_1 = require("@faker-js/faker");
 var productsDaoMongo_1 = require("../daos/productsDaoMongo");
 var middlewares_1 = require("../middlewares");
 var product_1 = require("../product/product");
-var ProductsRouter = /** @class */ (function () {
+var ProductsRouter = (function () {
     function ProductsRouter(productsHtmlPath) {
         Object.defineProperty(this, "router", {
             enumerable: true,
@@ -75,15 +75,12 @@ var ProductsRouter = /** @class */ (function () {
         configurable: true,
         writable: true,
         value: function () {
-            // Router
             this.getProductsPage();
-            // API Router
             this.getProducts();
             this.getProductsById();
             this.postProduct();
             this.deleteProductById();
             this.putProductById();
-            // API router with test data
             this.productsTest();
         }
     });
@@ -97,11 +94,11 @@ var ProductsRouter = /** @class */ (function () {
                 var prods;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, productsDaoMongo_1.productsDao.getAll()];
+                        case 0: return [4, productsDaoMongo_1.productsDao.getAll()];
                         case 1:
                             prods = _a.sent();
                             res.render(this.productsHtmlPath, { productList: prods });
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -117,11 +114,11 @@ var ProductsRouter = /** @class */ (function () {
                 var prods;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, productsDaoMongo_1.productsDao.getAll()];
+                        case 0: return [4, productsDaoMongo_1.productsDao.getAll()];
                         case 1:
                             prods = _a.sent();
                             res.json(prods);
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -139,13 +136,13 @@ var ProductsRouter = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             prodId = req.params.id;
-                            return [4 /*yield*/, productsDaoMongo_1.productsDao.getById(prodId)];
+                            return [4, productsDaoMongo_1.productsDao.getById(prodId)];
                         case 1:
                             prod = _a.sent();
                             if (!prod)
-                                return [2 /*return*/, res.status(404).send('404: Product not found')];
+                                return [2, res.status(404).send('404: Product not found')];
                             res.json(prod);
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -164,12 +161,12 @@ var ProductsRouter = /** @class */ (function () {
                         case 0:
                             newProd = (0, product_1.parseProduct)(req.body);
                             if (!newProd)
-                                return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
-                            return [4 /*yield*/, productsDaoMongo_1.productsDao.save(newProd)];
+                                return [2, res.status(400).send('400: Error parsing product, malformed request body')];
+                            return [4, productsDaoMongo_1.productsDao.save(newProd)];
                         case 1:
                             _a.sent();
                             res.status(201).redirect('/productos');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -187,13 +184,13 @@ var ProductsRouter = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             prodId = req.params.id;
-                            return [4 /*yield*/, productsDaoMongo_1.productsDao.deleteById(prodId)];
+                            return [4, productsDaoMongo_1.productsDao.deleteById(prodId)];
                         case 1:
                             success = _a.sent();
                             if (success == null)
-                                return [2 /*return*/, res.status(400).send('400: Error while deleting product')];
+                                return [2, res.status(400).send('400: Error while deleting product')];
                             res.status(200).send('200: Product deleted succesfully');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -213,25 +210,25 @@ var ProductsRouter = /** @class */ (function () {
                             prodId = req.params.id;
                             newProd = (0, product_1.parseProduct)(req.body);
                             if (!newProd)
-                                return [2 /*return*/, res.status(400).send('400: Error parsing product, malformed request body')];
+                                return [2, res.status(400).send('400: Error parsing product, malformed request body')];
                             success = false;
-                            return [4 /*yield*/, productsDaoMongo_1.productsDao.getById(prodId)];
+                            return [4, productsDaoMongo_1.productsDao.getById(prodId)];
                         case 1:
                             exists = (_a.sent()) != null ? true : false;
-                            if (!exists) return [3 /*break*/, 3];
-                            return [4 /*yield*/, productsDaoMongo_1.productsDao.updateById(prodId, newProd)];
+                            if (!exists) return [3, 3];
+                            return [4, productsDaoMongo_1.productsDao.updateById(prodId, newProd)];
                         case 2:
                             success = _a.sent();
-                            return [3 /*break*/, 5];
-                        case 3: return [4 /*yield*/, productsDaoMongo_1.productsDao.save(newProd)];
+                            return [3, 5];
+                        case 3: return [4, productsDaoMongo_1.productsDao.save(newProd)];
                         case 4:
                             success = _a.sent();
                             _a.label = 5;
                         case 5:
                             if (success == false)
-                                return [2 /*return*/, res.status(400).send('400: Error while updating product')];
+                                return [2, res.status(400).send('400: Error while updating product')];
                             res.status(200).send('200: Product updated succesfully');
-                            return [2 /*return*/];
+                            return [2];
                     }
                 });
             }); });
@@ -258,7 +255,7 @@ var ProductsRouter = /** @class */ (function () {
                         products.push(prod);
                     }
                     res.status(200).json(products);
-                    return [2 /*return*/];
+                    return [2];
                 });
             }); });
         }

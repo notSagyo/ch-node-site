@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,57 +36,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.productsDao = void 0;
-var container_firebase_1 = require("../containers/container-firebase");
-var uuid_1 = require("uuid");
-var firestore_1 = require("@firebase/firestore");
-var ProductsDao = (function () {
-    function ProductsDao() {
+exports.messagesDao = void 0;
+var normalizr = require("normalizr");
+var container_mongo_1 = require("../containers/container-mongo");
+var message_1 = require("../chat/message");
+var message_2 = require("../models/message");
+var user_1 = require("../models/user");
+var userDaoMongo_1 = require("./userDaoMongo");
+var MessagesDao = (function () {
+    function MessagesDao() {
         Object.defineProperty(this, "container", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: new container_firebase_1.default('products')
+            value: new container_mongo_1.default(message_2.messageModel)
         });
     }
-    Object.defineProperty(ProductsDao.prototype, "save", {
+    Object.defineProperty(MessagesDao.prototype, "save", {
         enumerable: false,
         configurable: true,
         writable: true,
-        value: function (product) {
+        value: function (message) {
             return __awaiter(this, void 0, void 0, function () {
-                var prodWithId;
+                var parsedMessge, parsedUser, doUserExist;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            prodWithId = __assign(__assign({}, product), { id: (0, uuid_1.v4)() });
-                            return [4, this.container.insert(prodWithId)];
-                        case 1: return [2, _a.sent()];
+                            parsedMessge = (0, message_1.parseMessages)(message);
+                            parsedUser = (0, user_1.parseUser)(message === null || message === void 0 ? void 0 : message.author);
+                            if (parsedUser == null)
+                                return [2, false];
+                            return [4, userDaoMongo_1.usersDao.getByEmail(parsedUser.email)];
+                        case 1:
+                            doUserExist = (_a.sent()) != null;
+                            !doUserExist && userDaoMongo_1.usersDao.save(parsedUser);
+                            if (!(parsedMessge != null)) return [3, 3];
+                            return [4, this.container.insert(parsedMessge)];
+                        case 2: return [2, _a.sent()];
+                        case 3: return [2, false];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "getById", {
+    Object.defineProperty(MessagesDao.prototype, "getById", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function (id) {
             return __awaiter(this, void 0, void 0, function () {
-                var res, product;
+                var res, message;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4, this.container.find((0, firestore_1.where)('id', '==', id))];
+                        case 0: return [4, this.container.find({ id: id })];
                         case 1:
                             res = _a.sent();
-                            product = res ? res[0] : null;
-                            return [2, product];
+                            message = res ? res[0] : null;
+                            return [2, message];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "getAll", {
+    Object.defineProperty(MessagesDao.prototype, "getAll", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -112,7 +113,7 @@ var ProductsDao = (function () {
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "updateById", {
+    Object.defineProperty(MessagesDao.prototype, "updateById", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -120,14 +121,14 @@ var ProductsDao = (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4, this.container.update((0, firestore_1.where)('id', '==', id), data)];
+                        case 0: return [4, this.container.update({ id: id }, data)];
                         case 1: return [2, _a.sent()];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "deleteById", {
+    Object.defineProperty(MessagesDao.prototype, "deleteById", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -135,14 +136,14 @@ var ProductsDao = (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4, this.container.delete((0, firestore_1.where)('id', '==', id))];
+                        case 0: return [4, this.container.delete({ id: id })];
                         case 1: return [2, _a.sent()];
                     }
                 });
             });
         }
     });
-    Object.defineProperty(ProductsDao.prototype, "deleteAll", {
+    Object.defineProperty(MessagesDao.prototype, "deleteAll", {
         enumerable: false,
         configurable: true,
         writable: true,
@@ -157,7 +158,40 @@ var ProductsDao = (function () {
             });
         }
     });
-    return ProductsDao;
+    Object.defineProperty(MessagesDao.prototype, "getNormalizedMessages", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var messages, normalizedMessages;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4, this.getAll()];
+                        case 1:
+                            messages = _a.sent();
+                            normalizedMessages = normalizr.normalize(messages, [message_2.normalizrMessage]);
+                            return [2, normalizedMessages];
+                    }
+                });
+            });
+        }
+    });
+    Object.defineProperty(MessagesDao.prototype, "denormalizeMessages", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function (normalizedMessages) {
+            return __awaiter(this, void 0, void 0, function () {
+                var denormalizedMessages;
+                return __generator(this, function (_a) {
+                    denormalizedMessages = normalizr.denormalize(normalizedMessages.result, [message_2.normalizrMessage], normalizedMessages.entities);
+                    return [2, denormalizedMessages];
+                });
+            });
+        }
+    });
+    return MessagesDao;
 }());
-exports.default = ProductsDao;
-exports.productsDao = new ProductsDao();
+exports.default = MessagesDao;
+exports.messagesDao = new MessagesDao();

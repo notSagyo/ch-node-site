@@ -42,105 +42,105 @@ var tests_1 = require("../tests");
 var testProductDaoFirebase = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, tests_1.testFunction)('save()', function () { return __awaiter(void 0, void 0, void 0, function () {
+            case 0: return [4, (0, tests_1.testFunction)('save()', function () { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, productsDaoFirebase_1.productsDao.save({ id: '0', name: 'Test', price: 100 })];
+                            case 0: return [4, productsDaoFirebase_1.productsDao.save({ id: '0', name: 'Test', price: 100 })];
                             case 1:
                                 _a.sent();
-                                return [4 /*yield*/, productsDaoFirebase_1.productsDao.save({ id: '1', name: 'Test2', price: 100 })];
+                                return [4, productsDaoFirebase_1.productsDao.save({ id: '1', name: 'Test2', price: 100 })];
                             case 2:
                                 _a.sent();
-                                return [4 /*yield*/, productsDaoFirebase_1.productsDao.save({ id: '2', name: 'Test3', price: 100 })];
+                                return [4, productsDaoFirebase_1.productsDao.save({ id: '2', name: 'Test3', price: 100 })];
                             case 3:
                                 _a.sent();
-                                return [2 /*return*/];
+                                return [2];
                         }
                     });
                 }); })];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('getAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('getAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, productsDaoFirebase_1.productsDao.getAll()];
+                                case 0: return [4, productsDaoFirebase_1.productsDao.getAll()];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('getById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('getById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, productsDaoFirebase_1.productsDao.getById('0')];
+                                case 0: return [4, productsDaoFirebase_1.productsDao.getById('0')];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('updateById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('updateById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var updated;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, productsDaoFirebase_1.productsDao.updateById('0', { name: 'Test999' })];
+                                case 0: return [4, productsDaoFirebase_1.productsDao.updateById('0', { name: 'Test999' })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, productsDaoFirebase_1.productsDao.getAll()];
+                                    return [4, productsDaoFirebase_1.productsDao.getAll()];
                                 case 2:
                                     updated = _a.sent();
                                     console.log('After update id:"0" name Test => Test999:', updated);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('deleteById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('deleteById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, productsDaoFirebase_1.productsDao.deleteById('0')];
+                                case 0: return [4, productsDaoFirebase_1.productsDao.deleteById('0')];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, productsDaoFirebase_1.productsDao.getAll()];
+                                    return [4, productsDaoFirebase_1.productsDao.getAll()];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete id:"0":', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('deleteAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('deleteAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, productsDaoFirebase_1.productsDao.deleteAll()];
+                                case 0: return [4, productsDaoFirebase_1.productsDao.deleteAll()];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, productsDaoFirebase_1.productsDao.getAll()];
+                                    return [4, productsDaoFirebase_1.productsDao.getAll()];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete:', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 6:
                 _a.sent();
                 console.log('\nFinished testing productDaoFirebase\n');
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); };

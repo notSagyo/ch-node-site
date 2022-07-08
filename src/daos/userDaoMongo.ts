@@ -18,6 +18,12 @@ export class UserDao implements iDao<iUser> {
     return user;
   }
 
+  async getByEmail(email: string): Promise<iUser | null> {
+    const res = await this.container.find({ email });
+    const user = res ? res[0] : null;
+    return user;
+  }
+
   async getAll(): Promise<iUser[]> {
     return await this.container.find('*') || [];
   }

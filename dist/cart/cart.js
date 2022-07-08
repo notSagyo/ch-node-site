@@ -11,10 +11,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// TODO: Delete this class
-var Cart = /** @class */ (function () {
+var Cart = (function () {
     function Cart(products, timestamp, id) {
-        // Manual ID input will be ignored when saved in the container
         Object.defineProperty(this, "id", {
             enumerable: true,
             configurable: true,
@@ -53,7 +51,6 @@ var Cart = /** @class */ (function () {
             Cart.deleteProduct(this, productId);
         }
     });
-    // Static Methods ==========================================================//
     Object.defineProperty(Cart, "addProduct", {
         enumerable: false,
         configurable: true,

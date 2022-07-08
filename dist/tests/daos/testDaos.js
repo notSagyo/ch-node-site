@@ -36,45 +36,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testFunction = void 0;
-var testContainers_1 = require("./containers/testContainers");
-var testDaos_1 = require("./daos/testDaos");
-var testNormalizr_1 = require("./testNormalizr");
-var testFunction = function (name, callback) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_1;
+exports.testDaos = void 0;
+var testCartDaoFirebase_1 = require("./testCartDaoFirebase");
+var testCartDaoMongo_1 = require("./testCartDaoMongo");
+var testProductDaoFirebase_1 = require("./testProductDaoFirebase");
+var testProductDaoMongo_1 = require("./testProductDaoMongo");
+var testDaos = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                console.log("> START test ".concat(name, " ------------------------------------<"));
-                return [4, callback()];
+                console.log('\n> testProductDaoMongo ==============================================<');
+                return [4, (0, testProductDaoMongo_1.testProductDaoMongo)()];
             case 1:
                 _a.sent();
-                console.log('> END test\n');
-                return [3, 3];
-            case 2:
-                err_1 = _a.sent();
-                console.error(err_1);
-                return [3, 3];
-            case 3: return [2];
-        }
-    });
-}); };
-exports.testFunction = testFunction;
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4, (0, testContainers_1.testContainers)()];
-            case 1:
-                _a.sent();
-                return [4, (0, testDaos_1.testDaos)()];
+                console.log('\n> testProductDaoFirebase ==============================================<');
+                return [4, (0, testProductDaoFirebase_1.testProductDaoFirebase)()];
             case 2:
                 _a.sent();
-                return [4, (0, testNormalizr_1.testNormalizr)()];
+                console.log('\n> testCartDaoMongo ==============================================<');
+                return [4, (0, testCartDaoMongo_1.testCartDaoMongo)()];
             case 3:
                 _a.sent();
-                console.log('> FINISHED ALL TESTS');
+                console.log('\n> testCartDaoFirebase ==============================================<');
+                return [4, (0, testCartDaoFirebase_1.testCartDaoFirebase)()];
+            case 4:
+                _a.sent();
                 return [2];
         }
     });
-}); })();
+}); };
+exports.testDaos = testDaos;

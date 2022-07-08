@@ -25,19 +25,21 @@ export const parseUser = (user: Partial<iUser> | Record<string, unknown> | undef
   const isValidAge = typeof user?.age === 'number' && user.age > 0;
   const isValidAvatar = typeof user?.avatar === 'string' && user.avatar.length > 0;
 
+  if (!isValidEmail) console.log('Invalid user email');
+  else if (!isValidName) console.log('Invalid user name');
+  else if (!isValidLastName) console.log('Invalid user last name');
+  else if (!isValidUsername) console.log('Invalid user username');
+  else if (!isValidAge) console.log('Invalid user age');
 
-  // TODO: add specific log for each case
   const isValid = isValidEmail
     && isValidName
     && isValidLastName
     && isValidUsername
     && isValidAge;
+  if (!isValid) return null;
 
-  if (!isValid)
-    return null;
   const id = isValidId ? user.id as string: v4();
   const avatar = isValidAvatar ? user.avatar as string : '';
-
   return({
     id,
     avatar,

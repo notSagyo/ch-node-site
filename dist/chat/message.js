@@ -1,18 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.messagesTable = void 0;
-var container_knex_1 = require("../containers/container-knex");
-var sqlite3_1 = require("../settings/sqlite3");
-exports.messagesTable = new container_knex_1.default('ecommerce', 'messages', sqlite3_1.sqliteOptions);
-exports.messagesTable.createTable(function (table) {
-    table.increments('id').primary();
-    table.integer('time');
-    table.string('author');
-    table.string('content');
-});
-var Message = /** @class */ (function () {
-    function Message(time, author, content, id) {
-        // Manual ID will be ignored when saving in the container
+exports.parseMessages = void 0;
+var uuid_1 = require("uuid");
+var user_1 = require("../models/user");
+var parseMessages = function (obj) {
+    var author = (0, user_1.parseUser)(obj === null || obj === void 0 ? void 0 : obj.author);
+    var time = !isNaN(Number(obj === null || obj === void 0 ? void 0 : obj.time)) ? Number(obj.time) : Date.now();
+    var content = typeof (obj === null || obj === void 0 ? void 0 : obj.content) === 'string' && (obj === null || obj === void 0 ? void 0 : obj.content.length) > 0 ? obj.content : '';
+    var id = typeof (obj === null || obj === void 0 ? void 0 : obj.id) === 'string' ? obj.id : (0, uuid_1.v4)();
+    if (author != null)
+        return { id: id, time: time, author: author, content: content };
+    return null;
+};
+exports.parseMessages = parseMessages;
+var Messagesssssss = (function () {
+    function Messagesssssss(time, author, content, id) {
         Object.defineProperty(this, "id", {
             enumerable: true,
             configurable: true,
@@ -40,46 +42,32 @@ var Message = /** @class */ (function () {
         this.time = time;
         this.author = author;
         this.content = content;
-        this.id = id || 0;
+        this.id = id || '-1';
     }
-    Object.defineProperty(Message, "parseMessage", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function (obj) {
-            var time = !isNaN(Number(obj === null || obj === void 0 ? void 0 : obj.time)) ? Number(obj.time) : null;
-            var author = typeof (obj === null || obj === void 0 ? void 0 : obj.author) === 'string' && (obj === null || obj === void 0 ? void 0 : obj.author) ? obj.author : null;
-            var content = typeof (obj === null || obj === void 0 ? void 0 : obj.content) === 'string' && (obj === null || obj === void 0 ? void 0 : obj.content.length) > 0 ? obj.content : null;
-            var id = typeof (obj === null || obj === void 0 ? void 0 : obj.id) === 'number' ? obj.id : 0;
-            if (time != null && author != null && content != null)
-                return new Message(time, author, content, id);
-            return null;
-        }
-    });
-    Object.defineProperty(Message, "getHtml", {
+    Object.defineProperty(Messagesssssss, "getHtml", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function (message) {
-            var parsedMsg = this.parseMessage(message);
+            var parsedMsg = (0, exports.parseMessages)(message);
             if (!parsedMsg)
                 return;
             var timeString = new Date(parsedMsg.time).toLocaleString();
-            return ("\n      <li>\n        [<span class=\"text-danger\">".concat(timeString, "</span>]\n        <span class=\"text-primary fw-bold\"> ").concat(parsedMsg.author, ": </span>\n        <span class=\"text-success\">").concat(parsedMsg.content, "</span>\n      </li>\n    "));
+            return ("\n      <li>\n        [<span class=\"text-danger\">".concat(timeString, "</span>]\n        <span class=\"text-primary fw-bold\"> ").concat(parsedMsg.author.username, ": </span>\n        <span class=\"text-success\">").concat(parsedMsg.content, "</span>\n      </li>\n    "));
         }
     });
-    Object.defineProperty(Message, "getHtmlList", {
+    Object.defineProperty(Messagesssssss, "getHtmlList", {
         enumerable: false,
         configurable: true,
         writable: true,
         value: function (messages) {
             var html = '';
             messages.forEach(function (message) {
-                html += Message.getHtml(message) || '';
+                html += Messagesssssss.getHtml(message) || '';
             });
             return html;
         }
     });
-    return Message;
+    return Messagesssssss;
 }());
-exports.default = Message;
+exports.default = Messagesssssss;

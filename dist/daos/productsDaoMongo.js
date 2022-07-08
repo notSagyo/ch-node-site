@@ -51,7 +51,7 @@ exports.productsDao = void 0;
 var container_mongo_1 = require("../containers/container-mongo");
 var product_1 = require("../models/product");
 var uuid_1 = require("uuid");
-var ProductsDao = /** @class */ (function () {
+var ProductsDao = (function () {
     function ProductsDao() {
         Object.defineProperty(this, "container", {
             enumerable: true,
@@ -71,8 +71,8 @@ var ProductsDao = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             prodWithId = __assign(__assign({}, product), { id: (0, uuid_1.v4)() });
-                            return [4 /*yield*/, this.container.insert(prodWithId)];
-                        case 1: return [2 /*return*/, _a.sent()];
+                            return [4, this.container.insert(prodWithId)];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
@@ -87,11 +87,11 @@ var ProductsDao = /** @class */ (function () {
                 var res, product;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.find({ id: id })];
+                        case 0: return [4, this.container.find({ id: id })];
                         case 1:
                             res = _a.sent();
                             product = res ? res[0] : null;
-                            return [2 /*return*/, product];
+                            return [2, product];
                     }
                 });
             });
@@ -105,8 +105,8 @@ var ProductsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.find('*')];
-                        case 1: return [2 /*return*/, (_a.sent()) || []];
+                        case 0: return [4, this.container.find('*')];
+                        case 1: return [2, (_a.sent()) || []];
                     }
                 });
             });
@@ -120,8 +120,8 @@ var ProductsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.update({ id: id }, data)];
-                        case 1: return [2 /*return*/, _a.sent()];
+                        case 0: return [4, this.container.update({ id: id }, data)];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
@@ -135,8 +135,8 @@ var ProductsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.delete({ id: id })];
-                        case 1: return [2 /*return*/, _a.sent()];
+                        case 0: return [4, this.container.delete({ id: id })];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
@@ -150,8 +150,8 @@ var ProductsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.delete('*')];
-                        case 1: return [2 /*return*/, _a.sent()];
+                        case 0: return [4, this.container.delete('*')];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });

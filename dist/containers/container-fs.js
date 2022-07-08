@@ -48,8 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-var Container = /** @class */ (function () {
+var Container = (function () {
     function Container(filePath) {
         Object.defineProperty(this, "path", {
             enumerable: true,
@@ -72,11 +71,11 @@ var Container = /** @class */ (function () {
                         case 0:
                             _c.trys.push([0, 5, , 6]);
                             exists = fs.existsSync(this.path);
-                            if (!exists) return [3 /*break*/, 2];
-                            return [4 /*yield*/, fs.promises.readFile(this.path, 'utf-8')];
+                            if (!exists) return [3, 2];
+                            return [4, fs.promises.readFile(this.path, 'utf-8')];
                         case 1:
                             _b = _c.sent();
-                            return [3 /*break*/, 3];
+                            return [3, 3];
                         case 2:
                             _b = '';
                             _c.label = 3;
@@ -87,15 +86,15 @@ var Container = /** @class */ (function () {
                             newId = ((_a = parsedFile[parsedFile.length - 1]) === null || _a === void 0 ? void 0 : _a.id) + 1 || 0;
                             parsedFile.push(__assign(__assign({}, obj), { id: newId }));
                             file = JSON.stringify(parsedFile, null, 2);
-                            return [4 /*yield*/, fs.promises.writeFile(this.path, file)];
+                            return [4, fs.promises.writeFile(this.path, file)];
                         case 4:
                             _c.sent();
-                            return [3 /*break*/, 6];
+                            return [3, 6];
                         case 5:
                             err_1 = _c.sent();
                             console.error(err_1);
-                            return [2 /*return*/, null];
-                        case 6: return [2 /*return*/, newId];
+                            return [2, null];
+                        case 6: return [2, newId];
                     }
                 });
             });
@@ -112,17 +111,17 @@ var Container = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, fs.promises.readFile(this.path, 'utf-8')];
+                            return [4, fs.promises.readFile(this.path, 'utf-8')];
                         case 1:
                             file = _a.sent();
                             parsedFile = JSON.parse(file);
                             result = parsedFile.find(function (item) { return item.id === id; });
-                            return [2 /*return*/, result];
+                            return [2, result];
                         case 2:
                             err_2 = _a.sent();
                             console.error(err_2);
-                            return [2 /*return*/, null];
-                        case 3: return [2 /*return*/];
+                            return [2, null];
+                        case 3: return [2];
                     }
                 });
             });
@@ -139,16 +138,16 @@ var Container = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, fs.promises.readFile(this.path, 'utf-8')];
+                            return [4, fs.promises.readFile(this.path, 'utf-8')];
                         case 1:
                             file = _a.sent();
                             parsedFile = file.length > 0 ? JSON.parse(file) : [];
-                            return [2 /*return*/, parsedFile];
+                            return [2, parsedFile];
                         case 2:
                             err_3 = _a.sent();
                             console.error(err_3);
-                            return [2 /*return*/, []];
-                        case 3: return [2 /*return*/];
+                            return [2, []];
+                        case 3: return [2];
                     }
                 });
             });
@@ -168,7 +167,7 @@ var Container = /** @class */ (function () {
                             _a.label = 1;
                         case 1:
                             _a.trys.push([1, 4, , 5]);
-                            return [4 /*yield*/, fs.promises.readFile(this.path, 'utf-8')];
+                            return [4, fs.promises.readFile(this.path, 'utf-8')];
                         case 2:
                             file = _a.sent();
                             parsedFile = JSON.parse(file);
@@ -178,15 +177,15 @@ var Container = /** @class */ (function () {
                             else
                                 parsedFile.push(obj);
                             newFile = JSON.stringify(parsedFile, null, 2);
-                            return [4 /*yield*/, fs.promises.writeFile(this.path, newFile)];
+                            return [4, fs.promises.writeFile(this.path, newFile)];
                         case 3:
                             _a.sent();
-                            return [2 /*return*/, id];
+                            return [2, id];
                         case 4:
                             err_4 = _a.sent();
                             console.error(err_4);
-                            return [2 /*return*/, null];
-                        case 5: return [2 /*return*/];
+                            return [2, null];
+                        case 5: return [2];
                     }
                 });
             });
@@ -203,7 +202,7 @@ var Container = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             _a.trys.push([0, 3, , 4]);
-                            return [4 /*yield*/, fs.promises.readFile(this.path, 'utf-8')];
+                            return [4, fs.promises.readFile(this.path, 'utf-8')];
                         case 1:
                             file = _a.sent();
                             parsedFile = JSON.parse(file);
@@ -212,15 +211,15 @@ var Container = /** @class */ (function () {
                                 throw Error('404: Not found');
                             parsedFile.splice(objIndex, 1);
                             newFile = JSON.stringify(parsedFile, null, 2);
-                            return [4 /*yield*/, fs.promises.writeFile(this.path, newFile)];
+                            return [4, fs.promises.writeFile(this.path, newFile)];
                         case 2:
                             _a.sent();
-                            return [2 /*return*/, id];
+                            return [2, id];
                         case 3:
                             err_5 = _a.sent();
                             console.error(err_5);
-                            return [2 /*return*/, null];
-                        case 4: return [2 /*return*/];
+                            return [2, null];
+                        case 4: return [2];
                     }
                 });
             });
@@ -235,13 +234,13 @@ var Container = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     try {
                         fs.promises.writeFile(this.path, '');
-                        return [2 /*return*/, true];
+                        return [2, true];
                     }
                     catch (err) {
                         console.error(err);
-                        return [2 /*return*/, null];
+                        return [2, null];
                     }
-                    return [2 /*return*/];
+                    return [2];
                 });
             });
         }

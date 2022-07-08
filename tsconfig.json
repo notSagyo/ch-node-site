@@ -14,7 +14,8 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "outDir": "dist",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "removeComments": true
   },
-  "include": ["src"],
+  "include": ["src"]
 }

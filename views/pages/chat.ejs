@@ -1,8 +1,10 @@
 <%- include('../partials/head', { pageTitle: 'Chat' }) %>
 <div class="p-2">
-  <ul id="messagesWindow">
-    <%- messageListHTML %>
-  </ul>
+  <!-- Filled with JS -->
+  <ul id="messagesWindow" class="mb-0"></ul>
+  <div class="mb-2">Compression rate:
+    <span class="fw-bold text-primary"><span id="compressionRate"></span>%</span>
+  </div>
   <form
     id="messageForm"
     enctype="multipart/form-data"

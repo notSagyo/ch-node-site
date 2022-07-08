@@ -37,8 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Knex = require("knex");
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-var Container = /** @class */ (function () {
+var Container = (function () {
     function Container(schema, table, options) {
         Object.defineProperty(this, "options", {
             enumerable: true,
@@ -79,19 +78,19 @@ var Container = /** @class */ (function () {
                     switch (_a.label) {
                         case 0:
                             knex = Knex.knex(this.options);
-                            return [4 /*yield*/, knex.schema.hasTable(this.table)];
+                            return [4, knex.schema.hasTable(this.table)];
                         case 1:
                             exists = _a.sent();
                             success = exists;
-                            if (!!exists) return [3 /*break*/, 3];
-                            return [4 /*yield*/, knex.schema.createTable(this.table, schemaBuilder)
+                            if (!!exists) return [3, 3];
+                            return [4, knex.schema.createTable(this.table, schemaBuilder)
                                     .then(function () { return success = true; })
                                     .catch(function (err) { return console.log(err); })
                                     .finally(function () { return knex.destroy(); })];
                         case 2:
                             _a.sent();
                             _a.label = 3;
-                        case 3: return [2 /*return*/, success];
+                        case 3: return [2, success];
                     }
                 });
             });
@@ -109,13 +108,13 @@ var Container = /** @class */ (function () {
                         case 0:
                             knex = Knex.knex(this.options);
                             success = false;
-                            return [4 /*yield*/, knex(this.table).insert(obj)
+                            return [4, knex(this.table).insert(obj)
                                     .then(function () { return success = true; })
                                     .catch(function (err) { return console.log(err); })
                                     .finally(function () { return knex.destroy(); })];
                         case 1:
                             _a.sent();
-                            return [2 /*return*/, success];
+                            return [2, success];
                     }
                 });
             });
@@ -133,22 +132,22 @@ var Container = /** @class */ (function () {
                         case 0:
                             knex = Knex.knex(this.options);
                             rows = [];
-                            if (!(sortColumn != null)) return [3 /*break*/, 2];
-                            return [4 /*yield*/, knex.from(this.table).where('condition').orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
+                            if (!(sortColumn != null)) return [3, 2];
+                            return [4, knex.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
                                     .then(function (res) { return rows = res; })
                                     .catch(function (err) { return console.log(err); })
                                     .finally(function () { return knex.destroy(); })];
                         case 1:
                             _a.sent();
-                            return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, knex.from(this.table).where(condition)
+                            return [3, 4];
+                        case 2: return [4, knex.from(this.table).where(condition)
                                 .then(function (res) { return rows = res; })
                                 .catch(function (err) { return console.log(err); })
                                 .finally(function () { return knex.destroy(); })];
                         case 3:
                             _a.sent();
                             _a.label = 4;
-                        case 4: return [2 /*return*/, rows];
+                        case 4: return [2, rows];
                     }
                 });
             });
@@ -166,13 +165,13 @@ var Container = /** @class */ (function () {
                         case 0:
                             knex = Knex.knex(this.options);
                             success = false;
-                            return [4 /*yield*/, knex(this.table).where(condition).update(update)
+                            return [4, knex(this.table).where(condition).update(update)
                                     .then(function () { return success = true; })
                                     .catch(function (err) { return console.log(err); })
                                     .finally(function () { return knex.destroy(); })];
                         case 1:
                             _a.sent();
-                            return [2 /*return*/, success];
+                            return [2, success];
                     }
                 });
             });
@@ -190,22 +189,22 @@ var Container = /** @class */ (function () {
                         case 0:
                             knex = Knex.knex(this.options);
                             success = false;
-                            if (!(limit != null)) return [3 /*break*/, 2];
-                            return [4 /*yield*/, knex.from(this.table).where(condition || {}).limit(limit).del()
+                            if (!(limit != null)) return [3, 2];
+                            return [4, knex.from(this.table).where(condition || {}).limit(limit).del()
                                     .then(function () { return success = true; })
                                     .catch(function (err) { return console.log(err); })
                                     .finally(function () { return knex.destroy(); })];
                         case 1:
                             _a.sent();
-                            return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, knex.from(this.table).where(condition || {}).del()
+                            return [3, 4];
+                        case 2: return [4, knex.from(this.table).where(condition || {}).del()
                                 .then(function () { return success = true; })
                                 .catch(function (err) { return console.log(err); })
                                 .finally(function () { return knex.destroy(); })];
                         case 3:
                             _a.sent();
                             _a.label = 4;
-                        case 4: return [2 /*return*/, success];
+                        case 4: return [2, success];
                     }
                 });
             });

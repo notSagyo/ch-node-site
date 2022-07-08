@@ -2,18 +2,21 @@ import { v4 } from 'uuid';
 import { parseUser } from '../models/user';
 import { iMessage } from '../types';
 
+// TODO: Restructure folders and delete this file
 export const parseMessage = (obj: Record<string, unknown> | Partial<iMessage>): iMessage | null => {
   const author = parseUser(obj?.author as Record<string, unknown>);
   const time = !isNaN(Number(obj?.time)) ? Number(obj.time) : Date.now();
   const content = typeof obj?.content === 'string' && obj?.content.length > 0 ? obj.content : '';
   const id = typeof obj?.id === 'string' ? obj.id : v4();
 
-  if (author != null)
-    return { id, time, author, content };
-  return null;
+  if (author == null) {
+    console.log('Invalid message author');
+    return null;
+  }
+  return { id, time, author, content };
 };
 
-export default class Message {
+export default class Messages {
   // Manual ID will be ignored when saving in the container
   id: string;
   time: number;
@@ -46,7 +49,7 @@ export default class Message {
   static getHtmlList(messages: iMessage[]) {
     let html = '';
     messages.forEach(message => {
-      html += Message.getHtml(message) || '';
+      html += Messages.getHtml(message) || '';
     });
     return html;
   }

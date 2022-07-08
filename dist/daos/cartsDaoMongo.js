@@ -40,7 +40,7 @@ exports.cartsDao = void 0;
 var container_mongo_1 = require("../containers/container-mongo");
 var cart_1 = require("../models/cart");
 var uuid_1 = require("uuid");
-var CartsDao = /** @class */ (function () {
+var CartsDao = (function () {
     function CartsDao() {
         Object.defineProperty(this, "container", {
             enumerable: true,
@@ -64,8 +64,8 @@ var CartsDao = /** @class */ (function () {
                                 products: (cart === null || cart === void 0 ? void 0 : cart.products) || [],
                                 timestamp: (cart === null || cart === void 0 ? void 0 : cart.timestamp) || Date.now()
                             };
-                            return [4 /*yield*/, this.container.insert(cartWithId)];
-                        case 1: return [2 /*return*/, _a.sent()];
+                            return [4, this.container.insert(cartWithId)];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
@@ -80,11 +80,11 @@ var CartsDao = /** @class */ (function () {
                 var res, product;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.find({ id: id })];
+                        case 0: return [4, this.container.find({ id: id })];
                         case 1:
                             res = _a.sent();
                             product = res ? res[0] : null;
-                            return [2 /*return*/, product];
+                            return [2, product];
                     }
                 });
             });
@@ -98,8 +98,8 @@ var CartsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.find({})];
-                        case 1: return [2 /*return*/, (_a.sent()) || []];
+                        case 0: return [4, this.container.find({})];
+                        case 1: return [2, (_a.sent()) || []];
                     }
                 });
             });
@@ -113,8 +113,8 @@ var CartsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.update({ id: id }, data)];
-                        case 1: return [2 /*return*/, _a.sent()];
+                        case 0: return [4, this.container.update({ id: id }, data)];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
@@ -128,8 +128,8 @@ var CartsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.delete({ id: id })];
-                        case 1: return [2 /*return*/, _a.sent()];
+                        case 0: return [4, this.container.delete({ id: id })];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
@@ -143,8 +143,8 @@ var CartsDao = /** @class */ (function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.container.delete({})];
-                        case 1: return [2 /*return*/, _a.sent()];
+                        case 0: return [4, this.container.delete({})];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
@@ -170,16 +170,16 @@ var CartsDao = /** @class */ (function () {
                             _a.label = 1;
                         case 1:
                             _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, this.container.update({ id: cartId }, { $push: { products: cartProd } })];
+                            return [4, this.container.update({ id: cartId }, { $push: { products: cartProd } })];
                         case 2:
                             _a.sent();
                             success = true;
-                            return [3 /*break*/, 4];
+                            return [3, 4];
                         case 3:
                             error_1 = _a.sent();
                             console.log(error_1);
-                            return [3 /*break*/, 4];
-                        case 4: return [2 /*return*/, success];
+                            return [3, 4];
+                        case 4: return [2, success];
                     }
                 });
             });
@@ -199,16 +199,16 @@ var CartsDao = /** @class */ (function () {
                             _a.label = 1;
                         case 1:
                             _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, this.container.update({ id: cartId }, { $pull: { products: { id: productId } } })];
+                            return [4, this.container.update({ id: cartId }, { $pull: { products: { id: productId } } })];
                         case 2:
                             _a.sent();
                             success = true;
-                            return [3 /*break*/, 4];
+                            return [3, 4];
                         case 3:
                             error_2 = _a.sent();
                             console.log(error_2);
-                            return [3 /*break*/, 4];
-                        case 4: return [2 /*return*/, success];
+                            return [3, 4];
+                        case 4: return [2, success];
                     }
                 });
             });

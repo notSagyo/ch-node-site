@@ -44,109 +44,109 @@ var tests_1 = require("../tests");
 var testCartDaoMongo = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, tests_1.testFunction)('save()', function () { return __awaiter(void 0, void 0, void 0, function () {
+            case 0: return [4, (0, tests_1.testFunction)('save()', function () { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, cartsDaoMongo_1.cartsDao.save({ id: '0', products: [], timestamp: Date.now() })];
+                            case 0: return [4, cartsDaoMongo_1.cartsDao.save({ id: '0', products: [], timestamp: Date.now() })];
                             case 1:
                                 _a.sent();
-                                return [4 /*yield*/, cartsDaoMongo_1.cartsDao.save({ id: '1', products: [], timestamp: Date.now() })];
+                                return [4, cartsDaoMongo_1.cartsDao.save({ id: '1', products: [], timestamp: Date.now() })];
                             case 2:
                                 _a.sent();
-                                return [4 /*yield*/, cartsDaoMongo_1.cartsDao.save({ id: '2', products: [], timestamp: Date.now() })];
+                                return [4, cartsDaoMongo_1.cartsDao.save({ id: '2', products: [], timestamp: Date.now() })];
                             case 3:
                                 _a.sent();
-                                return [2 /*return*/];
+                                return [2];
                         }
                     });
                 }); })];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('getAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('getAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartsDaoMongo_1.cartsDao.getAll()];
+                                case 0: return [4, cartsDaoMongo_1.cartsDao.getAll()];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('getById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('getById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartsDaoMongo_1.cartsDao.getById('0')];
+                                case 0: return [4, cartsDaoMongo_1.cartsDao.getById('0')];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('updateById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('updateById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var newCartProd, updated;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
                                     newCartProd = (0, cart_product_1.parseCartProduct)({ id: (0, uuid_1.v4)(), quantity: 1 });
                                     if (!newCartProd)
-                                        return [2 /*return*/];
-                                    return [4 /*yield*/, cartsDaoMongo_1.cartsDao.updateById('0', { products: [newCartProd] })];
+                                        return [2];
+                                    return [4, cartsDaoMongo_1.cartsDao.updateById('0', { products: [newCartProd] })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, cartsDaoMongo_1.cartsDao.getAll()];
+                                    return [4, cartsDaoMongo_1.cartsDao.getAll()];
                                 case 2:
                                     updated = _a.sent();
                                     console.log('After update id:"0" {id: v4(), quantity: 1}:', updated);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('deleteById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('deleteById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartsDaoMongo_1.cartsDao.deleteById('0')];
+                                case 0: return [4, cartsDaoMongo_1.cartsDao.deleteById('0')];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, cartsDaoMongo_1.cartsDao.getAll()];
+                                    return [4, cartsDaoMongo_1.cartsDao.getAll()];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete id:"0":', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('deleteAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('deleteAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartsDaoMongo_1.cartsDao.deleteAll()];
+                                case 0: return [4, cartsDaoMongo_1.cartsDao.deleteAll()];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, cartsDaoMongo_1.cartsDao.getAll()];
+                                    return [4, cartsDaoMongo_1.cartsDao.getAll()];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete:', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 6:
                 _a.sent();
                 console.log('\nFinished testing cartDaoMongo\n');
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); };
