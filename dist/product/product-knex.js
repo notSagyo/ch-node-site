@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseProduct = exports.productsTable = void 0;
 var container_knex_1 = require("../containers/container-knex");
 var mariadb_1 = require("../settings/mariadb");
-exports.productsTable = new container_knex_1.default(mariadb_1.options.connection.database, 'products', mariadb_1.options);
+exports.productsTable = new container_knex_1.default(mariadb_1.maridadbOptions.connection.database, 'products', mariadb_1.maridadbOptions);
 exports.productsTable.createTable(function (table) {
     table.increments('id').primary();
     table.string('name');

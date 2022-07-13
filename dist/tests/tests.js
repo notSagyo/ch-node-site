@@ -37,12 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testFunction = void 0;
-var testContainerFirebase_1 = require("./containers/testContainerFirebase");
-var testContainerMongo_1 = require("./containers/testContainerMongo");
-var testCartDaoFirebase_1 = require("./daos/testCartDaoFirebase");
-var testCartDaoMongo_1 = require("./daos/testCartDaoMongo");
-var testProductDaoFirebase_1 = require("./daos/testProductDaoFirebase");
-var testProductDaoMongo_1 = require("./daos/testProductDaoMongo");
+var test_container_1 = require("./containers/test-container");
+var test_daos_1 = require("./daos/test-daos");
+var test_normalizr_1 = require("./test-normalizr");
 var testFunction = function (name, callback) { return __awaiter(void 0, void 0, void 0, function () {
     var err_1;
     return __generator(this, function (_a) {
@@ -50,16 +47,16 @@ var testFunction = function (name, callback) { return __awaiter(void 0, void 0, 
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 console.log("> START test ".concat(name, " ------------------------------------<"));
-                return [4 /*yield*/, callback()];
+                return [4, callback()];
             case 1:
                 _a.sent();
                 console.log('> END test\n');
-                return [3 /*break*/, 3];
+                return [3, 3];
             case 2:
                 err_1 = _a.sent();
                 console.error(err_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3, 3];
+            case 3: return [2];
         }
     });
 }); };
@@ -67,33 +64,17 @@ exports.testFunction = testFunction;
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                console.log('\n> testContainerMongo ==============================================<');
-                return [4 /*yield*/, (0, testContainerMongo_1.testContainerMongo)()];
+            case 0: return [4, (0, test_container_1.testContainers)()];
             case 1:
                 _a.sent();
-                console.log('\n> testContainerFirebase ==============================================<');
-                return [4 /*yield*/, (0, testContainerFirebase_1.testContainerFirebase)()];
+                return [4, (0, test_daos_1.testDaos)()];
             case 2:
                 _a.sent();
-                console.log('\n> testProductDaoMongo ==============================================<');
-                return [4 /*yield*/, (0, testProductDaoMongo_1.testProductDaoMongo)()];
+                return [4, (0, test_normalizr_1.testNormalizr)()];
             case 3:
                 _a.sent();
-                console.log('\n> testProductDaoFirebase ==============================================<');
-                return [4 /*yield*/, (0, testProductDaoFirebase_1.testProductDaoFirebase)()];
-            case 4:
-                _a.sent();
-                console.log('\n> testCartDaoMongo ==============================================<');
-                return [4 /*yield*/, (0, testCartDaoMongo_1.testCartDaoMongo)()];
-            case 5:
-                _a.sent();
-                console.log('\n> testCartDaoFirebase ==============================================<');
-                return [4 /*yield*/, (0, testCartDaoFirebase_1.testCartDaoFirebase)()];
-            case 6:
-                _a.sent();
                 console.log('> FINISHED ALL TESTS');
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); })();

@@ -1,12 +1,12 @@
 import * as express from 'express';
 import * as path from 'path';
-import { Server as HttpServer } from 'http';
+import ProductsRouter from './controllers/products-router';
+import { productsDao } from './daos/products-dao-mongo';
+import { messagesDao } from './daos/messages-dao-mongo';
+import CartRouter from './controllers/cart-router';
 import { Server as IOServer } from 'socket.io';
-import ProductsRouter from './product/products-router';
-import { parseProduct } from './product/product';
-import Message, { messagesTable } from './chat/message';
-import CartRouter from './cart/cart-router';
-import { productsDao } from './daos/productsDaoMongo';
+import { parseProduct } from './utils/parsers';
+import { Server as HttpServer } from 'http';
 
 // INIT ======================================================================//
 // Constants
@@ -32,6 +32,7 @@ app.use('/productos', productsRouter.router);
 app.use('/carrito', cartRouter.router);
 app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
+app.use('/api', productsRouter.testRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 
 // Routes
@@ -40,9 +41,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/chat', async (req, res) => {
-  const msgList = await messagesTable.find({});
-  const msgListHTML = Message.getHtmlList(msgList as Message[]);
-  res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
+  res.render('pages/chat.ejs');
 });
 
 app.use((req, res) => {
@@ -56,35 +55,20 @@ app.use((req, res) => {
 ioServer.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
 
-  const updateProducts = async () => {
-    const newProductList = await productsDao.getAll();
-    ioServer.emit('products_updated', newProductList);
-  };
-
-  const updateMessages = async () => {
-    const newMessageList = await messagesTable.find({});
-    ioServer.emit('messages_updated', newMessageList);
-  };
-
+  // TODO: run the product parsing in the DAO
   socket.on('create_product', async (product) => {
     let parsedProduct = parseProduct(product);
-    // TODO: Check if product is valid
-    if (!parsedProduct)
+    if (parsedProduct == null)
       return socket.emit('message_error', 'Invalid product');
-
     await productsDao.save(parsedProduct);
-    updateProducts();
+    ioServer.emit('products_updated', await productsDao.getAll());
   });
 
+  ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
   socket.on('create_message', async (message) => {
-    const parsedMessage = Message.parseMessage(message);
-    // TODO: Check if message is valid
-    if (!parsedMessage)
-      return socket.emit('message_error', 'Invalid message');
-
-    const { id, ...msgNoID } = parsedMessage;
-    await messagesTable.insert(msgNoID as Message);
-    updateMessages();
+    const success = await messagesDao.save(message);
+    if (!success) return socket.emit('message_error', 'Invalid message');
+    ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
   });
 });
 

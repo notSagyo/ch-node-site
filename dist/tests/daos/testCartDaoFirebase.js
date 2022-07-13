@@ -44,131 +44,126 @@ var tests_1 = require("../tests");
 var testCartDaoFirebase = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, tests_1.testFunction)('save()', function () { return __awaiter(void 0, void 0, void 0, function () {
+            case 0: return [4, (0, tests_1.testFunction)('save()', function () { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, cartDaoFirebase_1.cartsDao.save({ id: '0', products: [], timestamp: Date.now() })];
+                            case 0: return [4, cartDaoFirebase_1.cartsDao.save({ id: '0', products: [], timestamp: Date.now() })];
                             case 1:
                                 _a.sent();
-                                return [4 /*yield*/, cartDaoFirebase_1.cartsDao.save({ id: '1', products: [], timestamp: Date.now() })];
+                                return [4, cartDaoFirebase_1.cartsDao.save({ id: '1', products: [], timestamp: Date.now() })];
                             case 2:
                                 _a.sent();
-                                return [4 /*yield*/, cartDaoFirebase_1.cartsDao.save({ id: '2', products: [], timestamp: Date.now() })];
+                                return [4, cartDaoFirebase_1.cartsDao.save({ id: '2', products: [], timestamp: Date.now() })];
                             case 3:
                                 _a.sent();
-                                return [2 /*return*/];
+                                return [2];
                         }
                     });
                 }); })];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('getAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('getAll()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartDaoFirebase_1.cartsDao.getAll()];
+                                case 0: return [4, cartDaoFirebase_1.cartsDao.getAll()];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('getById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('getById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartDaoFirebase_1.cartsDao.getById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc')];
+                                case 0: return [4, cartDaoFirebase_1.cartsDao.getById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc')];
                                 case 1:
                                     res = _a.sent();
                                     console.log(res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('updateById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('updateById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var newCartProd, updated;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
                                     newCartProd = (0, cart_product_1.parseCartProduct)({ id: (0, uuid_1.v4)(), quantity: 1 });
                                     if (!newCartProd)
-                                        return [2 /*return*/];
-                                    return [4 /*yield*/, cartDaoFirebase_1.cartsDao.updateById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', { products: [newCartProd] })];
+                                        return [2];
+                                    return [4, cartDaoFirebase_1.cartsDao.updateById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', { products: [newCartProd] })];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, cartDaoFirebase_1.cartsDao.getAll()];
+                                    return [4, cartDaoFirebase_1.cartsDao.getAll()];
                                 case 2:
                                     updated = _a.sent();
                                     console.log('After update id:"0" {id: v4(), quantity: 1}:', updated);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('addProductById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('addProductById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var updated;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartDaoFirebase_1.cartsDao.addProductById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', '6666666')];
+                                case 0: return [4, cartDaoFirebase_1.cartsDao.addProductById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', '6666666')];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, cartDaoFirebase_1.cartsDao.getAll()];
+                                    return [4, cartDaoFirebase_1.cartsDao.getAll()];
                                 case 2:
                                     updated = _a.sent();
                                     console.log('After add product "id":6666666 :', updated);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 5:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('removeProductById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('removeProductById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var updated;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartDaoFirebase_1.cartsDao.removeProductById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', '6666666')];
+                                case 0: return [4, cartDaoFirebase_1.cartsDao.removeProductById('0d59a48a-31ed-4b0b-ad17-60a35d9cbafc', '6666666')];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, cartDaoFirebase_1.cartsDao.getAll()];
+                                    return [4, cartDaoFirebase_1.cartsDao.getAll()];
                                 case 2:
                                     updated = _a.sent();
                                     console.log('After remove product "id":6666666 :', updated);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 6:
                 _a.sent();
-                return [4 /*yield*/, (0, tests_1.testFunction)('deleteById()', function () { return __awaiter(void 0, void 0, void 0, function () {
+                return [4, (0, tests_1.testFunction)('deleteById()', function () { return __awaiter(void 0, void 0, void 0, function () {
                         var res;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, cartDaoFirebase_1.cartsDao.deleteById('0')];
+                                case 0: return [4, cartDaoFirebase_1.cartsDao.deleteById('0')];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, cartDaoFirebase_1.cartsDao.getAll()];
+                                    return [4, cartDaoFirebase_1.cartsDao.getAll()];
                                 case 2:
                                     res = _a.sent();
                                     console.log('After delete id:"0":', res);
-                                    return [2 /*return*/];
+                                    return [2];
                             }
                         });
                     }); })];
             case 7:
                 _a.sent();
-                // await testFunction('deleteAll()', async () => {
-                //   await cartsDao.deleteAll();
-                //   const res = await cartsDao.getAll();
-                //   console.log('After delete:', res);
-                // });
                 console.log('\nFinished testing cartDaoFirebase\n');
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); };

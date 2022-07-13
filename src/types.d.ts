@@ -22,6 +22,42 @@ export interface iCart {
   products: iCartProduct[];
 }
 
+export interface iUser {
+  id: string;
+  age: number;
+  name: string;
+  email: string;
+  avatar: string;
+  lastName: string;
+  username: string;
+}
+
+export interface iMessage {
+  id: string;
+  time: number;
+  author: iUser;
+  content: string;
+}
+
+export interface iDao<T> {
+  save(data?: Partial<T>): Promise<boolean>;
+  getById(id: string): Promise<T | null>;
+  getAll(): Promise<T[]>;
+  updateById(id: string, data: Partial<T>): Promise<boolean>;
+  deleteById(id: string): Promise<boolean>;
+  deleteAll(): Promise<boolean>;
+}
+
+export interface iCartDao extends iDao<iCart> {
+  save(data?: Partial<iCart>): Promise<boolean>;
+  addProductById(cartId: string, productId: string, quantity?: number): Promise<boolean>;
+  removeProductById(cartId: string, productId: string): Promise<boolean>;
+}
+
+export interface iParser<T> {
+  (obj: Partial<T> | Record<string, unknown> | null | undefined): T | null;
+}
+
 export type filterSql<T> = [string, string, string | number] | Partial<T>;
 export type filterMongo<T> = mongoose.FilterQuery<T> | '*';
 export type filterFirebase = QueryConstraint | '*';

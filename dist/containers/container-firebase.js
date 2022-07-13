@@ -38,8 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var firestore_1 = require("@firebase/firestore");
 var firebase_1 = require("../settings/firebase");
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-var Container = /** @class */ (function () {
+var Container = (function () {
     function Container(collectionName) {
         Object.defineProperty(this, "collectionRef", {
             enumerable: true,
@@ -63,16 +62,16 @@ var Container = /** @class */ (function () {
                             _a.label = 1;
                         case 1:
                             _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, (0, firestore_1.addDoc)(this.collectionRef, data)];
+                            return [4, (0, firestore_1.addDoc)(this.collectionRef, data)];
                         case 2:
                             _a.sent();
                             success = true;
-                            return [3 /*break*/, 4];
+                            return [3, 4];
                         case 3:
                             err_1 = _a.sent();
                             console.error(err_1);
-                            return [3 /*break*/, 4];
-                        case 4: return [2 /*return*/, success];
+                            return [3, 4];
+                        case 4: return [2, success];
                     }
                 });
             });
@@ -95,16 +94,16 @@ var Container = /** @class */ (function () {
                             q = filter === '*'
                                 ? this.collectionRef
                                 : (0, firestore_1.query)(this.collectionRef, filter);
-                            return [4 /*yield*/, (0, firestore_1.getDocs)(q)];
+                            return [4, (0, firestore_1.getDocs)(q)];
                         case 2:
                             qSnapshot = _a.sent();
                             res = qSnapshot.docs.map(function (docSnap) { return docSnap.data(); });
-                            return [3 /*break*/, 4];
+                            return [3, 4];
                         case 3:
                             err_2 = _a.sent();
                             console.error(err_2);
-                            return [3 /*break*/, 4];
-                        case 4: return [2 /*return*/, res];
+                            return [3, 4];
+                        case 4: return [2, res];
                     }
                 });
             });
@@ -128,22 +127,22 @@ var Container = /** @class */ (function () {
                             q = filter === '*'
                                 ? this.collectionRef
                                 : (0, firestore_1.query)(this.collectionRef, filter);
-                            return [4 /*yield*/, (0, firestore_1.getDocs)(q)];
+                            return [4, (0, firestore_1.getDocs)(q)];
                         case 2:
                             qSnapshot = _a.sent();
                             allPromises = qSnapshot.docs.map(function (docSnap) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                return [2 /*return*/, (0, firestore_1.updateDoc)(docSnap.ref, data)];
+                                return [2, (0, firestore_1.updateDoc)(docSnap.ref, data)];
                             }); }); });
-                            return [4 /*yield*/, Promise.all(allPromises)];
+                            return [4, Promise.all(allPromises)];
                         case 3:
                             _a.sent();
                             success = true;
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 4:
                             err_3 = _a.sent();
                             console.error(err_3);
-                            return [3 /*break*/, 5];
-                        case 5: return [2 /*return*/, success];
+                            return [3, 5];
+                        case 5: return [2, success];
                     }
                 });
             });
@@ -167,22 +166,22 @@ var Container = /** @class */ (function () {
                             q = filter === '*'
                                 ? this.collectionRef
                                 : (0, firestore_1.query)(this.collectionRef, filter);
-                            return [4 /*yield*/, (0, firestore_1.getDocs)(q)];
+                            return [4, (0, firestore_1.getDocs)(q)];
                         case 2:
                             qSnapshot = _a.sent();
                             allPromises = qSnapshot.docs.map(function (docSnap) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                return [2 /*return*/, (0, firestore_1.deleteDoc)(docSnap.ref)];
+                                return [2, (0, firestore_1.deleteDoc)(docSnap.ref)];
                             }); }); });
-                            return [4 /*yield*/, Promise.all(allPromises)];
+                            return [4, Promise.all(allPromises)];
                         case 3:
                             _a.sent();
                             success = true;
-                            return [3 /*break*/, 5];
+                            return [3, 5];
                         case 4:
                             err_4 = _a.sent();
                             console.error(err_4);
-                            return [3 /*break*/, 5];
-                        case 5: return [2 /*return*/, success];
+                            return [3, 5];
+                        case 5: return [2, success];
                     }
                 });
             });
