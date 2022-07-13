@@ -36,45 +36,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testFunction = void 0;
-var test_container_1 = require("./containers/test-container");
-var test_daos_1 = require("./daos/test-daos");
-var test_normalizr_1 = require("./test-normalizr");
-var testFunction = function (name, callback) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_1;
+exports.testNormalizr = void 0;
+var messages_dao_mongo_1 = require("../daos/messages-dao-mongo");
+var tests_1 = require("./tests");
+var normalizr = require("normalizr");
+var util_1 = require("util");
+var testNormalizr = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var authorSchema, messageSchema, messages, normalizedMessages, denormalizedMessages;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                console.log("> START test ".concat(name, " ------------------------------------<"));
-                return [4, callback()];
+                authorSchema = new normalizr.schema.Entity('authors');
+                messageSchema = new normalizr.schema.Entity('messages', {
+                    author: authorSchema
+                });
+                return [4, messages_dao_mongo_1.messagesDao.getAll().then(function (messages) { console.log(typeof []); return messages; })];
             case 1:
-                _a.sent();
-                console.log('> END test\n');
-                return [3, 3];
-            case 2:
-                err_1 = _a.sent();
-                console.error(err_1);
-                return [3, 3];
-            case 3: return [2];
-        }
-    });
-}); };
-exports.testFunction = testFunction;
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4, (0, test_container_1.testContainers)()];
-            case 1:
-                _a.sent();
-                return [4, (0, test_daos_1.testDaos)()];
+                messages = _a.sent();
+                return [4, (0, tests_1.testFunction)('Normalize messages', function () {
+                        normalizedMessages = normalizr.normalize(messages, [messageSchema]);
+                        console.log('normalizedMessages:', (0, util_1.inspect)(normalizedMessages, false, 12, true));
+                    })];
             case 2:
                 _a.sent();
-                return [4, (0, test_normalizr_1.testNormalizr)()];
+                return [4, (0, tests_1.testFunction)('Denormalize messages', function () {
+                        denormalizedMessages = normalizr.denormalize(normalizedMessages.result, [messageSchema], normalizedMessages.entities);
+                        console.log('denormalizedMessages:', denormalizedMessages);
+                    })];
             case 3:
                 _a.sent();
-                console.log('> FINISHED ALL TESTS');
+                return [4, (0, tests_1.testFunction)('Compression rate', function () {
+                        var compressed = JSON.stringify(normalizedMessages);
+                        var uncompressed = JSON.stringify(denormalizedMessages);
+                        console.log("normalized: ".concat(compressed.length, " bytes"));
+                        console.log("denormalized: ".concat(uncompressed.length, " bytes"));
+                        console.log("compression rate: ".concat((100 - compressed.length / uncompressed.length * 100).toFixed(2), "%"));
+                    })];
+            case 4:
+                _a.sent();
                 return [2];
         }
     });
-}); })();
+}); };
+exports.testNormalizr = testNormalizr;

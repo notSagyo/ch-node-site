@@ -85,12 +85,13 @@ var Container = (function () {
                             if (!!exists) return [3, 3];
                             return [4, knex.schema.createTable(this.table, schemaBuilder)
                                     .then(function () { return success = true; })
-                                    .catch(function (err) { return console.log(err); })
-                                    .finally(function () { return knex.destroy(); })];
+                                    .catch(function (err) { return console.log(err); })];
                         case 2:
                             _a.sent();
                             _a.label = 3;
-                        case 3: return [2, success];
+                        case 3:
+                            knex.destroy();
+                            return [2, success];
                     }
                 });
             });
@@ -110,10 +111,10 @@ var Container = (function () {
                             success = false;
                             return [4, knex(this.table).insert(obj)
                                     .then(function () { return success = true; })
-                                    .catch(function (err) { return console.log(err); })
-                                    .finally(function () { return knex.destroy(); })];
+                                    .catch(function (err) { return console.log(err); })];
                         case 1:
                             _a.sent();
+                            knex.destroy();
                             return [2, success];
                     }
                 });
@@ -131,23 +132,23 @@ var Container = (function () {
                     switch (_a.label) {
                         case 0:
                             knex = Knex.knex(this.options);
-                            rows = [];
+                            rows = null;
                             if (!(sortColumn != null)) return [3, 2];
                             return [4, knex.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
                                     .then(function (res) { return rows = res; })
-                                    .catch(function (err) { return console.log(err); })
-                                    .finally(function () { return knex.destroy(); })];
+                                    .catch(function (err) { return console.log(err); })];
                         case 1:
                             _a.sent();
                             return [3, 4];
                         case 2: return [4, knex.from(this.table).where(condition)
                                 .then(function (res) { return rows = res; })
-                                .catch(function (err) { return console.log(err); })
-                                .finally(function () { return knex.destroy(); })];
+                                .catch(function (err) { return console.log(err); })];
                         case 3:
                             _a.sent();
                             _a.label = 4;
-                        case 4: return [2, rows];
+                        case 4:
+                            knex.destroy();
+                            return [2, rows];
                     }
                 });
             });
@@ -167,10 +168,10 @@ var Container = (function () {
                             success = false;
                             return [4, knex(this.table).where(condition).update(update)
                                     .then(function () { return success = true; })
-                                    .catch(function (err) { return console.log(err); })
-                                    .finally(function () { return knex.destroy(); })];
+                                    .catch(function (err) { return console.log(err); })];
                         case 1:
                             _a.sent();
+                            knex.destroy();
                             return [2, success];
                     }
                 });
@@ -192,19 +193,19 @@ var Container = (function () {
                             if (!(limit != null)) return [3, 2];
                             return [4, knex.from(this.table).where(condition || {}).limit(limit).del()
                                     .then(function () { return success = true; })
-                                    .catch(function (err) { return console.log(err); })
-                                    .finally(function () { return knex.destroy(); })];
+                                    .catch(function (err) { return console.log(err); })];
                         case 1:
                             _a.sent();
                             return [3, 4];
                         case 2: return [4, knex.from(this.table).where(condition || {}).del()
                                 .then(function () { return success = true; })
-                                .catch(function (err) { return console.log(err); })
-                                .finally(function () { return knex.destroy(); })];
+                                .catch(function (err) { return console.log(err); })];
                         case 3:
                             _a.sent();
                             _a.label = 4;
-                        case 4: return [2, success];
+                        case 4:
+                            knex.destroy();
+                            return [2, success];
                     }
                 });
             });

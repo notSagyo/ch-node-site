@@ -1,6 +1,6 @@
-import { testContainers } from './containers/testContainers';
-import { testDaos } from './daos/testDaos';
-import { testNormalizr } from './testNormalizr';
+import { testContainers } from './containers/test-container';
+import { testDaos } from './daos/test-daos';
+import { testNormalizr } from './test-normalizr';
 
 export const testFunction = async (name: string, callback: () => Promise<void> | void) => {
   try {

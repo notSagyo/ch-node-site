@@ -38,14 +38,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var path = require("path");
-var http_1 = require("http");
+var products_router_1 = require("./controllers/products-router");
+var products_dao_mongo_1 = require("./daos/products-dao-mongo");
+var messages_dao_mongo_1 = require("./daos/messages-dao-mongo");
+var cart_router_1 = require("./controllers/cart-router");
 var socket_io_1 = require("socket.io");
-var products_router_1 = require("./product/products-router");
-var product_1 = require("./product/product");
-var message_1 = require("./chat/message");
-var cart_router_1 = require("./cart/cart-router");
-var productsDaoMongo_1 = require("./daos/productsDaoMongo");
-var messagesDaoMongo_1 = require("./daos/messagesDaoMongo");
+var parsers_1 = require("./utils/parsers");
+var http_1 = require("http");
 var PORT = 8080;
 var app = express();
 var httpServer = new http_1.Server(app);
@@ -67,16 +66,9 @@ app.get('/', function (req, res) {
     res.render('pages/index.ejs');
 });
 app.get('/chat', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var msgList, msgListHTML;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4, messagesDaoMongo_1.messagesDao.getAll()];
-            case 1:
-                msgList = _a.sent();
-                msgListHTML = message_1.default.getHtmlList(msgList);
-                res.render('pages/chat.ejs', { messageListHTML: msgListHTML });
-                return [2];
-        }
+        res.render('pages/chat.ejs');
+        return [2];
     });
 }); });
 app.use(function (req, res) {
@@ -91,43 +83,43 @@ ioServer.on('connection', function (socket) { return __awaiter(void 0, void 0, v
         switch (_d.label) {
             case 0:
                 console.log('New client connected:', socket.id);
-                _b = (_a = ioServer).emit;
-                _c = ['messages_updated'];
-                return [4, messagesDaoMongo_1.messagesDao.getNormalizedMessages()];
-            case 1:
-                _b.apply(_a, _c.concat([_d.sent()]));
                 socket.on('create_product', function (product) { return __awaiter(void 0, void 0, void 0, function () {
                     var parsedProduct, _a, _b, _c;
                     return __generator(this, function (_d) {
                         switch (_d.label) {
                             case 0:
-                                parsedProduct = (0, product_1.parseProduct)(product);
-                                if (!parsedProduct)
+                                parsedProduct = (0, parsers_1.parseProduct)(product);
+                                if (parsedProduct == null)
                                     return [2, socket.emit('message_error', 'Invalid product')];
-                                return [4, productsDaoMongo_1.productsDao.save(parsedProduct)];
+                                return [4, products_dao_mongo_1.productsDao.save(parsedProduct)];
                             case 1:
                                 _d.sent();
                                 _b = (_a = ioServer).emit;
                                 _c = ['products_updated'];
-                                return [4, productsDaoMongo_1.productsDao.getAll()];
+                                return [4, products_dao_mongo_1.productsDao.getAll()];
                             case 2:
                                 _b.apply(_a, _c.concat([_d.sent()]));
                                 return [2];
                         }
                     });
                 }); });
+                _b = (_a = ioServer).emit;
+                _c = ['messages_updated'];
+                return [4, messages_dao_mongo_1.messagesDao.getAllNormalized()];
+            case 1:
+                _b.apply(_a, _c.concat([_d.sent()]));
                 socket.on('create_message', function (message) { return __awaiter(void 0, void 0, void 0, function () {
                     var success, _a, _b, _c;
                     return __generator(this, function (_d) {
                         switch (_d.label) {
-                            case 0: return [4, messagesDaoMongo_1.messagesDao.save(message)];
+                            case 0: return [4, messages_dao_mongo_1.messagesDao.save(message)];
                             case 1:
                                 success = _d.sent();
                                 if (!success)
                                     return [2, socket.emit('message_error', 'Invalid message')];
                                 _b = (_a = ioServer).emit;
                                 _c = ['messages_updated'];
-                                return [4, messagesDaoMongo_1.messagesDao.getNormalizedMessages()];
+                                return [4, messages_dao_mongo_1.messagesDao.getAllNormalized()];
                             case 2:
                                 _b.apply(_a, _c.concat([_d.sent()]));
                                 return [2];

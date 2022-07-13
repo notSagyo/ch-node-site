@@ -1,12 +1,12 @@
 import * as express from 'express';
 import * as path from 'path';
-import { Server as HttpServer } from 'http';
+import ProductsRouter from './controllers/products-router';
+import { productsDao } from './daos/products-dao-mongo';
+import { messagesDao } from './daos/messages-dao-mongo';
+import CartRouter from './controllers/cart-router';
 import { Server as IOServer } from 'socket.io';
-import ProductsRouter from './product/products-router';
-import { parseProduct } from './product/product';
-import CartRouter from './cart/cart-router';
-import { productsDao } from './daos/productsDaoMongo';
-import { messagesDao } from './daos/messagesDaoMongo';
+import { parseProduct } from './utils/parsers';
+import { Server as HttpServer } from 'http';
 
 // INIT ======================================================================//
 // Constants

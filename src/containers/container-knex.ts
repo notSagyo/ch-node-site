@@ -20,8 +20,8 @@ export default class Container<T extends Record<string, any>> {
     let success = exists;
     if (!exists) await knex.schema.createTable(this.table, schemaBuilder)
       .then(() => success = true)
-      .catch(err => console.log(err))
-      .finally(() => knex.destroy());
+      .catch(err => console.log(err));
+    knex.destroy();
     return success;
   }
 
@@ -30,26 +30,24 @@ export default class Container<T extends Record<string, any>> {
     let success = false;
     await knex(this.table).insert(obj)
       .then(() => success = true)
-      .catch(err => console.log(err))
-      .finally(() => knex.destroy());
+      .catch(err => console.log(err));
+    knex.destroy();
     return success;
   }
 
-  async find(condition: filterSql<T>, sortColumn?: string, ascending?: boolean) {
+  async find(condition: filterSql<T>, sortColumn?: string, ascending?: boolean): Promise<T[] | null> {
     const knex = Knex.knex(this.options);
-    let rows: T[] = [];
+    let rows: T[] | null = null;
     if (sortColumn != null) {
       await knex.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
-        .then(res => rows = res)
-        .catch(err => console.log(err))
-        .finally(() => knex.destroy());
+        .then(res => rows = res as T[])
+        .catch(err => console.log(err));
     } else {
       await knex.from(this.table).where(condition)
-        .then(res => rows = res)
-        .catch(err => console.log(err))
-        .finally(() => knex.destroy());
+        .then(res => rows = res as T[])
+        .catch(err => console.log(err));
     }
-
+    knex.destroy();
     return rows;
   }
 
@@ -58,8 +56,8 @@ export default class Container<T extends Record<string, any>> {
     let success = false;
     await knex(this.table).where(condition).update(update)
       .then(() => success = true)
-      .catch(err => console.log(err))
-      .finally(() => knex.destroy());
+      .catch(err => console.log(err));
+    knex.destroy();
     return success;
   }
 
@@ -69,14 +67,13 @@ export default class Container<T extends Record<string, any>> {
     if (limit != null) {
       await knex.from(this.table).where(condition || {}).limit(limit).del()
         .then(() => success = true)
-        .catch(err => console.log(err))
-        .finally(() => knex.destroy());
+        .catch(err => console.log(err));
     } else {
       await knex.from(this.table).where(condition || {}).del()
         .then(() => success = true)
-        .catch(err => console.log(err))
-        .finally(() => knex.destroy());
+        .catch(err => console.log(err));
     }
+    knex.destroy();
     return success;
   }
 }
