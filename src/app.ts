@@ -6,6 +6,7 @@ import { messagesDao } from './daos/messages-dao-mongo';
 import CartRouter from './controllers/cart-router';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
+import UserRouter from './controllers/user-router';
 
 // INIT ======================================================================//
 // Constants
@@ -15,6 +16,7 @@ const httpServer = new HttpServer(app);
 const ioServer = new IOServer(httpServer);
 const baseDir = path.join(__dirname, '..');
 
+const userRouter = new UserRouter('pages/login.ejs', 'pages/logout.ejs');
 const productsRouter = new ProductsRouter('pages/products.ejs');
 const cartRouter = new CartRouter('pages/cart.ejs');
 
@@ -27,11 +29,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Routers
-app.use('/productos', productsRouter.router);
+app.use('/', userRouter.router);
 app.use('/carrito', cartRouter.router);
+app.use('/productos', productsRouter.router);
+app.use('/api', productsRouter.testRouter);
 app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
-app.use('/api', productsRouter.testRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 
 // Routes

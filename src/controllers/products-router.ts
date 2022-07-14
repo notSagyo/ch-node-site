@@ -4,8 +4,9 @@ import { parseProduct } from '../utils/parsers';
 import { authn, authz } from '../middlewares/auth';
 import { faker } from '@faker-js/faker';
 import { iProduct } from '../types/models';
+import { iRouter } from '../types/types';
 
-export default class ProductsRouter {
+export default class ProductsRouter implements iRouter {
   router = express.Router();
   apiRouter = express.Router();
   testRouter = express.Router();

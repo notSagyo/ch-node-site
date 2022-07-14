@@ -4,8 +4,9 @@ import { authn, authz } from '../middlewares/auth';
 import Container from '../containers/container-knex';
 import { iProduct } from '../types/models';
 import { maridadbOptions as mariadbOptions } from '../settings/mariadb';
+import { iRouter } from '../types/types';
 
-export default class ProductsRouter {
+export default class ProductsRouter implements iRouter {
   router = express.Router();
   apiRouter = express.Router();
   table: Container<iProduct>;

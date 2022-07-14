@@ -1,7 +1,8 @@
 import * as express from 'express';
 import { cartsDao } from '../daos/carts-dao-mongo';
+import { iRouter } from '../types/types';
 
-export default class CartRouter {
+export default class CartRouter implements iRouter {
   cartHtmlPath: string;
   router = express.Router();
   apiRouter = express.Router();
