@@ -61,7 +61,7 @@ export default class CartRouter {
     });
   }
 
-  // Sample POST body: { "id": 1 }
+  /** Sample POST body: { "id": 1 } */
   private postCartProduct() {
     this.apiRouter.post('/:id/productos', async (req, res) => {
       const cartId = req.params.id;

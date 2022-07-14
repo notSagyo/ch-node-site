@@ -7,30 +7,30 @@ import { where } from '@firebase/firestore';
 export default class ProductsDao implements iDao<iProduct> {
   container = new Container<iProduct>('products');
 
-  async save(product: iProduct): Promise<boolean> {
+  async save(product: iProduct) {
     const prodWithId = { ...product, id: v4() };
     return await this.container.insert(prodWithId);
   }
 
-  async getById(id: string): Promise<iProduct | null> {
+  async getById(id: string) {
     const res = await this.container.find(where('id', '==', id));
     const product = res ? res[0] : null;
     return product;
   }
 
-  async getAll(): Promise<iProduct[]> {
+  async getAll() {
     return await this.container.find('*') || [];
   }
 
-  async updateById(id: string, data: Partial<iProduct>): Promise<boolean> {
+  async updateById(id: string, data: Partial<iProduct>) {
     return await this.container.update(where('id', '==', id), data);
   }
 
-  async deleteById(id: string): Promise<boolean> {
+  async deleteById(id: string) {
     return await this.container.delete(where('id', '==', id));
   }
 
-  async deleteAll(): Promise<boolean> {
+  async deleteAll() {
     return await this.container.delete('*');
   }
 }

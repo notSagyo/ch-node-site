@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 export default class CartsDao implements iCartDao {
   container = new Container(cartModel);
 
-  async save(cart?: Partial<iCart>): Promise<boolean> {
+  async save(cart?: Partial<iCart>) {
     const cartWithId: iCart = {
       id: v4() ,
       products: cart?.products || [],
@@ -16,7 +16,7 @@ export default class CartsDao implements iCartDao {
     return await this.container.insert(cartWithId);
   }
 
-  async getById(id: string): Promise<iCart | null> {
+  async getById(id: string) {
     const res = await this.container.find({ id });
     const product = res ? res[0] : null;
     return product;
@@ -26,19 +26,20 @@ export default class CartsDao implements iCartDao {
     return await this.container.find({}) || [];
   }
 
-  async updateById(id: string, data: Partial<iCart>): Promise<boolean> {
+  async updateById(id: string, data: Partial<iCart>) {
     return await this.container.update({ id }, data);
   }
 
-  async deleteById(id: string): Promise<boolean> {
+  async deleteById(id: string) {
     return await this.container.delete({ id });
   }
 
-  async deleteAll(): Promise<boolean> {
+  async deleteAll() {
     return await this.container.delete({});
   }
 
-  async addProductById(cartId: string, productId: string, quantity?: number): Promise<boolean> {
+  // Product methods =========================================================//
+  async addProductById(cartId: string, productId: string, quantity?: number) {
     let success = false;
     const cartProd: iCartProduct = {
       id: productId,
@@ -56,7 +57,7 @@ export default class CartsDao implements iCartDao {
     return success;
   }
 
-  async removeProductById(cartId: string, productId: string): Promise<boolean> {
+  async removeProductById(cartId: string, productId: string) {
     let success = false;
     try {
       await this.container.update({ id: cartId }, { $pull: { products: { id: productId }} });
