@@ -44,10 +44,10 @@ export default class UserRouter implements iRouter {
     const upload = multer();
     this.router.post('/login', upload.none(), (req, res) => {
       const user = req.body;
-
       if (req.session.user)
         return res.send('Already logged in');
       req.session.user = user;
+      console.log('Session: created user', JSON.stringify(user));
       res.redirect('/');
     });
   }

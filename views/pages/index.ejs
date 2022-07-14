@@ -1,16 +1,18 @@
 <%- include('../partials/head', { pageTitle: 'Home' }) %>
 <body>
   <%- include('../partials/header', locals.user ? user : { }) %>
-  <ul>
-    <li>
-      <a href="/chat"><h2>Chat</h2></a>
-    </li>
-    <li>
-      <a href="/productos"><h2>Products</h2></a>
-    </li>
-    <li>
-      <a href="/carrito"><h2>Cart</h2></a>
-    </li>
-  </ul>
+  <div class="container">
+    <ul>
+      <li>
+        <a href="/chat"><h2>Chat</h2></a>
+      </li>
+      <li>
+        <a href="/productos"><h2>Products</h2></a>
+      </li>
+      <li>
+        <a href="/carrito"><h2>Cart</h2></a>
+      </li>
+    </ul>
+  </div>
 </body>
 </html>

@@ -1,15 +1,17 @@
-import cookieParser from 'cookie-parser';
-import express from 'express';
-import path from 'path';
 import ProductsRouter from './controllers/products-router';
-import { productsDao } from './daos/products-dao-mongo';
-import { messagesDao } from './daos/messages-dao-mongo';
 import UserRouter from './controllers/user-router';
 import CartRouter from './controllers/cart-router';
+import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo';
+import session from 'express-session';
+import express from 'express';
+import path from 'path';
+
+import { productsDao } from './daos/products-dao-mongo';
+import { messagesDao } from './daos/messages-dao-mongo';
+import { resetAge } from './middlewares/cookies';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 
 // INIT ======================================================================//
 // Constants
@@ -35,10 +37,12 @@ app.use(session({
   store: MongoStore.create({
     mongoUrl: 'mongodb+srv://sagyo:sagyo@cluster0.3dem9pw.mongodb.net/?retryWrites=true&w=majority'
   }),
+  cookie: { maxAge: 10 * 60 * 1000 },
   secret: 'TheCookieNeverRests',
   resave: true,
   saveUninitialized: true,
 }));
+app.use(resetAge);
 
 // Routers
 app.use('/', userRouter.router);
