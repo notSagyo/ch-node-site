@@ -5,7 +5,6 @@ import { productsDao } from './daos/products-dao-mongo';
 import { messagesDao } from './daos/messages-dao-mongo';
 import CartRouter from './controllers/cart-router';
 import { Server as IOServer } from 'socket.io';
-import { parseProduct } from './utils/parsers';
 import { Server as HttpServer } from 'http';
 
 // INIT ======================================================================//
@@ -55,12 +54,8 @@ app.use((req, res) => {
 ioServer.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
 
-  // TODO: run the product parsing in the DAO
   socket.on('create_product', async (product) => {
-    let parsedProduct = parseProduct(product);
-    if (parsedProduct == null)
-      return socket.emit('message_error', 'Invalid product');
-    await productsDao.save(parsedProduct);
+    await productsDao.save(product);
     ioServer.emit('products_updated', await productsDao.getAll());
   });
 

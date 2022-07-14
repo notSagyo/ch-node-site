@@ -2,18 +2,14 @@ import Container from '../containers/container-mongo';
 import { cartModel } from '../models/cart';
 import { iCart, iCartProduct } from '../types/models';
 import { iCartDao } from '../types/daos';
-import { v4 } from 'uuid';
+import { parseCart } from '../utils/parsers';
 
 export default class CartsDao implements iCartDao {
   container = new Container(cartModel);
 
   async save(cart?: Partial<iCart>) {
-    const cartWithId: iCart = {
-      id: v4() ,
-      products: cart?.products || [],
-      timestamp: cart?.timestamp || Date.now()
-    };
-    return await this.container.insert(cartWithId);
+    const parsedCart = parseCart(cart) as iCart;
+    return await this.container.insert(parsedCart);
   }
 
   async getById(id: string) {
