@@ -1,15 +1,29 @@
-<%- include('../partials/head.ejs', { pageTitle: 'User login', content: ''}) %>
+<%- include('../partials/head.ejs', { pageTitle: 'User login' }) %>
 <body>
+  <%- include('../partials/header', locals.user ? user : { }) %>
   <div class="container">
+  <% if (locals.user != null && user?.username) { %>
+    <script>
+      window.location.href = '/';
+    </script>
+  <% } %>
+
     <div class="col-md-4 offset-md-4 border rounded-3 p-3 my-3">
       <h1 class="text-center">User Login</h1>
-      <form action="/login" method="post" class="form-signin">
+      <form
+        id="loginForm"
+        class="form-signin"
+        method="post"
+        action="/login"
+        enctype="multipart/form-data"
+      >
         <div class="my-3">
           <label for="loginUsername">Username</label>
-          <input type="text" class="form-control" id="loginUsername" name="loginUsername" placeholder="Username" required autofocus>
+          <input type="text" class="form-control" id="loginUsername" name="username" placeholder="Username" required autofocus>
         </div>
-        <button class="btn btn-primary btn-block" type="submit">Log in</button>
+        <button class="btn btn-success btn-block" type="submit">Log in</button>
       </form>
     </div>
   </div>
 </body>
+</html>

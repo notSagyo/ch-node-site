@@ -1,6 +1,6 @@
-<%- include('../partials/head', { pageTitle: 'Home', content: '' }) %>
+<%- include('../partials/head', { pageTitle: 'Home' }) %>
 <body>
-  <!-- PRODUCT FORM -->
+  <%- include('../partials/header', locals.user ? user : { }) %>
   <ul>
     <li>
       <a href="/chat"><h2>Chat</h2></a>

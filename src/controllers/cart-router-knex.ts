@@ -26,7 +26,7 @@ export default class CartRouter implements iRouter {
 
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
-      res.render(this.cartHtmlPath);
+      res.render(this.cartHtmlPath, { user: req.session.user });
     });
   }
 

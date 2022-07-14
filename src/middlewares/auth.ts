@@ -1,8 +1,9 @@
 import * as express from 'express';
 
 // Authentication
-export const authn: express.RequestHandler = (req: any, res, next) => {
-  req.user = {
+// TODO: update to work with session
+export const authn: express.RequestHandler = (req, res, next) => {
+  req.session.user = {
     fullName: 'John Doe',
     isAdmin: true
   };
@@ -10,7 +11,7 @@ export const authn: express.RequestHandler = (req: any, res, next) => {
 };
 
 // Authorization
-export const authz: express.RequestHandler = (req: any, res, next) => {
-  if (req.user.isAdmin) next();
+export const authz: express.RequestHandler = (req, res, next) => {
+  if (req.session.isAdmin) next();
   else res.status(403).send('403: Forbidden, must be and admin');
 };

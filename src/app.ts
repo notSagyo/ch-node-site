@@ -1,12 +1,14 @@
+import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as path from 'path';
 import ProductsRouter from './controllers/products-router';
 import { productsDao } from './daos/products-dao-mongo';
 import { messagesDao } from './daos/messages-dao-mongo';
+import UserRouter from './controllers/user-router';
 import CartRouter from './controllers/cart-router';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import UserRouter from './controllers/user-router';
+import * as session from 'express-session';
 
 // INIT ======================================================================//
 // Constants
@@ -25,8 +27,14 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(baseDir, 'views'));
 
 // Middlewares
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser('TheCookieNeverRests'));
+app.use(session({
+  secret: 'TheCookieNeverRests',
+  resave: true,
+  saveUninitialized: true,
+}));
 
 // Routers
 app.use('/', userRouter.router);
@@ -39,11 +47,11 @@ app.use(express.static(path.join(baseDir, 'public')));
 
 // Routes
 app.get('/', (req, res) => {
-  res.render('pages/index.ejs');
+  res.render('pages/index.ejs', { user: req.session.user });
 });
 
 app.get('/chat', async (req, res) => {
-  res.render('pages/chat.ejs');
+  res.render('pages/chat.ejs', { user: req.session.user });
 });
 
 app.use((req, res) => {

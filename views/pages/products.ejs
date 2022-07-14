@@ -1,9 +1,11 @@
 <%- include('../partials/head', { pageTitle: 'Products', content: '<script defer src="/js/products.js"></script>' }) %>
 <body>
+  <%- include('../partials/header', locals.user ? user : { }) %>
+
   <div class="d-flex align-items-start">
     <!-- PRODUCT FORM -->
-    <div class="d-flex align-items-center mx-3 sticky-top">
-      <%- include('../partials/product-form', { pageTitle: 'Load product' }) %>
+    <div class="d-flex align-items-center mx-3">
+      <%- include('../partials/product-form') %>
     </div>
 
      <!-- PRODUCT TABLE -->
