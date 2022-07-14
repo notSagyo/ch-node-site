@@ -2,18 +2,21 @@ import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
 import { mongooseOptions } from '../settings/mongoose';
 import { filterMongo } from '../types/types';
 
+// TODO: change everything's return type
 export default class Container<T> {
   connection: Connection | undefined;
   model: Model<T>;
+  collection: string;
 
   constructor(model: Model<T>) {
     this.model = model;
+    this.collection = this.model.collection.name;
   }
 
   async connect() {
-    const { uri, options: connectOptions } = mongooseOptions;
+    const { uri, options } = mongooseOptions;
     try {
-      this.connection = (await mongoose.connect(uri, connectOptions)).connection;
+      this.connection = (await mongoose.connect(uri, options)).connection;
       console.log('Connected to mongoDB');
     } catch (err) {
       console.error(err);
@@ -38,7 +41,7 @@ export default class Container<T> {
     try {
       await this.model.create(data);
       success = true;
-      // console.log('Inserted new data:', data);
+      console.log(`Inserted new data to '${this.collection}'`);
     } catch (err) {
       console.error(err);
     }
@@ -52,6 +55,7 @@ export default class Container<T> {
     const allOrFilter = filter === '*' ? {} : filter;
     try {
       result = await this.model.find(allOrFilter).lean().exec() as T[];
+      console.log(`Retrieved from '${this.collection}' elements matching:`, filter);
     } catch (err) {
       console.error(err);
     }
@@ -66,8 +70,7 @@ export default class Container<T> {
     try {
       await this.model.updateMany(allOrFilter, data);
       success = true;
-      console.log('Updated elements matching:', filter);
-
+      console.log(`Updated from '${this.collection}' elements matching:`, filter);
     } catch (err) {
       console.error(err);
     }
@@ -82,7 +85,7 @@ export default class Container<T> {
     try {
       await this.model.deleteMany(allOrFilter);
       success = true;
-      console.log('Deleted elements matching:', filter);
+      console.log(`Deleted from '${this.collection}' elements matching:`, filter);
     } catch (err) {
       console.error(err);
     }
