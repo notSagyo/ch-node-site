@@ -30,11 +30,13 @@ export default class UserRouter implements iRouter {
 
   getLogout() {
     this.router.get('/logout', (req, res) => {
-      res.render(this.logoutHtmlPath, { user: req.session.user });
-      if (req.session.user != null) {
-        req.session.destroy(err => res.send(err));
-        console.log('Session: destroyed');
-      }
+      const user = req.session.user;
+      if (req.session.user != null)
+        req.session.destroy((err) => {
+          if (err) res.send(err);
+          else console.log('Session: destroyed');
+        });
+      res.render(this.logoutHtmlPath, { user });
     });
   }
 

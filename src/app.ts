@@ -32,7 +32,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser('TheCookieNeverRests'));
 app.use(session({
-  store: MongoStore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/sessions' }),
+  store: MongoStore.create({
+    mongoUrl: 'mongodb+srv://sagyo:sagyo@cluster0.3dem9pw.mongodb.net/?retryWrites=true&w=majority'
+  }),
   secret: 'TheCookieNeverRests',
   resave: true,
   saveUninitialized: true,
