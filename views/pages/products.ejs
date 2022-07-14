@@ -1,6 +1,11 @@
-<%- include('../partials/head', { pageTitle: 'Products' }) %>
+<%- include('../partials/head', { pageTitle: 'Products', content: '<script defer src="/js/products.js"></script>' }) %>
 <body>
   <div class="d-flex align-items-start">
+    <!-- PRODUCT FORM -->
+    <div class="d-flex align-items-center mx-3 sticky-top">
+      <%- include('../partials/product-form', { pageTitle: 'Load product' }) %>
+    </div>
+
      <!-- PRODUCT TABLE -->
       <div class="border rounded-bottom">
         <table id="productsTable" class="table m-0 <%= productList.length > 0 ? "" : "d-none" %>">
@@ -34,11 +39,6 @@
           </svg>
           <span>Try adding some products first and come back...</span>
       </div>
-
-    <!-- PRODUCT FORM -->
-    <div class="d-flex align-items-center mx-3">
-      <%- include('../partials/product-form', { pageTitle: 'Load product' }) %>
-    </div>
   </div>
 </body>
 </html>

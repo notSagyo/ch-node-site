@@ -66,6 +66,7 @@ export const parseProduct: iParser<iProduct> = (prod) => {
   const placeholder = 'https://via.placeholder.com/256';
 
   const isValidName = typeof prod?.name === 'string' && prod.name.length > 0;
+  const isValidId = typeof prod?.id === 'string' && validate(prod.id);
   const isValidDescription = typeof prod?.description === 'string';
   const isValidPrice = prod?.price && !isNaN(Number(prod?.price))
     && Number(prod?.price) > 0;
@@ -74,9 +75,9 @@ export const parseProduct: iParser<iProduct> = (prod) => {
 
   const description = isValidDescription ? prod.description as string : undefined;
   const thumbnail = isValidThumbnail ? prod.thumbnail as string : placeholder;
-  const id = typeof prod?.id === 'string' ? prod.id : '-1';
   const price = isValidPrice ? Number(prod.price) : null;
   const name = isValidName ? prod.name as string : null;
+  const id = isValidId ? prod.id as string : v4();
 
   if (name != null && price != null)
     return { id, name, price, thumbnail, description };

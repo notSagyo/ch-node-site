@@ -54,12 +54,14 @@ app.use((req, res) => {
 ioServer.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
 
+  ioServer.emit('products_updated', await productsDao.getAll());
+  ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
+
   socket.on('create_product', async (product) => {
     await productsDao.save(product);
     ioServer.emit('products_updated', await productsDao.getAll());
   });
 
-  ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
   socket.on('create_message', async (message) => {
     const success = await messagesDao.save(message);
     if (!success) return socket.emit('message_error', 'Invalid message');
