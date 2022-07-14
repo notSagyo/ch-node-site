@@ -3,7 +3,7 @@ import { productsDao } from '../daos/products-dao-mongo';
 import { parseProduct } from '../utils/parsers';
 import { authn, authz } from '../middlewares/auth';
 import { faker } from '@faker-js/faker';
-import { iProduct } from '../types';
+import { iProduct } from '../types/models';
 
 export default class ProductsRouter {
   router = express.Router();

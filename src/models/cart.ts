@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Model, Schema } from 'mongoose';
-import { iCart } from '../types';
+import { iCart } from '../types/models';
 
 const collection = 'carts';
 const cartSchema: Schema<iCart> = new mongoose.Schema({

@@ -1,6 +1,6 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
 import { mongooseOptions } from '../settings/mongoose';
-import { filterMongo } from '../types';
+import { filterMongo } from '../types/types';
 
 export default class Container<T> {
   connection: Connection | undefined;

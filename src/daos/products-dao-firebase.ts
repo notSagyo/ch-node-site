@@ -1,5 +1,6 @@
 import Container from '../containers/container-firebase';
-import { iDao, iProduct } from '../types';
+import { iProduct } from '../types/models';
+import { iDao } from '../types/daos';
 import { v4 } from 'uuid';
 import { where } from '@firebase/firestore';
 

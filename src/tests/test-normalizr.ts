@@ -1,7 +1,7 @@
 import { messagesDao } from '../daos/messages-dao-mongo';
 import { testFunction } from './tests';
 import * as normalizr from 'normalizr';
-import { iUser, iMessage } from '../types';
+import { iUser, iMessage } from '../types/models';
 import { inspect } from 'util';
 
 export const testNormalizr = async () => {

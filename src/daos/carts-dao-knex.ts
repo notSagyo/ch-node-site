@@ -1,6 +1,7 @@
 import Container from '../containers/container-knex';
 import { maridadbOptions } from '../settings/mariadb';
-import { iCart, iCartDao } from '../types';
+import { iCart } from '../types/models';
+import { iCartDao } from '../types/daos';
 import { parseCart, parseCartProduct } from '../utils/parsers';
 
 export default class CartsDao implements iCartDao {

@@ -1,7 +1,8 @@
 import Container from '../containers/container-mongo';
 import { parseUser } from '../utils/parsers';
 import { usersModel } from '../models/user';
-import { iDao, iUser } from '../types';
+import { iUser } from '../types/models';
+import { iDao } from '../types/daos';
 
 export class UserDao implements iDao<iUser> {
   container = new Container(usersModel);

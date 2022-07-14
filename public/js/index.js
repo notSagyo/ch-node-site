@@ -4,10 +4,10 @@ console.log('Socket connected');
 
 // ?TODO: Remove duplicated code
 // Normalizr schemas
-const normalizrAuthor =
+const normalizrAuthorSchema =
   new normalizr.schema.Entity('authors', {  }, { idAttribute: 'email' });
-const normalizrMessage =
-  new normalizr.schema.Entity('messages', { author: normalizrAuthor, });
+const normalizrMessageSchema =
+  new normalizr.schema.Entity('messages', { author: normalizrAuthorSchema, });
 
 // On socket events ==========================================================//
 // PRODUCTS =========================//
@@ -42,7 +42,7 @@ socket.on('messages_updated', (normalizedMessages) => {
   const compressionRate = document.getElementById('compressionRate');
   const denormalizedMessages = normalizr.denormalize(
     normalizedMessages.result,
-    [normalizrMessage],
+    [normalizrMessageSchema],
     normalizedMessages.entities
   );
 

@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { filterSql } from '../types';
+import { filterSql } from '../types/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Container<T extends Record<string, any>> {

@@ -2,7 +2,7 @@ import * as express from 'express';
 import { parseProduct } from '../utils/parsers';
 import { authn, authz } from '../middlewares/auth';
 import Container from '../containers/container-knex';
-import { iProduct } from '../types';
+import { iProduct } from '../types/models';
 import { maridadbOptions as mariadbOptions } from '../settings/mariadb';
 
 export default class ProductsRouter {

@@ -1,6 +1,7 @@
 import Container from '../containers/container-mongo';
 import { cartModel } from '../models/cart';
-import { iCart, iCartDao, iCartProduct } from '../types';
+import { iCart, iCartProduct } from '../types/models';
+import { iCartDao } from '../types/daos';
 import { v4 } from 'uuid';
 
 export default class CartsDao implements iCartDao {

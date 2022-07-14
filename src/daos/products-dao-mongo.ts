@@ -1,6 +1,7 @@
 import Container from '../containers/container-mongo';
 import { productsModel } from '../models/product';
-import { iDao, iProduct } from '../types';
+import { iProduct } from '../types/models';
+import { iDao } from '../types/daos';
 import { v4 } from 'uuid';
 
 export default class ProductsDao implements iDao<iProduct>{

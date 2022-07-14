@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Model, Schema } from 'mongoose';
-import { iProduct } from '../types';
+import { iProduct } from '../types/models';
 
 const collection = 'products';
 const productSchema: Schema<iProduct> = new mongoose.Schema({

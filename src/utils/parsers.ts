@@ -1,4 +1,5 @@
-import { iUser, iMessage, iProduct, iCartProduct, iCart, iParser } from '../types';
+import { iParser } from '../types/types';
+import { iUser, iMessage, iProduct, iCartProduct, iCart } from '../types/models';
 import { validateEmail } from './utils';
 import { validate, v4 } from 'uuid';
 

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as normalizr from 'normalizr';
-import { iMessage, iUser } from '../types';
+import { iMessage, iUser } from '../types/models';
 import { userSchema } from './user';
 
 // Mongoose Schema ===========================================================//
@@ -13,7 +13,7 @@ export const messageSchema: mongoose.Schema<iMessage> = new mongoose.Schema({
 export const messageModel = mongoose.model('messages', messageSchema);
 
 // Normalizr Schema ==========================================================//
-export const normalizrAuthor: normalizr.Schema<iUser> =
+export const normalizrAuthorSchema: normalizr.Schema<iUser> =
   new normalizr.schema.Entity('authors', {  }, { idAttribute: 'email' });
-export const normalizrMessage: normalizr.Schema<iMessage> =
-  new normalizr.schema.Entity('messages', { author: normalizrAuthor, });
+export const normalizerMessageSchema: normalizr.Schema<iMessage> =
+  new normalizr.schema.Entity('messages', { author: normalizrAuthorSchema, });

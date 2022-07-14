@@ -1,8 +1,9 @@
 import * as normalizr from 'normalizr';
-import { messageModel, normalizrMessage } from '../models/message';
+import { messageModel, normalizerMessageSchema } from '../models/message';
 import Container from '../containers/container-mongo';
 import { parseMessage } from '../utils/parsers';
-import { iDao, iMessage } from '../types';
+import { iMessage } from '../types/models';
+import { iDao } from '../types/daos';
 import { usersDao } from './users-dao-mongo';
 
 export default class MessagesDao implements iDao<iMessage> {
@@ -51,7 +52,7 @@ export default class MessagesDao implements iDao<iMessage> {
 
   async getAllNormalized() {
     const messages = await this.getAll();
-    const normalizedMessages = normalizr.normalize(messages, [normalizrMessage]);
+    const normalizedMessages = normalizr.normalize(messages, [normalizerMessageSchema]);
     return normalizedMessages;
   }
 }
