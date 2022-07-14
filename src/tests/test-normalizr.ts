@@ -1,12 +1,12 @@
 import { messagesDao } from '../daos/messages-dao-mongo';
 import { testFunction } from './tests';
-import * as normalizr from 'normalizr';
+import { denormalize, normalize, schema, Schema } from 'normalizr';
 import { iUser, iMessage } from '../types/models';
 import { inspect } from 'util';
 
 export const testNormalizr = async () => {
-  const authorSchema: normalizr.Schema<iUser> = new normalizr.schema.Entity('authors');
-  const messageSchema: normalizr.Schema<iMessage> = new normalizr.schema.Entity('messages', {
+  const authorSchema: Schema<iUser> = new schema.Entity('authors');
+  const messageSchema: Schema<iMessage> = new schema.Entity('messages', {
     author: authorSchema
   });
 
@@ -17,12 +17,12 @@ export const testNormalizr = async () => {
   /* eslint-disable @typescript-eslint/no-explicit-any */
 
   await testFunction('Normalize messages', () => {
-    normalizedMessages = normalizr.normalize(messages, [ messageSchema ]);
+    normalizedMessages = normalize(messages, [ messageSchema ]);
     console.log('normalizedMessages:', inspect(normalizedMessages, false, 12, true));
   });
 
   await testFunction('Denormalize messages', () => {
-    denormalizedMessages = normalizr.denormalize(normalizedMessages.result, [ messageSchema ], normalizedMessages.entities);
+    denormalizedMessages = denormalize(normalizedMessages.result, [ messageSchema ], normalizedMessages.entities);
     console.log('denormalizedMessages:', denormalizedMessages);
   });
 

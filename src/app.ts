@@ -1,6 +1,6 @@
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
-import * as path from 'path';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import path from 'path';
 import ProductsRouter from './controllers/products-router';
 import { productsDao } from './daos/products-dao-mongo';
 import { messagesDao } from './daos/messages-dao-mongo';
@@ -8,7 +8,8 @@ import UserRouter from './controllers/user-router';
 import CartRouter from './controllers/cart-router';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import * as session from 'express-session';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 // INIT ======================================================================//
 // Constants
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser('TheCookieNeverRests'));
 app.use(session({
+  store: MongoStore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/sessions' }),
   secret: 'TheCookieNeverRests',
   resave: true,
   saveUninitialized: true,

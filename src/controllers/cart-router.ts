@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import { cartsDao } from '../daos/carts-dao-mongo';
 import { iRouter } from '../types/types';
 

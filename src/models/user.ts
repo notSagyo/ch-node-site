@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { iUser } from '../types/models';
 
 export const userSchema: mongoose.Schema<iUser> = new mongoose.Schema({

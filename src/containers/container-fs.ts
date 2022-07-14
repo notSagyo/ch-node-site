@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import fs from 'fs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Container<T extends Record<string, any>> {

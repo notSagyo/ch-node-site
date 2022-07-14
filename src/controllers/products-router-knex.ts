@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import { parseProduct } from '../utils/parsers';
 import { authn, authz } from '../middlewares/auth';
 import Container from '../containers/container-knex';

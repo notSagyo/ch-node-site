@@ -1,79 +1,78 @@
-import * as Knex from 'knex';
+import { Knex, knex}  from 'knex';
 import { filterSql } from '../types/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Container<T extends Record<string, any>> {
-  options: Knex.Knex.Config;
+  options: Knex.Config;
   table: string;
   schema: string;
-  knex: Knex.Knex | undefined;
 
-  constructor(schema: string, table: string, options: Knex.Knex.Config) {
+  constructor(schema: string, table: string, options: Knex.Config) {
     this.options = options;
     this.table = table;
     this.schema = schema;
   }
 
-  async createTable(schemaBuilder: (table: Knex.Knex.TableBuilder) => void) {
-    const knex = Knex.knex(this.options);
-    const exists = await knex.schema.hasTable(this.table);
+  async createTable(schemaBuilder: (table: Knex.TableBuilder) => void) {
+    const kn = knex(this.options);
+    const exists = await kn.schema.hasTable(this.table);
     let success = exists;
-    if (!exists) await knex.schema.createTable(this.table, schemaBuilder)
+    if (!exists) await kn.schema.createTable(this.table, schemaBuilder)
       .then(() => success = true)
       .catch(err => console.log(err));
-    knex.destroy();
+    kn.destroy();
     return success;
   }
 
   async insert(obj: T | T[]) {
-    const knex = Knex.knex(this.options);
+    const kn = knex(this.options);
     let success = false;
-    await knex(this.table).insert(obj)
+    await kn(this.table).insert(obj)
       .then(() => success = true)
       .catch(err => console.log(err));
-    knex.destroy();
+    kn.destroy();
     return success;
   }
 
   async find(condition: filterSql<T>, sortColumn?: string, ascending?: boolean): Promise<T[] | null> {
-    const knex = Knex.knex(this.options);
+    const kn = knex(this.options);
     let rows: T[] | null = null;
     if (sortColumn != null) {
-      await knex.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
+      await kn.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
         .then(res => rows = res as T[])
         .catch(err => console.log(err));
     } else {
-      await knex.from(this.table).where(condition)
+      await kn.from(this.table).where(condition)
         .then(res => rows = res as T[])
         .catch(err => console.log(err));
     }
-    knex.destroy();
+    kn.destroy();
     return rows;
   }
 
   async update(condition: filterSql<T>, update: Partial<T>) {
-    const knex = Knex.knex(this.options);
+    const kn = knex(this.options);
     let success = false;
-    await knex(this.table).where(condition).update(update)
+    await kn(this.table).where(condition).update(update)
       .then(() => success = true)
       .catch(err => console.log(err));
-    knex.destroy();
+    kn.destroy();
     return success;
   }
 
   async delete(condition?: filterSql<T>, limit?: number) {
-    const knex = Knex.knex(this.options);
+    const kn = knex(this.options);
     let success = false;
     if (limit != null) {
-      await knex.from(this.table).where(condition || {}).limit(limit).del()
+      await kn.from(this.table).where(condition || {}).limit(limit).del()
         .then(() => success = true)
         .catch(err => console.log(err));
     } else {
-      await knex.from(this.table).where(condition || {}).del()
+      await kn.from(this.table).where(condition || {}).del()
         .then(() => success = true)
         .catch(err => console.log(err));
     }
-    knex.destroy();
+    kn.destroy();
     return success;
   }
 }
