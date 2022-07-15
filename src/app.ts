@@ -6,7 +6,6 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import express from 'express';
 import path from 'path';
-
 import { productsDao } from './daos/products-dao-mongo';
 import { messagesDao } from './daos/messages-dao-mongo';
 import { resetAge } from './middlewares/cookies';
@@ -39,8 +38,8 @@ app.use(session({
   }),
   cookie: { maxAge: 10 * 60 * 1000 },
   secret: 'TheCookieNeverRests',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
 }));
 app.use(resetAge);
 

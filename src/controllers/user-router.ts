@@ -20,7 +20,7 @@ export default class UserRouter implements iRouter {
     this.postLogout();
   }
 
-  getLogin() {
+  private getLogin() {
     this.router.get('/login', (req, res) => {
       if (req.session.user != null)
         return res.send('Already logged in');
@@ -28,31 +28,27 @@ export default class UserRouter implements iRouter {
     });
   }
 
-  getLogout() {
+  private getLogout() {
     this.router.get('/logout', (req, res) => {
       const user = req.session.user;
-      if (req.session.user != null)
-        req.session.destroy((err) => {
-          if (err) res.send(err);
-          else console.log('Session: destroyed');
-        });
+      req.session.destroy((err) => {
+        if (err) console.error(err);
+        else console.log('Session: destroyed');
+      });
       res.render(this.logoutHtmlPath, { user });
     });
   }
 
-  postLogin() {
+  private postLogin() {
     const upload = multer();
     this.router.post('/login', upload.none(), (req, res) => {
       const user = req.body;
-      if (req.session.user)
-        return res.send('Already logged in');
       req.session.user = user;
-      console.log('Session: created user', JSON.stringify(user));
       res.redirect('/');
     });
   }
 
-  postLogout() {
+  private postLogout() {
     this.router.post('/logout', (req, res) => res.redirect('/logout'));
   }
 }
