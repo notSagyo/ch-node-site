@@ -5,6 +5,7 @@ import Container from '../containers/container-knex';
 import { iProduct } from '../types/models';
 import { maridadbOptions as mariadbOptions } from '../settings/mariadb';
 import { iRouter } from '../types/types';
+import { ejsDefaultData } from '../settings/ejs';
 
 export default class ProductsRouter implements iRouter {
   router = express.Router();
@@ -40,7 +41,7 @@ export default class ProductsRouter implements iRouter {
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
       const prods = await this.table.find({});
-      res.render(this.productsHtmlPath, { productList: prods, user: req.session.user });
+      res.render(this.productsHtmlPath, { ...ejsDefaultData, productList: prods });
     });
   }
 

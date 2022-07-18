@@ -11,6 +11,7 @@ import { messagesDao } from './daos/messages-dao-mongo';
 import { resetAge } from './middlewares/cookies';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
+import { ejsDefaultData } from './settings/ejs';
 
 // INIT ======================================================================//
 // Constants
@@ -54,11 +55,11 @@ app.use(express.static(path.join(baseDir, 'public')));
 
 // Routes
 app.get('/', (req, res) => {
-  res.render('pages/index.ejs', { user: req.session.user });
+  res.render('pages/index.ejs', ejsDefaultData);
 });
 
 app.get('/chat', async (req, res) => {
-  res.render('pages/chat.ejs', { user: req.session.user });
+  res.render('pages/chat.ejs', ejsDefaultData);
 });
 
 app.use((req, res) => {

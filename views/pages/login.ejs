@@ -1,6 +1,6 @@
 <%- include('../partials/head.ejs', { pageTitle: 'User login' }) %>
 <body>
-  <%- include('../partials/header', locals.user ? user : { }) %>
+  <%- include('../partials/header') %>
   <div class="container">
   <% if (locals.user != null && user?.username) { %>
     <script>

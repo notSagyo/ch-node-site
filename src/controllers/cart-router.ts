@@ -1,5 +1,6 @@
 import express from 'express';
 import { cartsDao } from '../daos/carts-dao-mongo';
+import { ejsDefaultData } from '../settings/ejs';
 import { iRouter } from '../types/types';
 
 export default class CartRouter implements iRouter {
@@ -26,7 +27,7 @@ export default class CartRouter implements iRouter {
 
   private getCartPage() {
     this.router.get('/', async (req, res) => {
-      res.render(this.cartHtmlPath, { user: req.session.user });
+      res.render(this.cartHtmlPath, ejsDefaultData);
     });
   }
 
