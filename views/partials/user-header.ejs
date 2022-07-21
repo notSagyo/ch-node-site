@@ -1,7 +1,7 @@
 <div class="container">
   <div class="ms-auto text-end py-1">
-    <% if (locals.user != null && user?.username) { %>
-      Logged in as: <%= user.username %>
+    <% if (locals.user != null && user?.email) { %>
+      Logged in as: <%= user.email %>
       <div class="my-1">
         <form id="logoutForm" action="/logout" method="POST">
           <button class="btn btn-sm btn-danger btn-block" type="submit">Log out</button>
@@ -10,7 +10,8 @@
     <% } else { %>
       Not logged in
       <div class="my-1">
-        <a href="/login"><button class="btn btn-sm btn-success btn-block">Log in</button></a>
+        <a href="/signup" class="me-1"><button class="btn btn-sm btn-success btn-block">Sign up</button></a>
+        <a href="/login"><button class="btn btn-sm btn-primary btn-block">Log in</button></a>
       </div>
     <% } %>
   </div>

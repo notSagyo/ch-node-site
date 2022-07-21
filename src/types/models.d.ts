@@ -23,6 +23,7 @@ export interface iCart {
 export interface iUser {
   lastName: string;
   username: string;
+  password: string;
   avatar: string;
   email: string;
   name: string;

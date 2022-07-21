@@ -6,12 +6,12 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import express from 'express';
 import path from 'path';
+import { updateEjsDefaultData, resetAge } from './middlewares/middlewares';
 import { productsDao } from './daos/products-dao-mongo';
 import { messagesDao } from './daos/messages-dao-mongo';
-import { resetAge } from './middlewares/cookies';
+import { ejsDefaultData } from './settings/ejs';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import { ejsDefaultData } from './settings/ejs';
 
 // INIT ======================================================================//
 // Constants
@@ -21,9 +21,14 @@ const httpServer = new HttpServer(app);
 const ioServer = new IOServer(httpServer);
 const baseDir = path.join(__dirname, '..');
 
-const userRouter = new UserRouter('pages/login.ejs', 'pages/logout.ejs');
 const productsRouter = new ProductsRouter('pages/products.ejs');
 const cartRouter = new CartRouter('pages/cart.ejs');
+const userRouter = new UserRouter(
+  'pages/login.ejs',
+  'pages/logout.ejs',
+  'pages/signup.ejs',
+  'pages/error.ejs'
+);
 
 // Config
 app.set('view engine', 'ejs');
@@ -43,6 +48,7 @@ app.use(session({
   saveUninitialized: false,
 }));
 app.use(resetAge);
+app.use(updateEjsDefaultData);
 
 // Routers
 app.use('/', userRouter.router);

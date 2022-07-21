@@ -5,6 +5,7 @@ import { validate, v4 } from 'uuid';
 
 export const parseUser: iParser<iUser> = (user) => {
   if (user == null) return null;
+  const isValidPassword = typeof user?.password === 'string' && user.password.length > 1;
   const isValidName = typeof user?.name === 'string' && user.name.length > 1;
   const isValidAge = typeof user?.age === 'number' && user.age > 0;
   const isValidId = typeof user?.id === 'string' && validate(user.id);
@@ -22,11 +23,13 @@ export const parseUser: iParser<iUser> = (user) => {
   else if (!isValidEmail) console.log('Invalid user email');
   else if (!isValidUsername) console.log('Invalid user username');
   else if (!isValidLastName) console.log('Invalid user last name');
+  else if (!isValidPassword) console.log('Invalid user password');
 
   const isValid = isValidEmail
     && isValidName
     && isValidLastName
     && isValidUsername
+    && isValidPassword
     && isValidAge;
   if (!isValid) return null;
 
@@ -40,6 +43,7 @@ export const parseUser: iParser<iUser> = (user) => {
     email: user.email as string,
     lastName: user.lastName as string,
     username: user.username as string,
+    password: user.password as string,
   });
 };
 

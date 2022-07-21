@@ -2,27 +2,16 @@
 <body>
   <%- include('../partials/header') %>
   <div class="container">
+  <!-- IF LOGGED IN REDIRECT TO HOME -->
   <% if (locals.user != null && user?.username) { %>
     <script>
       window.location.href = '/';
     </script>
   <% } %>
-
+  <h1 class="text-center">User Login</h1>
     <div class="col-md-4 offset-md-4 border rounded-3 p-3 my-3">
-      <h1 class="text-center">User Login</h1>
-      <form
-        id="loginForm"
-        class="form-signin"
-        method="post"
-        action="/login"
-        enctype="multipart/form-data"
-      >
-        <div class="my-3">
-          <label for="loginUsername">Username</label>
-          <input type="text" class="form-control" id="loginUsername" name="username" placeholder="Username" required autofocus>
-        </div>
-        <button class="btn btn-success btn-block" type="submit">Log in</button>
-      </form>
+      <!-- INCLUDE LOGIN FORM -->
+      <%- include('../partials/login-form') %>
     </div>
   </div>
 </body>
