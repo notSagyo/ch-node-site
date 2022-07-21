@@ -6,3 +6,8 @@ ul {
 .prodId {
   text-overflow: ellipsis;
 }
+
+.form-suggestion {
+  display: block;
+  font-size: small;
+}
