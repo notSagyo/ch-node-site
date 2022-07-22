@@ -1,7 +1,9 @@
-import * as express from 'express';
+import express from 'express';
 import { cartsDao } from '../daos/carts-dao-knex';
+import { ejsDefaultData } from '../settings/ejs';
+import { iRouter } from '../types/types';
 
-export default class CartRouter {
+export default class CartRouter implements iRouter {
   router = express.Router();
   apiRouter = express.Router();
   cartHtmlPath: string;
@@ -25,7 +27,7 @@ export default class CartRouter {
 
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
-      res.render(this.cartHtmlPath);
+      res.render(this.cartHtmlPath, ejsDefaultData);
     });
   }
 
@@ -61,7 +63,7 @@ export default class CartRouter {
     });
   }
 
-  // Sample POST body: { "id": 1 }
+  /** Sample POST body: { "id": 1 } */
   private postCartProduct() {
     this.apiRouter.post('/:id/productos', async (req, res) => {
       const cartId = req.params.id;

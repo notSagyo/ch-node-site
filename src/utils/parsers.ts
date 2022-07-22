@@ -1,9 +1,11 @@
-import { iUser, iMessage, iProduct, iCartProduct, iCart, iParser } from '../types';
+import { iParser } from '../types/types';
+import { iUser, iMessage, iProduct, iCartProduct, iCart } from '../types/models';
 import { validateEmail } from './utils';
 import { validate, v4 } from 'uuid';
 
 export const parseUser: iParser<iUser> = (user) => {
   if (user == null) return null;
+  const isValidPassword = typeof user?.password === 'string' && user.password.length > 1;
   const isValidName = typeof user?.name === 'string' && user.name.length > 1;
   const isValidAge = typeof user?.age === 'number' && user.age > 0;
   const isValidId = typeof user?.id === 'string' && validate(user.id);
@@ -21,11 +23,13 @@ export const parseUser: iParser<iUser> = (user) => {
   else if (!isValidEmail) console.log('Invalid user email');
   else if (!isValidUsername) console.log('Invalid user username');
   else if (!isValidLastName) console.log('Invalid user last name');
+  else if (!isValidPassword) console.log('Invalid user password');
 
   const isValid = isValidEmail
     && isValidName
     && isValidLastName
     && isValidUsername
+    && isValidPassword
     && isValidAge;
   if (!isValid) return null;
 
@@ -39,6 +43,7 @@ export const parseUser: iParser<iUser> = (user) => {
     email: user.email as string,
     lastName: user.lastName as string,
     username: user.username as string,
+    password: user.password as string,
   });
 };
 
@@ -65,6 +70,7 @@ export const parseProduct: iParser<iProduct> = (prod) => {
   const placeholder = 'https://via.placeholder.com/256';
 
   const isValidName = typeof prod?.name === 'string' && prod.name.length > 0;
+  const isValidId = typeof prod?.id === 'string' && validate(prod.id);
   const isValidDescription = typeof prod?.description === 'string';
   const isValidPrice = prod?.price && !isNaN(Number(prod?.price))
     && Number(prod?.price) > 0;
@@ -73,9 +79,9 @@ export const parseProduct: iParser<iProduct> = (prod) => {
 
   const description = isValidDescription ? prod.description as string : undefined;
   const thumbnail = isValidThumbnail ? prod.thumbnail as string : placeholder;
-  const id = typeof prod?.id === 'string' ? prod.id : '-1';
   const price = isValidPrice ? Number(prod.price) : null;
   const name = isValidName ? prod.name as string : null;
+  const id = isValidId ? prod.id as string : v4();
 
   if (name != null && price != null)
     return { id, name, price, thumbnail, description };

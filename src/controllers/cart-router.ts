@@ -1,13 +1,14 @@
-import * as express from 'express';
+import express from 'express';
 import { cartsDao } from '../daos/carts-dao-mongo';
+import { ejsDefaultData } from '../settings/ejs';
+import { iRouter } from '../types/types';
 
-export default class CartRouter {
+export default class CartRouter implements iRouter {
+  cartHtmlPath: string;
   router = express.Router();
   apiRouter = express.Router();
-  cartHtmlPath: string;
 
-  constructor(
-    cartHtmlPath: string) {
+  constructor(cartHtmlPath: string) {
     this.cartHtmlPath = cartHtmlPath;
     this.initRoutes();
   }
@@ -26,14 +27,15 @@ export default class CartRouter {
 
   private getCartPage() {
     this.router.get('/', async (req, res) => {
-      res.render(this.cartHtmlPath);
+      res.render(this.cartHtmlPath, ejsDefaultData);
     });
   }
 
   private postCart() {
     this.apiRouter.post('/', async (req, res) => {
-      const newCartId = await cartsDao.save();
-      if (newCartId == null)
+      const success = await cartsDao.save();
+
+      if (success == false)
         return res.status(400).send('400: Error while saving cart');
       res.status(201).send('201: Cart created succesfully');
     });
@@ -43,9 +45,9 @@ export default class CartRouter {
     this.apiRouter.get('/:id/productos', async (req, res) => {
       const cartId = req.params.id;
       const cart = await cartsDao.getById(cartId);
-      if (!cart)
-        return res.status(404).send(`404: Cart with ID:${cartId} not found`);
 
+      if (cart == null)
+        return res.status(404).send(`404: Cart with ID:${cartId} not found`);
       res.status(200).json(cart.products);
     });
   }
@@ -54,21 +56,21 @@ export default class CartRouter {
     this.apiRouter.delete('/:id', async (req, res) => {
       const cartId = req.params.id;
       const success = await cartsDao.deleteById(cartId);
-      if (success == null)
+
+      if (success == false)
         return res.status(400).send('400: Error while deleting cart');
       res.status(200).send(`200: Cart N°${cartId} deleted succesfully`);
     });
   }
 
-  // Sample body: { "id": 1 }
+  /** Sample POST body: { "id": 1 } */
   private postCartProduct() {
     this.apiRouter.post('/:id/productos', async (req, res) => {
       const cartId = req.params.id;
       const productId = req.body.id;
-
-      // Add product to cart
       const success = await cartsDao.addProductById(cartId, productId);
-      if (!success)
+
+      if (success == false)
         return res.status(400).send('400: Error while saving product in cart');
       res.status(201).send('201: Product added succesfully');
     });
@@ -78,9 +80,9 @@ export default class CartRouter {
     this.apiRouter.delete('/:cartId/productos', async (req, res) => {
       const cartId = req.params.cartId;
       const productId = req.body.id;
-
       const success = await cartsDao.removeProductById(cartId, productId);
-      if (!success)
+
+      if (success == false)
         return res.status(400).send('400: Error while deleting product from cart');
       res.status(200).send('200: CartProduct deleted succesfully');
     });

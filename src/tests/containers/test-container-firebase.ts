@@ -1,7 +1,7 @@
 import { where } from '@firebase/firestore';
 import { v4 } from 'uuid';
 import Container from '../../containers/container-firebase';
-import { iProduct } from '../../types';
+import { iProduct } from '../../types/models';
 import { testFunction } from '../tests';
 
 export const testContainerFirebase = async () => {

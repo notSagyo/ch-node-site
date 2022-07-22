@@ -1,11 +1,13 @@
-import * as express from 'express';
+import express from 'express';
 import { parseProduct } from '../utils/parsers';
 import { authn, authz } from '../middlewares/auth';
 import Container from '../containers/container-knex';
-import { iProduct } from '../types';
+import { iProduct } from '../types/models';
 import { maridadbOptions as mariadbOptions } from '../settings/mariadb';
+import { iRouter } from '../types/types';
+import { ejsDefaultData } from '../settings/ejs';
 
-export default class ProductsRouter {
+export default class ProductsRouter implements iRouter {
   router = express.Router();
   apiRouter = express.Router();
   table: Container<iProduct>;
@@ -39,7 +41,7 @@ export default class ProductsRouter {
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
       const prods = await this.table.find({});
-      res.render(this.productsHtmlPath, { productList: prods });
+      res.render(this.productsHtmlPath, { ...ejsDefaultData, productList: prods });
     });
   }
 

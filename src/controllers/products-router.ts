@@ -1,11 +1,13 @@
-import * as express from 'express';
+import express from 'express';
 import { productsDao } from '../daos/products-dao-mongo';
 import { parseProduct } from '../utils/parsers';
 import { authn, authz } from '../middlewares/auth';
 import { faker } from '@faker-js/faker';
-import { iProduct } from '../types';
+import { iProduct } from '../types/models';
+import { iRouter } from '../types/types';
+import { ejsDefaultData } from '../settings/ejs';
 
-export default class ProductsRouter {
+export default class ProductsRouter implements iRouter {
   router = express.Router();
   apiRouter = express.Router();
   testRouter = express.Router();
@@ -34,7 +36,7 @@ export default class ProductsRouter {
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
       const prods = await productsDao.getAll();
-      res.render(this.productsHtmlPath, { productList: prods });
+      res.render(this.productsHtmlPath, { ...ejsDefaultData, productList: prods });
     });
   }
 

@@ -1,6 +1,6 @@
 import { addDoc, collection, CollectionReference, deleteDoc, DocumentData, getDocs, query, updateDoc } from '@firebase/firestore';
 import { db } from '../settings/firebase';
-import { filterFirebase } from '../types';
+import { filterFirebase } from '../types/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Container<T extends Record<string, any>> {
