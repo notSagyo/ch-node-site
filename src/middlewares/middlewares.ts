@@ -14,6 +14,6 @@ export const resetAge: express.RequestHandler = (req, res, next) => {
 */
 export const updateEjsDefaultData: express.RequestHandler = (req, res, next) => {
   res.locals.oldEjsDefaultData = ejsDefaultData;
-  ejsDefaultData.user = req.session.user;
+  ejsDefaultData.user = req.user;
   next();
 };

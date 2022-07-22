@@ -1,5 +1,5 @@
 interface iEjsDefaultData {
-  user: undefined | null | Record<string, unknown>;
+  user: undefined | null | Express.User;
 }
 
 export const ejsDefaultData: iEjsDefaultData = {

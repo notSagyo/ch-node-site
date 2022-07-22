@@ -3,11 +3,8 @@ import express from 'express';
 // Authentication
 // TODO: update to work with session
 export const authn: express.RequestHandler = (req, res, next) => {
-  req.session.user = {
-    fullName: 'John Doe',
-    isAdmin: true
-  };
-  next();
+  if (req.session.user) next();
+  res.status(401).send('Unauthorized: you must be logged in');
 };
 
 // Authorization

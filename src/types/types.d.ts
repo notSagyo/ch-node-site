@@ -22,7 +22,23 @@ export type filterAny<T> = filterSql<T> | filterMongo<T> | filterFirebase;
 // TODO: replace any type with iUser
 declare module 'express-session' {
   export interface SessionData {
-    user: { [key: string]: any };
+    user: { [key: string]: unknown };
     isAdmin: boolean;
+  }
+}
+
+// Express ===================================================================//
+declare module 'Express' {
+  export interface User {
+    email: string,
+    password: string
+  }
+}
+
+declare global {
+  namespace Express {
+    interface User {
+      email: string
+    }
   }
 }

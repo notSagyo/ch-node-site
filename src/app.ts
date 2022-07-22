@@ -1,6 +1,7 @@
 import ProductsRouter from './controllers/products-router';
 import UserRouter from './controllers/user-router';
 import CartRouter from './controllers/cart-router';
+import passport from './settings/passport';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
@@ -47,6 +48,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(resetAge);
 app.use(updateEjsDefaultData);
 
@@ -61,6 +64,7 @@ app.use(express.static(path.join(baseDir, 'public')));
 
 // Routes
 app.get('/', (req, res) => {
+  console.log('Req. user:', req.user);
   res.render('pages/index.ejs', ejsDefaultData);
 });
 
