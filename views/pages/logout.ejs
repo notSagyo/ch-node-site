@@ -12,7 +12,7 @@
           </div>
         <% } else { %>
           <h1 class="text-center">Logged out</h1>
-          <span class="text-center d-block">Hope to see you soon <%= user.username %>!</span>
+          <span class="text-center d-block">Hope to see you soon <%= user.email %>!</span>
           <script> setTimeout(() => window.location.href = '/login', 2000); </script>
         <% } %>
       </div>

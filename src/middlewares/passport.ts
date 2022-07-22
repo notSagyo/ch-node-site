@@ -3,12 +3,12 @@ import bcrypt from 'bcrypt';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { usersDao } from '../daos/users-dao-mongo';
 import { iUser } from '../types/models';
-import { saltRounds } from './bcrypt';
+import { saltRounds } from '../settings/bcrypt';
 import { v4 } from 'uuid';
 
 passport.use('registration', new LocalStrategy({ usernameField: 'email' }, async (email, password, callback) => {
   const foundUser = await usersDao.getByEmail(email);
-  if (foundUser != null) return callback(new Error('User already exists'));
+  if (foundUser != null) return callback(null, false, { message: 'User already exists' });
   const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(saltRounds));
   const createdUser: iUser = {
     age: 20,
@@ -27,7 +27,7 @@ passport.use('registration', new LocalStrategy({ usernameField: 'email' }, async
 passport.use('authn', new LocalStrategy({ usernameField: 'email' }, async (email, password, callback) => {
   const dbUser = await usersDao.getByEmail(email);
   if (dbUser == null || !bcrypt.compareSync(password, dbUser.password))
-    return callback(new Error('Invalid login credentials'));
+    return callback(null, false, { message: 'Invalid email/password' });
   callback(null, dbUser);
 }));
 

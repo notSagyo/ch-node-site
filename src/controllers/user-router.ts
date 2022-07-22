@@ -9,6 +9,7 @@ export default class UserRouter implements iRouter {
   logoutHtmlPath: string;
   signupHtmlPath: string;
   errorHtmlPath: string;
+
   router = express.Router();
 
   constructor(loginHtmlPath: string, logoutHtmlPath: string, signupHtmlPath: string, errorHtmlPath: string) {
@@ -21,16 +22,24 @@ export default class UserRouter implements iRouter {
 
   initRoutes() {
     this.getLogin();
-    this.getLogout();
     this.getSignup();
+    this.getLogout();
     this.postLogin();
-    this.postLogout();
     this.postSignup();
+    this.postLogout();
+    this.getErrorInvalidCredentials();
+    this.getErrorAlreadyExists();
   }
 
   private getLogin() {
     this.router.get('/login', (req, res) => {
       res.render(this.loginHtmlPath, ejsDefaultData);
+    });
+  }
+
+  private getSignup() {
+    this.router.get('/signup', (req, res) => {
+      res.render(this.signupHtmlPath, ejsDefaultData);
     });
   }
 
@@ -50,27 +59,48 @@ export default class UserRouter implements iRouter {
     });
   }
 
-  private getSignup() {
-    this.router.get('/signup', (req, res) => {
-      res.render(this.signupHtmlPath, ejsDefaultData);
-    });
-  }
-
   private postLogin() {
     const upload = multer();
-    this.router.post('/login', upload.none(), passport.authenticate('authn'), async (req, res) => {
-      res.redirect('/');
-    });
+    this.router.post(
+      '/login',
+      upload.none(),
+      passport.authenticate('authn', { failureRedirect: '/loginerror' }),
+      (req, res) => res.redirect('/')
+    );
+  }
+
+  private postSignup() {
+    const upload = multer();
+    this.router.post(
+      '/signup',
+      upload.none(),
+      passport.authenticate('registration', { failureRedirect: '/signuperror' }),
+      (req, res) => res.redirect('/')
+    );
   }
 
   private postLogout() {
     this.router.post('/logout', (req, res) => res.redirect('/logout'));
   }
 
-  private postSignup() {
-    const upload = multer();
-    this.router.post('/signup', upload.none(), passport.authenticate('registration'), (req, res) => {
-      res.redirect('/');
+  private getErrorInvalidCredentials() {
+    this.router.get('/loginerror', (req, res) => {
+      res.render(this.errorHtmlPath, {
+        ejsDefaultData,
+        errorTitle: 'Login error',
+        errorDescription: 'Invalid credentials: email/password combination'
+          + ' do not match an existing user'
+      });
+    });
+  }
+
+  private getErrorAlreadyExists() {
+    this.router.get('/signuperror', (req, res) => {
+      res.render(this.errorHtmlPath, {
+        ejsDefaultData,
+        errorTitle: 'Registration error',
+        errorDescription: 'User with the same email/username already exists'
+      });
     });
   }
 }
