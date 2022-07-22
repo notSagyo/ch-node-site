@@ -46,15 +46,22 @@ export default class UserRouter implements iRouter {
   private getLogout() {
     this.router.get('/logout', (req, res) => {
       const destroyedUser = res.locals.oldEjsDefaultData.user;
+      let success = true;
 
-      req.session.destroy((err) => {
-        if (err)
-          console.error(err);
-        else {
-          console.log('Session: destroyed');
-          ejsDefaultData.user = null;
-        }
+      req.logout((err) =>  {
+        console.log(err);
+        success = false;
       });
+
+      if (!success) {
+        return res.render(this.errorHtmlPath, {
+          ejsDefaultData,
+          errorTitle: 'Logout error',
+          errorDescription: 'Logout failed'
+        });
+      }
+
+      ejsDefaultData.user = null;
       res.render(this.logoutHtmlPath, { user: destroyedUser });
     });
   }
