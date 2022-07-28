@@ -18,6 +18,7 @@ export type filterFirebase = QueryConstraint | '*';
 /** SQL or NoSQL condition */
 export type filterAny<T> = filterSql<T> | filterMongo<T> | filterFirebase;
 
+// Express ===================================================================//
 // Express session Declaration merging
 // TODO: replace any type with iUser
 declare module 'express-session' {
@@ -27,18 +28,17 @@ declare module 'express-session' {
   }
 }
 
-// Express ===================================================================//
 declare module 'Express' {
   export interface User {
-    email: string,
-    password: string
+    email: string;
+    password: string;
   }
 }
 
 declare global {
   namespace Express {
     interface User {
-      email: string
+      email: string;
     }
   }
 }

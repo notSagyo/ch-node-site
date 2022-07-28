@@ -27,8 +27,7 @@ export default class UserRouter implements iRouter {
     this.postLogin();
     this.postSignup();
     this.postLogout();
-    this.getErrorInvalidCredentials();
-    this.getErrorAlreadyExists();
+    this.getError();
   }
 
   private getLogin() {
@@ -71,7 +70,12 @@ export default class UserRouter implements iRouter {
     this.router.post(
       '/login',
       upload.none(),
-      passport.authenticate('authn', { failureRedirect: '/loginerror' }),
+      passport.authenticate('authn', {
+        failureRedirect: '/error'
+          + '?errorTitle=Login error'
+          + '&errorDescription=Invalid credentials: email/password combination'
+          + ' do not match an existing user'
+      }),
       (req, res) => res.redirect('/')
     );
   }
@@ -81,7 +85,11 @@ export default class UserRouter implements iRouter {
     this.router.post(
       '/signup',
       upload.none(),
-      passport.authenticate('registration', { failureRedirect: '/signuperror' }),
+      passport.authenticate('registration', {
+        failureRedirect: '/error'
+        + '?errorTitle=Registration error'
+        + '&errorDescription=User with the same email/username already exists'
+      }),
       (req, res) => res.redirect('/')
     );
   }
@@ -90,23 +98,15 @@ export default class UserRouter implements iRouter {
     this.router.post('/logout', (req, res) => res.redirect('/logout'));
   }
 
-  private getErrorInvalidCredentials() {
-    this.router.get('/loginerror', (req, res) => {
-      res.render(this.errorHtmlPath, {
-        ejsDefaultData,
-        errorTitle: 'Login error',
-        errorDescription: 'Invalid credentials: email/password combination'
-          + ' do not match an existing user'
-      });
-    });
-  }
+  private getError() {
+    this.router.get('/error', (req, res) => {
+      const errorTitle = req.query.errorTitle || 'Error';
+      const errorDescription = req.query.errorDescription || 'Unknown error';
 
-  private getErrorAlreadyExists() {
-    this.router.get('/signuperror', (req, res) => {
       res.render(this.errorHtmlPath, {
         ejsDefaultData,
-        errorTitle: 'Registration error',
-        errorDescription: 'User with the same email/username already exists'
+        errorTitle: errorTitle,
+        errorDescription: errorDescription
       });
     });
   }
