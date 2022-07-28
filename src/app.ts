@@ -64,6 +64,7 @@ app.use(updateEjsDefaultData);
 // Routers
 app.use('/', userRouter.router);
 app.use('/', utilsRouter.router);
+app.use('/api', utilsRouter.apiRouter);
 app.use('/carrito', cartRouter.router);
 app.use('/productos', productsRouter.router);
 app.use('/api', productsRouter.testRouter);
