@@ -1,16 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authz = exports.authn = void 0;
-var authn = function (req, res, next) {
-    req.user = {
-        fullName: 'John Doe',
-        isAdmin: true
-    };
-    next();
+const authn = (req, res, next) => {
+    if (req.session.user)
+        next();
+    res.status(401).send('Unauthorized: you must be logged in');
 };
 exports.authn = authn;
-var authz = function (req, res, next) {
-    if (req.user.isAdmin)
+const authz = (req, res, next) => {
+    if (req.session.isAdmin)
         next();
     else
         res.status(403).send('403: Forbidden, must be and admin');

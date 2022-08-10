@@ -1,0 +1,15 @@
+# NO USAR POWERSHELL (funciona con git bash, command propmt, etc.)
+
+######## CONSOLA A
+cd nginx
+./nginx
+
+######## CONSOLA B
+# Modo fork
+pm2 start dist/app.js --name="app8080" --watch -- --port="8080"
+
+# Modo cluster de pm2
+pm2 start dist/app.js --name="app8082" --watch -i 1 -- --port="8082"
+pm2 start dist/app.js --name="app8083" --watch -i 1 -- --port="8083"
+pm2 start dist/app.js --name="app8084" --watch -i 1 -- --port="8084"
+pm2 start dist/app.js --name="app8085" --watch -i 1 -- --port="8085"

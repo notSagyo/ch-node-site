@@ -1,11 +1,14 @@
 import ProductsRouter from './controllers/products-router';
+import UtilsRouter from './controllers/utils-router';
 import UserRouter from './controllers/user-router';
 import CartRouter from './controllers/cart-router';
 import passport from './middlewares/passport';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
+import minimist from 'minimist';
 import express from 'express';
+import dotenv from 'dotenv';
 import path from 'path';
 import { updateEjsDefaultData, resetAge } from './middlewares/middlewares';
 import { productsDao } from './daos/products-dao-mongo';
@@ -13,16 +16,17 @@ import { messagesDao } from './daos/messages-dao-mongo';
 import { ejsDefaultData } from './settings/ejs';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import dotenv from 'dotenv';
-import UtilsRouter from './controllers/utils-router';
 
 // INIT ======================================================================//
 // Constants
-const PORT = process.argv[2] || 8080;
 const app = express();
 const httpServer = new HttpServer(app);
 const ioServer = new IOServer(httpServer);
 const baseDir = path.join(__dirname, '..');
+
+const args = minimist(process.argv.slice(2));
+const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
+export const PORT = args.port || 8080;
 
 const productsRouter = new ProductsRouter('pages/products.ejs');
 const utilsRouter = new UtilsRouter();
@@ -72,7 +76,6 @@ app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 
-// Routes
 app.get('/', (req, res) => {
   console.log('Req. user:', req.user);
   res.render('pages/index.ejs', ejsDefaultData);
@@ -110,5 +113,6 @@ ioServer.on('connection', async (socket) => {
 
 // Listen ====================================================================//
 httpServer.listen(PORT, () => {
-  console.log(`Server started at http://localhost:${PORT}/`);
+  const time = new Date().toLocaleTimeString();
+  console.log(`[${time}]: Server at http://localhost:${PORT}/ in ${mode} mode`);
 });

@@ -57,7 +57,9 @@ export default class UtilsRouter {
       forked.on('message', (msg) => {
         result = msg;
         res.header('Content-Type', 'application/json');
-        res.status(200).send(JSON.stringify(result, null, 2));
+        let resultString = JSON.stringify(result, null, 2);
+        resultString = process.argv.slice(2) + ' ' + resultString;
+        res.status(200).send(resultString);
         console.log('Randoms sent!');
       });
     });

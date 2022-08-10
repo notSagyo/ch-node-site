@@ -12,6 +12,7 @@ interface iParser<T> {
   (obj: Partial<T> | Record<string, unknown> | null | undefined): T | null;
 }
 
+// Databases
 export type filterSql<T> = [string, string, string | number] | Partial<T>;
 export type filterMongo<T> = mongoose.FilterQuery<T> | '*';
 export type filterFirebase = QueryConstraint | '*';
@@ -20,7 +21,6 @@ export type filterAny<T> = filterSql<T> | filterMongo<T> | filterFirebase;
 
 // Express ===================================================================//
 // Express session Declaration merging
-// TODO: replace any type with iUser
 declare module 'express-session' {
   export interface SessionData {
     user: { [key: string]: unknown };

@@ -1,9 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cartModel = void 0;
-var mongoose = require("mongoose");
-var collection = 'carts';
-var cartSchema = new mongoose.Schema({
+const mongoose_1 = __importDefault(require("mongoose"));
+const collection = 'carts';
+const cartSchema = new mongoose_1.default.Schema({
     id: { type: String, required: true, unique: true },
     timestamp: { type: Number, required: true },
     products: { type: [{
@@ -13,4 +16,4 @@ var cartSchema = new mongoose.Schema({
                 timestamp: { type: Number, required: true },
             }], required: true },
 });
-exports.cartModel = mongoose.model(collection, cartSchema);
+exports.cartModel = mongoose_1.default.model(collection, cartSchema);

@@ -1,135 +1,96 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
-var path = require("path");
-var products_router_1 = require("./controllers/products-router");
-var products_dao_mongo_1 = require("./daos/products-dao-mongo");
-var messages_dao_mongo_1 = require("./daos/messages-dao-mongo");
-var cart_router_1 = require("./controllers/cart-router");
-var socket_io_1 = require("socket.io");
-var parsers_1 = require("./utils/parsers");
-var http_1 = require("http");
-var PORT = 8080;
-var app = express();
-var httpServer = new http_1.Server(app);
-var ioServer = new socket_io_1.Server(httpServer);
-var baseDir = path.join(__dirname, '..');
-var productsRouter = new products_router_1.default('pages/products.ejs');
-var cartRouter = new cart_router_1.default('pages/cart.ejs');
+exports.PORT = void 0;
+const products_router_1 = __importDefault(require("./controllers/products-router"));
+const utils_router_1 = __importDefault(require("./controllers/utils-router"));
+const user_router_1 = __importDefault(require("./controllers/user-router"));
+const cart_router_1 = __importDefault(require("./controllers/cart-router"));
+const passport_1 = __importDefault(require("./middlewares/passport"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const connect_mongo_1 = __importDefault(require("connect-mongo"));
+const express_session_1 = __importDefault(require("express-session"));
+const minimist_1 = __importDefault(require("minimist"));
+const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const path_1 = __importDefault(require("path"));
+const middlewares_1 = require("./middlewares/middlewares");
+const products_dao_mongo_1 = require("./daos/products-dao-mongo");
+const messages_dao_mongo_1 = require("./daos/messages-dao-mongo");
+const ejs_1 = require("./settings/ejs");
+const socket_io_1 = require("socket.io");
+const http_1 = require("http");
+const app = (0, express_1.default)();
+const httpServer = new http_1.Server(app);
+const ioServer = new socket_io_1.Server(httpServer);
+const baseDir = path_1.default.join(__dirname, '..');
+const args = (0, minimist_1.default)(process.argv.slice(2));
+const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
+exports.PORT = args.port || 8080;
+const productsRouter = new products_router_1.default('pages/products.ejs');
+const utilsRouter = new utils_router_1.default();
+const cartRouter = new cart_router_1.default('pages/cart.ejs');
+const userRouter = new user_router_1.default('pages/login.ejs', 'pages/logout.ejs', 'pages/signup.ejs', 'pages/error.ejs');
+dotenv_1.default.config();
 app.set('view engine', 'ejs');
-app.set('views', path.join(baseDir, 'views'));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use('/productos', productsRouter.router);
+app.set('views', path_1.default.join(baseDir, 'views'));
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, cookie_parser_1.default)('TheCookieNeverRests'));
+app.use((0, express_session_1.default)({
+    store: connect_mongo_1.default.create({
+        mongoUrl: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}` +
+            '@cluster0.3dem9pw.mongodb.net/?retryWrites=true&w=majority',
+    }),
+    cookie: { maxAge: 10 * 60 * 1000 },
+    secret: 'TheCookieNeverRests',
+    resave: false,
+    saveUninitialized: false,
+}));
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
+app.use(middlewares_1.resetAge);
+app.use(middlewares_1.updateEjsDefaultData);
+app.use('/', userRouter.router);
+app.use('/', utilsRouter.router);
+app.use('/api', utilsRouter.apiRouter);
 app.use('/carrito', cartRouter.router);
+app.use('/productos', productsRouter.router);
+app.use('/api', productsRouter.testRouter);
 app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
-app.use('/api', productsRouter.testRouter);
-app.use(express.static(path.join(baseDir, 'public')));
-app.get('/', function (req, res) {
-    res.render('pages/index.ejs');
+app.use(express_1.default.static(path_1.default.join(baseDir, 'public')));
+app.get('/', (req, res) => {
+    console.log('Req. user:', req.user);
+    res.render('pages/index.ejs', ejs_1.ejsDefaultData);
 });
-app.get('/chat', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.render('pages/chat.ejs');
-        return [2];
-    });
-}); });
-app.use(function (req, res) {
+app.get('/chat', async (req, res) => {
+    res.render('pages/chat.ejs', ejs_1.ejsDefaultData);
+});
+app.use((req, res) => {
     res.status(404).json({
         error: 404,
-        desc: "Route ".concat(req.url, " method ").concat(req.method, " not implemented")
+        desc: `Route ${req.url} method ${req.method} not implemented`,
     });
 });
-ioServer.on('connection', function (socket) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                console.log('New client connected:', socket.id);
-                socket.on('create_product', function (product) { return __awaiter(void 0, void 0, void 0, function () {
-                    var parsedProduct, _a, _b, _c;
-                    return __generator(this, function (_d) {
-                        switch (_d.label) {
-                            case 0:
-                                parsedProduct = (0, parsers_1.parseProduct)(product);
-                                if (parsedProduct == null)
-                                    return [2, socket.emit('message_error', 'Invalid product')];
-                                return [4, products_dao_mongo_1.productsDao.save(parsedProduct)];
-                            case 1:
-                                _d.sent();
-                                _b = (_a = ioServer).emit;
-                                _c = ['products_updated'];
-                                return [4, products_dao_mongo_1.productsDao.getAll()];
-                            case 2:
-                                _b.apply(_a, _c.concat([_d.sent()]));
-                                return [2];
-                        }
-                    });
-                }); });
-                _b = (_a = ioServer).emit;
-                _c = ['messages_updated'];
-                return [4, messages_dao_mongo_1.messagesDao.getAllNormalized()];
-            case 1:
-                _b.apply(_a, _c.concat([_d.sent()]));
-                socket.on('create_message', function (message) { return __awaiter(void 0, void 0, void 0, function () {
-                    var success, _a, _b, _c;
-                    return __generator(this, function (_d) {
-                        switch (_d.label) {
-                            case 0: return [4, messages_dao_mongo_1.messagesDao.save(message)];
-                            case 1:
-                                success = _d.sent();
-                                if (!success)
-                                    return [2, socket.emit('message_error', 'Invalid message')];
-                                _b = (_a = ioServer).emit;
-                                _c = ['messages_updated'];
-                                return [4, messages_dao_mongo_1.messagesDao.getAllNormalized()];
-                            case 2:
-                                _b.apply(_a, _c.concat([_d.sent()]));
-                                return [2];
-                        }
-                    });
-                }); });
-                return [2];
-        }
+ioServer.on('connection', async (socket) => {
+    console.log('New client connected:', socket.id);
+    ioServer.emit('products_updated', await products_dao_mongo_1.productsDao.getAll());
+    ioServer.emit('messages_updated', await messages_dao_mongo_1.messagesDao.getAllNormalized());
+    socket.on('create_product', async (product) => {
+        await products_dao_mongo_1.productsDao.save(product);
+        ioServer.emit('products_updated', await products_dao_mongo_1.productsDao.getAll());
     });
-}); });
-httpServer.listen(PORT, function () {
-    console.log("Server started at http://localhost:".concat(PORT, "/"));
+    socket.on('create_message', async (message) => {
+        const success = await messages_dao_mongo_1.messagesDao.save(message);
+        if (!success)
+            return socket.emit('message_error', 'Invalid message');
+        ioServer.emit('messages_updated', await messages_dao_mongo_1.messagesDao.getAllNormalized());
+    });
+});
+httpServer.listen(exports.PORT, () => {
+    const time = new Date().toLocaleTimeString();
+    console.log(`[${time}]: Server at http://localhost:${exports.PORT}/ in ${mode} mode`);
 });
