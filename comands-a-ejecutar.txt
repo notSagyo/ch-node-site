@@ -1,4 +1,6 @@
 # NO USAR POWERSHELL (funciona con git bash, command propmt, etc.)
+# SI NGNX TIRA ERROR 10013 AL CORRER EN PUERTO 80, EJECUTAR:
+netsh http add iplisten ipaddress=::
 
 ######## CONSOLA A
 cd nginx
