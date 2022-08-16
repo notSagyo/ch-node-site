@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
     "build": "tsc --build --verbose",
-    "preview": "nodemon dist/app.js",
+    "preview": "pm2 start dist/app.js --watch",
     "start": "npm run preview",
     "watch": "nodemon --exec ts-node",
     "watchjs": "nodemon --exec node",

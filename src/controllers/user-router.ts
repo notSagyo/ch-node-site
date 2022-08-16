@@ -3,6 +3,7 @@ import multer from 'multer';
 import { ejsDefaultData } from '../settings/ejs';
 import { iRouter } from '../types/types';
 import passport from 'passport';
+import { logger } from '../utils/logger';
 
 export default class UserRouter implements iRouter {
   loginHtmlPath: string;
@@ -12,7 +13,12 @@ export default class UserRouter implements iRouter {
 
   router = express.Router();
 
-  constructor(loginHtmlPath: string, logoutHtmlPath: string, signupHtmlPath: string, errorHtmlPath: string) {
+  constructor(
+    loginHtmlPath: string,
+    logoutHtmlPath: string,
+    signupHtmlPath: string,
+    errorHtmlPath: string
+  ) {
     this.logoutHtmlPath = logoutHtmlPath;
     this.loginHtmlPath = loginHtmlPath;
     this.signupHtmlPath = signupHtmlPath;
@@ -47,8 +53,8 @@ export default class UserRouter implements iRouter {
       const destroyedUser = res.locals.oldEjsDefaultData.user;
       let success = true;
 
-      req.logout((err) =>  {
-        console.log(err);
+      req.logout((err) => {
+        logger.log(err);
         success = false;
       });
 
@@ -56,7 +62,7 @@ export default class UserRouter implements iRouter {
         return res.render(this.errorHtmlPath, {
           ejsDefaultData,
           errorTitle: 'Logout error',
-          errorDescription: 'Logout failed'
+          errorDescription: 'Logout failed',
         });
       }
 
@@ -71,10 +77,11 @@ export default class UserRouter implements iRouter {
       '/login',
       upload.none(),
       passport.authenticate('authn', {
-        failureRedirect: '/error'
-          + '?errorTitle=Login error'
-          + '&errorDescription=Invalid credentials: email/password combination'
-          + ' do not match an existing user'
+        failureRedirect:
+          '/error' +
+          '?errorTitle=Login error' +
+          '&errorDescription=Invalid credentials: email/password combination' +
+          ' do not match an existing user',
       }),
       (req, res) => res.redirect('/')
     );
@@ -86,9 +93,10 @@ export default class UserRouter implements iRouter {
       '/signup',
       upload.none(),
       passport.authenticate('registration', {
-        failureRedirect: '/error'
-        + '?errorTitle=Registration error'
-        + '&errorDescription=User with the same email/username already exists'
+        failureRedirect:
+          '/error' +
+          '?errorTitle=Registration error' +
+          '&errorDescription=User with the same email/username already exists',
       }),
       (req, res) => res.redirect('/')
     );
@@ -103,10 +111,11 @@ export default class UserRouter implements iRouter {
       const errorTitle = req.query.errorTitle || 'Error';
       const errorDescription = req.query.errorDescription || 'Unknown error';
 
+      logger.error(`${errorTitle} - ${errorDescription}`);
       res.render(this.errorHtmlPath, {
         ejsDefaultData,
         errorTitle: errorTitle,
-        errorDescription: errorDescription
+        errorDescription: errorDescription,
       });
     });
   }

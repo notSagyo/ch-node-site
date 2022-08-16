@@ -7,6 +7,7 @@ const child_process_1 = require("child_process");
 const express_1 = __importDefault(require("express"));
 const os_1 = __importDefault(require("os"));
 const path_1 = __importDefault(require("path"));
+const logger_1 = require("../utils/logger");
 class UtilsRouter {
     router = express_1.default.Router();
     apiRouter = express_1.default.Router();
@@ -41,7 +42,7 @@ class UtilsRouter {
     }
     getRandoms() {
         this.apiRouter.get('/randoms', (req, res) => {
-            console.log('Getting randoms...');
+            logger_1.logger.info('Getting randoms...');
             const iterations = Number(req.query.cant) || 100_000_000;
             const forked = (0, child_process_1.fork)(path_1.default.join(__dirname, '../utils/randoms' + path_1.default.extname(__filename)));
             let result = {};
@@ -52,7 +53,7 @@ class UtilsRouter {
                 let resultString = JSON.stringify(result, null, 2);
                 resultString = process.argv.slice(2) + ' ' + resultString;
                 res.status(200).send(resultString);
-                console.log('Randoms sent!');
+                logger_1.logger.info('Randoms sent!');
             });
         });
     }

@@ -1,3 +1,7 @@
+// Initialize dotenv for any import that requires it
+import dotenv from 'dotenv';
+dotenv.config();
+
 import ProductsRouter from './controllers/products-router';
 import UtilsRouter from './controllers/utils-router';
 import UserRouter from './controllers/user-router';
@@ -6,9 +10,9 @@ import passport from './middlewares/passport';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
+import log from './middlewares/log';
 import minimist from 'minimist';
 import express from 'express';
-import dotenv from 'dotenv';
 import path from 'path';
 import { updateEjsDefaultData, resetAge } from './middlewares/middlewares';
 import { productsDao } from './daos/products-dao-mongo';
@@ -16,6 +20,8 @@ import { messagesDao } from './daos/messages-dao-mongo';
 import { ejsDefaultData } from './settings/ejs';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
+import { initLogger, logger } from './utils/logger';
+import { mongooseOptions } from './settings/mongoose';
 
 // INIT ======================================================================//
 // Constants
@@ -39,9 +45,9 @@ const userRouter = new UserRouter(
 );
 
 // Config
-dotenv.config();
 app.set('view engine', 'ejs');
 app.set('views', path.join(baseDir, 'views'));
+initLogger(path.join(process.cwd(), 'logs'));
 
 // Middlewares
 app.use(express.json());
@@ -49,11 +55,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser('TheCookieNeverRests'));
 app.use(
   session({
-    store: MongoStore.create({
-      mongoUrl:
-        `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}` +
-        '@cluster0.3dem9pw.mongodb.net/?retryWrites=true&w=majority',
-    }),
+    store: MongoStore.create({ mongoUrl: mongooseOptions.uri }),
     cookie: { maxAge: 10 * 60 * 1000 },
     secret: 'TheCookieNeverRests',
     resave: false,
@@ -64,6 +66,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(resetAge);
 app.use(updateEjsDefaultData);
+app.use(log);
 
 // Routers
 app.use('/', userRouter.router);
@@ -77,7 +80,7 @@ app.use('/api/productos', productsRouter.apiRouter);
 app.use(express.static(path.join(baseDir, 'public')));
 
 app.get('/', (req, res) => {
-  console.log('Req. user:', req.user);
+  logger.info('Req. user:', req.user);
   res.render('pages/index.ejs', ejsDefaultData);
 });
 
@@ -94,7 +97,7 @@ app.use((req, res) => {
 
 // Websockets
 ioServer.on('connection', async (socket) => {
-  console.log('New client connected:', socket.id);
+  logger.info('New client connected:', socket.id);
 
   ioServer.emit('products_updated', await productsDao.getAll());
   ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
@@ -114,5 +117,7 @@ ioServer.on('connection', async (socket) => {
 // Listen ====================================================================//
 httpServer.listen(PORT, () => {
   const time = new Date().toLocaleTimeString();
-  console.log(`[${time}]: Server at http://localhost:${PORT}/ in ${mode} mode`);
+  console.log(
+    `[${time}]: Server on port ${PORT} in ${mode}, ${process.env.NODE_ENV} mode`
+  );
 });

@@ -7,6 +7,7 @@ exports.cartsDao = void 0;
 const container_mongo_1 = __importDefault(require("../containers/container-mongo"));
 const cart_1 = require("../models/cart");
 const parsers_1 = require("../utils/parsers");
+const logger_1 = require("../utils/logger");
 class CartsDao {
     container = new container_mongo_1.default(cart_1.cartModel);
     async save(cart) {
@@ -19,7 +20,7 @@ class CartsDao {
         return product;
     }
     async getAll() {
-        return await this.container.find({}) || [];
+        return (await this.container.find({})) || [];
     }
     async updateById(id, data) {
         return await this.container.update({ id }, data);
@@ -36,14 +37,14 @@ class CartsDao {
             id: productId,
             quantity: quantity || 1,
             code: '',
-            timestamp: Date.now()
+            timestamp: Date.now(),
         };
         try {
             await this.container.update({ id: cartId }, { $push: { products: cartProd } });
             success = true;
         }
         catch (error) {
-            console.log(error);
+            logger_1.logger.error(error);
         }
         return success;
     }
@@ -54,7 +55,7 @@ class CartsDao {
             success = true;
         }
         catch (error) {
-            console.log(error);
+            logger_1.logger.error(error);
         }
         return success;
     }

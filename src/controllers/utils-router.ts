@@ -2,6 +2,7 @@ import { fork } from 'child_process';
 import express from 'express';
 import os from 'os';
 import path from 'path';
+import { logger } from '../utils/logger';
 
 export default class UtilsRouter {
   router = express.Router();
@@ -44,7 +45,7 @@ export default class UtilsRouter {
 
   private getRandoms() {
     this.apiRouter.get('/randoms', (req, res) => {
-      console.log('Getting randoms...');
+      logger.info('Getting randoms...');
       const iterations = Number(req.query.cant) || 100_000_000;
 
       const forked = fork(
@@ -60,7 +61,7 @@ export default class UtilsRouter {
         let resultString = JSON.stringify(result, null, 2);
         resultString = process.argv.slice(2) + ' ' + resultString;
         res.status(200).send(resultString);
-        console.log('Randoms sent!');
+        logger.info('Randoms sent!');
       });
     });
   }

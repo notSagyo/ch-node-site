@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PORT = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const products_router_1 = __importDefault(require("./controllers/products-router"));
 const utils_router_1 = __importDefault(require("./controllers/utils-router"));
 const user_router_1 = __importDefault(require("./controllers/user-router"));
@@ -12,9 +14,9 @@ const passport_1 = __importDefault(require("./middlewares/passport"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const express_session_1 = __importDefault(require("express-session"));
+const log_1 = __importDefault(require("./middlewares/log"));
 const minimist_1 = __importDefault(require("minimist"));
 const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const middlewares_1 = require("./middlewares/middlewares");
 const products_dao_mongo_1 = require("./daos/products-dao-mongo");
@@ -22,6 +24,8 @@ const messages_dao_mongo_1 = require("./daos/messages-dao-mongo");
 const ejs_1 = require("./settings/ejs");
 const socket_io_1 = require("socket.io");
 const http_1 = require("http");
+const logger_1 = require("./utils/logger");
+const mongoose_1 = require("./settings/mongoose");
 const app = (0, express_1.default)();
 const httpServer = new http_1.Server(app);
 const ioServer = new socket_io_1.Server(httpServer);
@@ -33,17 +37,14 @@ const productsRouter = new products_router_1.default('pages/products.ejs');
 const utilsRouter = new utils_router_1.default();
 const cartRouter = new cart_router_1.default('pages/cart.ejs');
 const userRouter = new user_router_1.default('pages/login.ejs', 'pages/logout.ejs', 'pages/signup.ejs', 'pages/error.ejs');
-dotenv_1.default.config();
 app.set('view engine', 'ejs');
 app.set('views', path_1.default.join(baseDir, 'views'));
+(0, logger_1.initLogger)(path_1.default.join(process.cwd(), 'logs'));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)('TheCookieNeverRests'));
 app.use((0, express_session_1.default)({
-    store: connect_mongo_1.default.create({
-        mongoUrl: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}` +
-            '@cluster0.3dem9pw.mongodb.net/?retryWrites=true&w=majority',
-    }),
+    store: connect_mongo_1.default.create({ mongoUrl: mongoose_1.mongooseOptions.uri }),
     cookie: { maxAge: 10 * 60 * 1000 },
     secret: 'TheCookieNeverRests',
     resave: false,
@@ -53,6 +54,7 @@ app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use(middlewares_1.resetAge);
 app.use(middlewares_1.updateEjsDefaultData);
+app.use(log_1.default);
 app.use('/', userRouter.router);
 app.use('/', utilsRouter.router);
 app.use('/api', utilsRouter.apiRouter);
@@ -63,7 +65,7 @@ app.use('/api/carrito', cartRouter.apiRouter);
 app.use('/api/productos', productsRouter.apiRouter);
 app.use(express_1.default.static(path_1.default.join(baseDir, 'public')));
 app.get('/', (req, res) => {
-    console.log('Req. user:', req.user);
+    logger_1.logger.info('Req. user:', req.user);
     res.render('pages/index.ejs', ejs_1.ejsDefaultData);
 });
 app.get('/chat', async (req, res) => {
@@ -76,7 +78,7 @@ app.use((req, res) => {
     });
 });
 ioServer.on('connection', async (socket) => {
-    console.log('New client connected:', socket.id);
+    logger_1.logger.info('New client connected:', socket.id);
     ioServer.emit('products_updated', await products_dao_mongo_1.productsDao.getAll());
     ioServer.emit('messages_updated', await messages_dao_mongo_1.messagesDao.getAllNormalized());
     socket.on('create_product', async (product) => {
@@ -92,5 +94,5 @@ ioServer.on('connection', async (socket) => {
 });
 httpServer.listen(exports.PORT, () => {
     const time = new Date().toLocaleTimeString();
-    console.log(`[${time}]: Server at http://localhost:${exports.PORT}/ in ${mode} mode`);
+    console.log(`[${time}]: Server on port ${exports.PORT} in ${mode}, ${process.env.NODE_ENV} mode`);
 });

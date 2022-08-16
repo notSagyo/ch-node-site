@@ -1,6 +1,7 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
 import { mongooseOptions } from '../settings/mongoose';
 import { filterMongo } from '../types/types';
+import { logger } from '../utils/logger';
 
 // TODO: change everything's return type
 export default class Container<T> {
@@ -17,21 +18,20 @@ export default class Container<T> {
     const { uri, options } = mongooseOptions;
     try {
       this.connection = (await mongoose.connect(uri, options)).connection;
-      console.log('Connected to mongoDB');
+      logger.info('Connected to mongoDB');
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   }
 
   async close() {
-    if (!this.connection)
-      return;
+    if (!this.connection) return;
     try {
       await this.connection.close();
       this.connection = undefined;
-      console.log('Disconected from mongoDB\n');
+      logger.info('Disconected from mongoDB\n');
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   }
 
@@ -41,9 +41,9 @@ export default class Container<T> {
     try {
       await this.model.create(data);
       success = true;
-      console.log(`Inserted new data to '${this.collection}'`);
+      logger.info(`Inserted new data to '${this.collection}'`);
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
     this.close();
     return success;
@@ -54,10 +54,13 @@ export default class Container<T> {
     let result: T[] | null = null;
     const allOrFilter = filter === '*' ? {} : filter;
     try {
-      result = await this.model.find(allOrFilter).lean().exec() as T[];
-      console.log(`Retrieved from '${this.collection}' elements matching:`, filter);
+      result = (await this.model.find(allOrFilter).lean().exec()) as T[];
+      logger.info(
+        `Retrieved from '${this.collection}' elements matching:`,
+        filter
+      );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
     this.close();
     return result;
@@ -70,9 +73,12 @@ export default class Container<T> {
     try {
       await this.model.updateMany(allOrFilter, data);
       success = true;
-      console.log(`Updated from '${this.collection}' elements matching:`, filter);
+      logger.info(
+        `Updated from '${this.collection}' elements matching:`,
+        filter
+      );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
     this.close();
     return success;
@@ -85,9 +91,12 @@ export default class Container<T> {
     try {
       await this.model.deleteMany(allOrFilter);
       success = true;
-      console.log(`Deleted from '${this.collection}' elements matching:`, filter);
+      logger.info(
+        `Deleted from '${this.collection}' elements matching:`,
+        filter
+      );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
     this.close();
     return success;

@@ -7,6 +7,7 @@ exports.cartsDao = void 0;
 const container_knex_1 = __importDefault(require("../containers/container-knex"));
 const mariadb_1 = require("../settings/mariadb");
 const parsers_1 = require("../utils/parsers");
+const logger_1 = require("../utils/logger");
 class CartsDao {
     container = new container_knex_1.default(mariadb_1.maridadbOptions.connection.database, 'carts', mariadb_1.maridadbOptions);
     save(cart) {
@@ -20,7 +21,7 @@ class CartsDao {
         return cart;
     }
     async getAll() {
-        return await this.container.find({}) || [];
+        return (await this.container.find({})) || [];
     }
     async updateById(id, data) {
         return await this.container.update({ id }, data);
@@ -42,7 +43,7 @@ class CartsDao {
             await this.container.update({ id: cartId }, { products: cart.products });
         }
         catch (error) {
-            console.log(error);
+            logger_1.logger.error(error);
         }
         return success;
     }
@@ -51,12 +52,12 @@ class CartsDao {
         let success = false;
         if (cart == null)
             return success;
-        cart.products = cart.products.filter(p => p.id !== productId);
+        cart.products = cart.products.filter((p) => p.id !== productId);
         try {
             await this.container.update({ id: cartId }, { products: cart.products });
         }
         catch (error) {
-            console.log(error);
+            logger_1.logger.error(error);
         }
         return success;
     }

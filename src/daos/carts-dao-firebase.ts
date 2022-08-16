@@ -3,6 +3,7 @@ import { arrayRemove, arrayUnion, where } from '@firebase/firestore';
 import { iCart, iCartProduct } from '../types/models';
 import { iDao } from '../types/daos';
 import { parseCart } from '../utils/parsers';
+import { logger } from '../utils/logger';
 
 export default class CartsDao implements iDao<iCart> {
   container = new Container<iCart>('carts');
@@ -19,7 +20,7 @@ export default class CartsDao implements iDao<iCart> {
   }
 
   async getAll() {
-    return await this.container.find('*') || [];
+    return (await this.container.find('*')) || [];
   }
 
   async updateById(id: string, data: Partial<iCart>) {
@@ -45,10 +46,12 @@ export default class CartsDao implements iDao<iCart> {
     };
 
     try {
-      await this.container.update(where('id', '==', cartId), { products: arrayUnion(cartProd) });
+      await this.container.update(where('id', '==', cartId), {
+        products: arrayUnion(cartProd),
+      });
       success = true;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
     return success;
   }
@@ -56,13 +59,12 @@ export default class CartsDao implements iDao<iCart> {
   async removeProductById(cartId: string, productId: string) {
     let success = false;
     try {
-      this.container.update(
-        where('id', '==', cartId),
-        { products: arrayRemove(where('id', '==', productId)) }
-      );
+      this.container.update(where('id', '==', cartId), {
+        products: arrayRemove(where('id', '==', productId)),
+      });
       success = true;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
     return success;
   }

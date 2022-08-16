@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_2 = require("../settings/mongoose");
+const logger_1 = require("../utils/logger");
 class Container {
     connection;
     model;
@@ -17,10 +18,10 @@ class Container {
         const { uri, options } = mongoose_2.mongooseOptions;
         try {
             this.connection = (await mongoose_1.default.connect(uri, options)).connection;
-            console.log('Connected to mongoDB');
+            logger_1.logger.info('Connected to mongoDB');
         }
         catch (err) {
-            console.error(err);
+            logger_1.logger.error(err);
         }
     }
     async close() {
@@ -29,10 +30,10 @@ class Container {
         try {
             await this.connection.close();
             this.connection = undefined;
-            console.log('Disconected from mongoDB\n');
+            logger_1.logger.info('Disconected from mongoDB\n');
         }
         catch (err) {
-            console.error(err);
+            logger_1.logger.error(err);
         }
     }
     async insert(data) {
@@ -41,10 +42,10 @@ class Container {
         try {
             await this.model.create(data);
             success = true;
-            console.log(`Inserted new data to '${this.collection}'`);
+            logger_1.logger.info(`Inserted new data to '${this.collection}'`);
         }
         catch (err) {
-            console.error(err);
+            logger_1.logger.error(err);
         }
         this.close();
         return success;
@@ -54,11 +55,11 @@ class Container {
         let result = null;
         const allOrFilter = filter === '*' ? {} : filter;
         try {
-            result = await this.model.find(allOrFilter).lean().exec();
-            console.log(`Retrieved from '${this.collection}' elements matching:`, filter);
+            result = (await this.model.find(allOrFilter).lean().exec());
+            logger_1.logger.info(`Retrieved from '${this.collection}' elements matching:`, filter);
         }
         catch (err) {
-            console.error(err);
+            logger_1.logger.error(err);
         }
         this.close();
         return result;
@@ -70,10 +71,10 @@ class Container {
         try {
             await this.model.updateMany(allOrFilter, data);
             success = true;
-            console.log(`Updated from '${this.collection}' elements matching:`, filter);
+            logger_1.logger.info(`Updated from '${this.collection}' elements matching:`, filter);
         }
         catch (err) {
-            console.error(err);
+            logger_1.logger.error(err);
         }
         this.close();
         return success;
@@ -85,10 +86,10 @@ class Container {
         try {
             await this.model.deleteMany(allOrFilter);
             success = true;
-            console.log(`Deleted from '${this.collection}' elements matching:`, filter);
+            logger_1.logger.info(`Deleted from '${this.collection}' elements matching:`, filter);
         }
         catch (err) {
-            console.error(err);
+            logger_1.logger.error(err);
         }
         this.close();
         return success;

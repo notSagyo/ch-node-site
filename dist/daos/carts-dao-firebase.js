@@ -7,6 +7,7 @@ exports.cartsDao = void 0;
 const container_firebase_1 = __importDefault(require("../containers/container-firebase"));
 const firestore_1 = require("@firebase/firestore");
 const parsers_1 = require("../utils/parsers");
+const logger_1 = require("../utils/logger");
 class CartsDao {
     container = new container_firebase_1.default('carts');
     async save(cart) {
@@ -19,7 +20,7 @@ class CartsDao {
         return product;
     }
     async getAll() {
-        return await this.container.find('*') || [];
+        return (await this.container.find('*')) || [];
     }
     async updateById(id, data) {
         return await this.container.update((0, firestore_1.where)('id', '==', id), data);
@@ -39,22 +40,26 @@ class CartsDao {
             timestamp: Date.now(),
         };
         try {
-            await this.container.update((0, firestore_1.where)('id', '==', cartId), { products: (0, firestore_1.arrayUnion)(cartProd) });
+            await this.container.update((0, firestore_1.where)('id', '==', cartId), {
+                products: (0, firestore_1.arrayUnion)(cartProd),
+            });
             success = true;
         }
         catch (error) {
-            console.log(error);
+            logger_1.logger.error(error);
         }
         return success;
     }
     async removeProductById(cartId, productId) {
         let success = false;
         try {
-            this.container.update((0, firestore_1.where)('id', '==', cartId), { products: (0, firestore_1.arrayRemove)((0, firestore_1.where)('id', '==', productId)) });
+            this.container.update((0, firestore_1.where)('id', '==', cartId), {
+                products: (0, firestore_1.arrayRemove)((0, firestore_1.where)('id', '==', productId)),
+            });
             success = true;
         }
         catch (error) {
-            console.log(error);
+            logger_1.logger.error(error);
         }
         return success;
     }

@@ -1,41 +1,50 @@
 import { iParser } from '../types/types';
-import { iUser, iMessage, iProduct, iCartProduct, iCart } from '../types/models';
+import {
+  iUser,
+  iMessage,
+  iProduct,
+  iCartProduct,
+  iCart,
+} from '../types/models';
 import { validateEmail } from './utils';
 import { validate, v4 } from 'uuid';
+import { logger } from './logger';
 
 export const parseUser: iParser<iUser> = (user) => {
   if (user == null) return null;
-  const isValidPassword = typeof user?.password === 'string' && user.password.length > 1;
+  const isValidPassword =
+    typeof user?.password === 'string' && user.password.length > 1;
   const isValidName = typeof user?.name === 'string' && user.name.length > 1;
   const isValidAge = typeof user?.age === 'number' && user.age > 0;
   const isValidId = typeof user?.id === 'string' && validate(user.id);
-  const isValidLastName = typeof user?.lastName === 'string'
-    && user.lastName.length > 1;
-  const isValidUsername = typeof user?.username === 'string'
-    && user.username.length > 2;
-  const isValidAvatar = typeof user?.avatar === 'string'
-    && user.avatar.length > 0;
-  const isValidEmail = typeof user?.email === 'string'
-    && validateEmail(user.email);
+  const isValidLastName =
+    typeof user?.lastName === 'string' && user.lastName.length > 1;
+  const isValidUsername =
+    typeof user?.username === 'string' && user.username.length > 2;
+  const isValidAvatar =
+    typeof user?.avatar === 'string' && user.avatar.length > 0;
+  const isValidEmail =
+    typeof user?.email === 'string' && validateEmail(user.email);
 
-  if (!isValidAge) console.log('Invalid user age');
-  else if (!isValidName) console.log('Invalid user name');
-  else if (!isValidEmail) console.log('Invalid user email');
-  else if (!isValidUsername) console.log('Invalid user username');
-  else if (!isValidLastName) console.log('Invalid user last name');
-  else if (!isValidPassword) console.log('Invalid user password');
+  if (!isValidAge) logger.error('Invalid user age');
+  if (!isValidName) logger.error('Invalid user name');
+  if (!isValidEmail) logger.error('Invalid user email');
+  if (!isValidUsername) logger.error('Invalid user username');
+  if (!isValidLastName) logger.error('Invalid user last name');
+  if (!isValidPassword) logger.error('Invalid user password');
 
-  const isValid = isValidEmail
-    && isValidName
-    && isValidLastName
-    && isValidUsername
-    && isValidPassword
-    && isValidAge;
+  const isValid =
+    isValidEmail &&
+    isValidName &&
+    isValidLastName &&
+    isValidUsername &&
+    isValidPassword &&
+    isValidAge;
   if (!isValid) return null;
 
-  const id = isValidId ? user.id as string: v4();
-  const avatar = isValidAvatar ? user.avatar as string : '';
-  return({
+  const id = isValidId ? (user.id as string) : v4();
+  const avatar = isValidAvatar ? (user.avatar as string) : '';
+  return {
     id,
     avatar,
     age: user.age as number,
@@ -44,22 +53,22 @@ export const parseUser: iParser<iUser> = (user) => {
     lastName: user.lastName as string,
     username: user.username as string,
     password: user.password as string,
-  });
+  };
 };
 
 export const parseMessage: iParser<iMessage> = (msg) => {
   if (msg == null) return null;
   const author = parseUser(msg?.author as Record<string, unknown>);
   const id = typeof msg?.id === 'string' ? msg.id : v4();
-  const content = typeof msg?.content === 'string' && msg?.content.length > 0
-    ? msg.content
-    : '';
-  const time = msg?.time && !isNaN(Number(msg?.time))
-    ? Number(msg.time)
-    : Date.now();
+  const content =
+    typeof msg?.content === 'string' && msg?.content.length > 0
+      ? msg.content
+      : '';
+  const time =
+    msg?.time && !isNaN(Number(msg?.time)) ? Number(msg.time) : Date.now();
 
   if (author == null) {
-    console.log('Invalid message author');
+    logger.error('Invalid message author');
     return null;
   }
 
@@ -72,16 +81,18 @@ export const parseProduct: iParser<iProduct> = (prod) => {
   const isValidName = typeof prod?.name === 'string' && prod.name.length > 0;
   const isValidId = typeof prod?.id === 'string' && validate(prod.id);
   const isValidDescription = typeof prod?.description === 'string';
-  const isValidPrice = prod?.price && !isNaN(Number(prod?.price))
-    && Number(prod?.price) > 0;
-  const isValidThumbnail = typeof prod?.thumbnail === 'string'
-    && prod?.thumbnail.length > 0;
+  const isValidPrice =
+    prod?.price && !isNaN(Number(prod?.price)) && Number(prod?.price) > 0;
+  const isValidThumbnail =
+    typeof prod?.thumbnail === 'string' && prod?.thumbnail.length > 0;
 
-  const description = isValidDescription ? prod.description as string : undefined;
-  const thumbnail = isValidThumbnail ? prod.thumbnail as string : placeholder;
+  const description = isValidDescription
+    ? (prod.description as string)
+    : undefined;
+  const thumbnail = isValidThumbnail ? (prod.thumbnail as string) : placeholder;
   const price = isValidPrice ? Number(prod.price) : null;
-  const name = isValidName ? prod.name as string : null;
-  const id = isValidId ? prod.id as string : v4();
+  const name = isValidName ? (prod.name as string) : null;
+  const id = isValidId ? (prod.id as string) : v4();
 
   if (name != null && price != null)
     return { id, name, price, thumbnail, description };
@@ -95,11 +106,12 @@ export const parseCart: iParser<iCart> = (cart): iCart => {
 
   if (cart != null) {
     const isValidId = typeof cart?.id === 'string' && validate(cart.id);
-    const isValidTimestamp = typeof cart?.timestamp === 'number'
-      && !isNaN(cart.timestamp);
-    const isValidProducts = Array.isArray(cart?.products)
-      && cart.products.length > 0
-      && cart.products.every(prod => parseProduct(prod) != null);
+    const isValidTimestamp =
+      typeof cart?.timestamp === 'number' && !isNaN(cart.timestamp);
+    const isValidProducts =
+      Array.isArray(cart?.products) &&
+      cart.products.length > 0 &&
+      cart.products.every((prod) => parseProduct(prod) != null);
 
     isValidId && (id = cart.id as string);
     isValidProducts && (cart.products as iCartProduct[]);
@@ -112,18 +124,17 @@ export const parseCart: iParser<iCart> = (cart): iCart => {
 export const parseCartProduct: iParser<iCartProduct> = (prod) => {
   const isValidCode = typeof prod?.code === 'string' && prod.code.length > 0;
   const isValidId = typeof prod?.id === 'string' && validate(prod.id);
-  const isValidTimestamp = typeof prod?.timestamp === 'number'
-    && prod.timestamp > 0;
-  const isValidQuantity = typeof prod?.quantity === 'number'
-    && prod.quantity > 0;
+  const isValidTimestamp =
+    typeof prod?.timestamp === 'number' && prod.timestamp > 0;
+  const isValidQuantity =
+    typeof prod?.quantity === 'number' && prod.quantity > 0;
 
-  if (!isValidId)
-    return null;
+  if (!isValidId) return null;
 
-  const quantity = isValidQuantity ? prod.quantity as number : 1;
-  const timestamp = isValidTimestamp ? prod.timestamp as number : Date.now();
-  const code = isValidCode ? prod.code as string : '-1';
+  const quantity = isValidQuantity ? (prod.quantity as number) : 1;
+  const timestamp = isValidTimestamp ? (prod.timestamp as number) : Date.now();
+  const code = isValidCode ? (prod.code as string) : '-1';
   const id = prod.id as string;
 
-  return({ id, code, quantity, timestamp });
+  return { id, code, quantity, timestamp };
 };

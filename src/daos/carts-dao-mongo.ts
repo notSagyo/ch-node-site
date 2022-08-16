@@ -3,6 +3,7 @@ import { cartModel } from '../models/cart';
 import { iCart, iCartProduct } from '../types/models';
 import { iCartDao } from '../types/daos';
 import { parseCart } from '../utils/parsers';
+import { logger } from '../utils/logger';
 
 export default class CartsDao implements iCartDao {
   container = new Container(cartModel);
@@ -19,7 +20,7 @@ export default class CartsDao implements iCartDao {
   }
 
   async getAll(): Promise<iCart[]> {
-    return await this.container.find({}) || [];
+    return (await this.container.find({})) || [];
   }
 
   async updateById(id: string, data: Partial<iCart>) {
@@ -41,14 +42,17 @@ export default class CartsDao implements iCartDao {
       id: productId,
       quantity: quantity || 1,
       code: '',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     try {
-      await this.container.update({ id: cartId }, { $push: { products: cartProd} });
+      await this.container.update(
+        { id: cartId },
+        { $push: { products: cartProd } }
+      );
       success = true;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
     return success;
   }
@@ -56,10 +60,13 @@ export default class CartsDao implements iCartDao {
   async removeProductById(cartId: string, productId: string) {
     let success = false;
     try {
-      await this.container.update({ id: cartId }, { $pull: { products: { id: productId }} });
+      await this.container.update(
+        { id: cartId },
+        { $pull: { products: { id: productId } } }
+      );
       success = true;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
     return success;
   }

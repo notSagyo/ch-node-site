@@ -3,9 +3,14 @@ import { maridadbOptions } from '../settings/mariadb';
 import { iCart } from '../types/models';
 import { iCartDao } from '../types/daos';
 import { parseCart, parseCartProduct } from '../utils/parsers';
+import { logger } from '../utils/logger';
 
 export default class CartsDao implements iCartDao {
-  container = new Container<iCart>(maridadbOptions.connection.database, 'carts', maridadbOptions);
+  container = new Container<iCart>(
+    maridadbOptions.connection.database,
+    'carts',
+    maridadbOptions
+  );
 
   save(cart?: iCart) {
     const parsedCart = parseCart(cart) as iCart;
@@ -20,7 +25,7 @@ export default class CartsDao implements iCartDao {
   }
 
   async getAll() {
-    return await this.container.find({}) || [];
+    return (await this.container.find({})) || [];
   }
 
   async updateById(id: string, data: Partial<iCart>) {
@@ -41,14 +46,13 @@ export default class CartsDao implements iCartDao {
     const cart = await this.getById(cartId);
     let success = false;
 
-    if (parsedProd == null || cart == null)
-      return success;
+    if (parsedProd == null || cart == null) return success;
 
     cart.products.push(parsedProd);
     try {
       await this.container.update({ id: cartId }, { products: cart.products });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
     return success;
   }
@@ -57,14 +61,13 @@ export default class CartsDao implements iCartDao {
     const cart = await this.getById(cartId);
     let success = false;
 
-    if (cart == null)
-      return success;
+    if (cart == null) return success;
 
-    cart.products = cart.products.filter(p => p.id !== productId);
+    cart.products = cart.products.filter((p) => p.id !== productId);
     try {
       await this.container.update({ id: cartId }, { products: cart.products });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
     return success;
   }

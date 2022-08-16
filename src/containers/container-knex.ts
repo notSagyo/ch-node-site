@@ -1,5 +1,6 @@
-import { Knex, knex}  from 'knex';
+import { Knex, knex } from 'knex';
 import { filterSql } from '../types/types';
+import { logger } from '../utils/logger';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Container<T extends Record<string, any>> {
@@ -17,9 +18,11 @@ export default class Container<T extends Record<string, any>> {
     const kn = knex(this.options);
     const exists = await kn.schema.hasTable(this.table);
     let success = exists;
-    if (!exists) await kn.schema.createTable(this.table, schemaBuilder)
-      .then(() => success = true)
-      .catch(err => console.log(err));
+    if (!exists)
+      await kn.schema
+        .createTable(this.table, schemaBuilder)
+        .then(() => (success = true))
+        .catch((err) => logger.error(err));
     kn.destroy();
     return success;
   }
@@ -27,24 +30,35 @@ export default class Container<T extends Record<string, any>> {
   async insert(obj: T | T[]) {
     const kn = knex(this.options);
     let success = false;
-    await kn(this.table).insert(obj)
-      .then(() => success = true)
-      .catch(err => console.log(err));
+    await kn(this.table)
+      .insert(obj)
+      .then(() => (success = true))
+      .catch((err) => logger.error(err));
     kn.destroy();
     return success;
   }
 
-  async find(condition: filterSql<T>, sortColumn?: string, ascending?: boolean): Promise<T[] | null> {
+  async find(
+    condition: filterSql<T>,
+    sortColumn?: string,
+    ascending?: boolean
+  ): Promise<T[] | null> {
     const kn = knex(this.options);
     let rows: T[] | null = null;
     if (sortColumn != null) {
-      await kn.from(this.table).where(condition).orderBy(sortColumn).orderBy(ascending ? 'asc' : 'desc')
-        .then(res => rows = res as T[])
-        .catch(err => console.log(err));
+      await kn
+        .from(this.table)
+        .where(condition)
+        .orderBy(sortColumn)
+        .orderBy(ascending ? 'asc' : 'desc')
+        .then((res) => (rows = res as T[]))
+        .catch((err) => logger.error(err));
     } else {
-      await kn.from(this.table).where(condition)
-        .then(res => rows = res as T[])
-        .catch(err => console.log(err));
+      await kn
+        .from(this.table)
+        .where(condition)
+        .then((res) => (rows = res as T[]))
+        .catch((err) => logger.error(err));
     }
     kn.destroy();
     return rows;
@@ -53,9 +67,11 @@ export default class Container<T extends Record<string, any>> {
   async update(condition: filterSql<T>, update: Partial<T>) {
     const kn = knex(this.options);
     let success = false;
-    await kn(this.table).where(condition).update(update)
-      .then(() => success = true)
-      .catch(err => console.log(err));
+    await kn(this.table)
+      .where(condition)
+      .update(update)
+      .then(() => (success = true))
+      .catch((err) => logger.error(err));
     kn.destroy();
     return success;
   }
@@ -64,13 +80,20 @@ export default class Container<T extends Record<string, any>> {
     const kn = knex(this.options);
     let success = false;
     if (limit != null) {
-      await kn.from(this.table).where(condition || {}).limit(limit).del()
-        .then(() => success = true)
-        .catch(err => console.log(err));
+      await kn
+        .from(this.table)
+        .where(condition || {})
+        .limit(limit)
+        .del()
+        .then(() => (success = true))
+        .catch((err) => logger.error(err));
     } else {
-      await kn.from(this.table).where(condition || {}).del()
-        .then(() => success = true)
-        .catch(err => console.log(err));
+      await kn
+        .from(this.table)
+        .where(condition || {})
+        .del()
+        .then(() => (success = true))
+        .catch((err) => logger.error(err));
     }
     kn.destroy();
     return success;

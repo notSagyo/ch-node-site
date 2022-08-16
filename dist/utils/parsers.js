@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseCartProduct = exports.parseCart = exports.parseProduct = exports.parseMessage = exports.parseUser = void 0;
 const utils_1 = require("./utils");
 const uuid_1 = require("uuid");
+const logger_1 = require("./logger");
 const parseUser = (user) => {
     if (user == null)
         return null;
@@ -10,37 +11,33 @@ const parseUser = (user) => {
     const isValidName = typeof user?.name === 'string' && user.name.length > 1;
     const isValidAge = typeof user?.age === 'number' && user.age > 0;
     const isValidId = typeof user?.id === 'string' && (0, uuid_1.validate)(user.id);
-    const isValidLastName = typeof user?.lastName === 'string'
-        && user.lastName.length > 1;
-    const isValidUsername = typeof user?.username === 'string'
-        && user.username.length > 2;
-    const isValidAvatar = typeof user?.avatar === 'string'
-        && user.avatar.length > 0;
-    const isValidEmail = typeof user?.email === 'string'
-        && (0, utils_1.validateEmail)(user.email);
+    const isValidLastName = typeof user?.lastName === 'string' && user.lastName.length > 1;
+    const isValidUsername = typeof user?.username === 'string' && user.username.length > 2;
+    const isValidAvatar = typeof user?.avatar === 'string' && user.avatar.length > 0;
+    const isValidEmail = typeof user?.email === 'string' && (0, utils_1.validateEmail)(user.email);
     if (!isValidAge)
-        console.log('Invalid user age');
-    else if (!isValidName)
-        console.log('Invalid user name');
-    else if (!isValidEmail)
-        console.log('Invalid user email');
-    else if (!isValidUsername)
-        console.log('Invalid user username');
-    else if (!isValidLastName)
-        console.log('Invalid user last name');
-    else if (!isValidPassword)
-        console.log('Invalid user password');
-    const isValid = isValidEmail
-        && isValidName
-        && isValidLastName
-        && isValidUsername
-        && isValidPassword
-        && isValidAge;
+        logger_1.logger.error('Invalid user age');
+    if (!isValidName)
+        logger_1.logger.error('Invalid user name');
+    if (!isValidEmail)
+        logger_1.logger.error('Invalid user email');
+    if (!isValidUsername)
+        logger_1.logger.error('Invalid user username');
+    if (!isValidLastName)
+        logger_1.logger.error('Invalid user last name');
+    if (!isValidPassword)
+        logger_1.logger.error('Invalid user password');
+    const isValid = isValidEmail &&
+        isValidName &&
+        isValidLastName &&
+        isValidUsername &&
+        isValidPassword &&
+        isValidAge;
     if (!isValid)
         return null;
     const id = isValidId ? user.id : (0, uuid_1.v4)();
     const avatar = isValidAvatar ? user.avatar : '';
-    return ({
+    return {
         id,
         avatar,
         age: user.age,
@@ -49,7 +46,7 @@ const parseUser = (user) => {
         lastName: user.lastName,
         username: user.username,
         password: user.password,
-    });
+    };
 };
 exports.parseUser = parseUser;
 const parseMessage = (msg) => {
@@ -60,11 +57,9 @@ const parseMessage = (msg) => {
     const content = typeof msg?.content === 'string' && msg?.content.length > 0
         ? msg.content
         : '';
-    const time = msg?.time && !isNaN(Number(msg?.time))
-        ? Number(msg.time)
-        : Date.now();
+    const time = msg?.time && !isNaN(Number(msg?.time)) ? Number(msg.time) : Date.now();
     if (author == null) {
-        console.log('Invalid message author');
+        logger_1.logger.error('Invalid message author');
         return null;
     }
     return { id, time, author, content };
@@ -75,11 +70,11 @@ const parseProduct = (prod) => {
     const isValidName = typeof prod?.name === 'string' && prod.name.length > 0;
     const isValidId = typeof prod?.id === 'string' && (0, uuid_1.validate)(prod.id);
     const isValidDescription = typeof prod?.description === 'string';
-    const isValidPrice = prod?.price && !isNaN(Number(prod?.price))
-        && Number(prod?.price) > 0;
-    const isValidThumbnail = typeof prod?.thumbnail === 'string'
-        && prod?.thumbnail.length > 0;
-    const description = isValidDescription ? prod.description : undefined;
+    const isValidPrice = prod?.price && !isNaN(Number(prod?.price)) && Number(prod?.price) > 0;
+    const isValidThumbnail = typeof prod?.thumbnail === 'string' && prod?.thumbnail.length > 0;
+    const description = isValidDescription
+        ? prod.description
+        : undefined;
     const thumbnail = isValidThumbnail ? prod.thumbnail : placeholder;
     const price = isValidPrice ? Number(prod.price) : null;
     const name = isValidName ? prod.name : null;
@@ -95,11 +90,10 @@ const parseCart = (cart) => {
     let id = (0, uuid_1.v4)();
     if (cart != null) {
         const isValidId = typeof cart?.id === 'string' && (0, uuid_1.validate)(cart.id);
-        const isValidTimestamp = typeof cart?.timestamp === 'number'
-            && !isNaN(cart.timestamp);
-        const isValidProducts = Array.isArray(cart?.products)
-            && cart.products.length > 0
-            && cart.products.every(prod => (0, exports.parseProduct)(prod) != null);
+        const isValidTimestamp = typeof cart?.timestamp === 'number' && !isNaN(cart.timestamp);
+        const isValidProducts = Array.isArray(cart?.products) &&
+            cart.products.length > 0 &&
+            cart.products.every((prod) => (0, exports.parseProduct)(prod) != null);
         isValidId && (id = cart.id);
         isValidProducts && cart.products;
         isValidTimestamp && (timestamp = cart.timestamp);
@@ -110,16 +104,14 @@ exports.parseCart = parseCart;
 const parseCartProduct = (prod) => {
     const isValidCode = typeof prod?.code === 'string' && prod.code.length > 0;
     const isValidId = typeof prod?.id === 'string' && (0, uuid_1.validate)(prod.id);
-    const isValidTimestamp = typeof prod?.timestamp === 'number'
-        && prod.timestamp > 0;
-    const isValidQuantity = typeof prod?.quantity === 'number'
-        && prod.quantity > 0;
+    const isValidTimestamp = typeof prod?.timestamp === 'number' && prod.timestamp > 0;
+    const isValidQuantity = typeof prod?.quantity === 'number' && prod.quantity > 0;
     if (!isValidId)
         return null;
     const quantity = isValidQuantity ? prod.quantity : 1;
     const timestamp = isValidTimestamp ? prod.timestamp : Date.now();
     const code = isValidCode ? prod.code : '-1';
     const id = prod.id;
-    return ({ id, code, quantity, timestamp });
+    return { id, code, quantity, timestamp };
 };
 exports.parseCartProduct = parseCartProduct;
