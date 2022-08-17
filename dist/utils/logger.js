@@ -15,9 +15,9 @@ const initLogger = (outPath) => {
             fileDebug: { type: 'file', filename: path_1.default.join(outPath, 'debug.log') },
             fileError: { type: 'file', filename: path_1.default.join(outPath, 'error.log') },
             fileWarn: { type: 'file', filename: path_1.default.join(outPath, 'warn.log') },
-            loggerDebug: {
+            loggerWarn: {
                 type: 'logLevelFilter',
-                appender: 'fileDebug',
+                appender: 'fileWarn',
                 level: 'debug',
             },
             loggerError: {
@@ -28,9 +28,9 @@ const initLogger = (outPath) => {
         },
         categories: {
             dev: { appenders: ['console'], level: 'info' },
-            prod: { appenders: ['loggerError', 'loggerDebug'], level: 'debug' },
+            prod: { appenders: ['loggerError', 'loggerWarn'], level: 'debug' },
             default: {
-                appenders: ['console', 'loggerDebug', 'loggerError'],
+                appenders: ['console', 'loggerWarn', 'loggerError'],
                 level: 'info',
             },
         },

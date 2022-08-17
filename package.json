@@ -10,7 +10,9 @@
     "start": "npm run preview",
     "watch": "nodemon --exec ts-node",
     "watchjs": "nodemon --exec node",
-    "test": "ts-node src/tests/tests.ts"
+    "test": "ts-node src/tests/tests.ts",
+    "fork": "pm2 start dist/app.js --name app8080 --watch -- --port 8080",
+    "cluster": "pm2 start dist/app.js --name app8081 --watch -i max -- --port 8081"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
   "homepage": "https://github.com/notSagyo/ch-node-site#readme",
   "dependencies": {
     "@firebase/firestore": "^3.4.12",
+    "autocannon": "^7.9.0",
     "bcrypt": "^5.0.1",
     "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
@@ -50,6 +53,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
+    "@types/autocannon": "^7.6.1",
     "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.3",
