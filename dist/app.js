@@ -28,7 +28,6 @@ const http_1 = require("http");
 const logger_1 = require("./utils/logger");
 const mongoose_1 = require("./settings/mongoose");
 const cluster_1 = __importDefault(require("cluster"));
-const run_autocannon_1 = __importDefault(require("./utils/run-autocannon"));
 const args = (0, minimist_1.default)(process.argv.slice(2));
 const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
 exports.PORT = args.port || 8080;
@@ -111,5 +110,4 @@ exports.PORT = args.port || 8080;
         console.log(`[${time}]: Server on port ${exports.PORT} in ${mode},` +
             ` ${process.env.NODE_ENV || 'default'} mode`);
     });
-    (0, run_autocannon_1.default)('http://localhost:8080/api/randoms');
 })();
