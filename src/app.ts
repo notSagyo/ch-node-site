@@ -24,7 +24,6 @@ import { Server as HttpServer } from 'http';
 import { initLogger, logger } from './utils/logger';
 import { mongooseOptions } from './settings/mongoose';
 import cluster from 'cluster';
-import runAutocannon from './utils/run-autocannon';
 
 // Get args
 const args = minimist(process.argv.slice(2));
@@ -137,6 +136,4 @@ export const PORT = args.port || 8080;
         ` ${process.env.NODE_ENV || 'default'} mode`
     );
   });
-
-  runAutocannon('http://localhost:8080/api/randoms');
 })();
