@@ -24,8 +24,8 @@ const initLogger = (outPath: string) => {
     },
 
     categories: {
-      dev: { appenders: ['console'], level: 'info' },
-      prod: { appenders: ['loggerError', 'loggerWarn'], level: 'debug' },
+      development: { appenders: ['console'], level: 'info' },
+      production: { appenders: ['loggerError', 'loggerWarn'], level: 'debug' },
 
       default: {
         appenders: ['console', 'loggerWarn', 'loggerError'],
@@ -34,7 +34,8 @@ const initLogger = (outPath: string) => {
     },
   });
 
-  const loggerType = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+  const loggerType =
+    process.env.NODE_ENV === 'production' ? 'production' : 'development';
   logger = Log4js.getLogger(loggerType);
 };
 
