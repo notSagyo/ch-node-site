@@ -12,25 +12,25 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import log from './middlewares/log';
 import minimist from 'minimist';
+import cluster from 'cluster';
 import express from 'express';
 import path from 'path';
-import { cpus } from 'os';
 import { updateEjsDefaultData, resetAge } from './middlewares/middlewares';
 import { productsDao } from './daos/products-dao-mongo';
 import { messagesDao } from './daos/messages-dao-mongo';
+import { mongooseOptions } from './settings/mongoose';
+import { initLogger, logger } from './utils/logger';
 import { ejsDefaultData } from './settings/ejs';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import { initLogger, logger } from './utils/logger';
-import { mongooseOptions } from './settings/mongoose';
-import cluster from 'cluster';
+import { cpus } from 'os';
 
+// INIT ======================================================================//
 // Get args
 const args = minimist(process.argv.slice(2));
 const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
 export const PORT = args.port || 8080;
 
-// INIT ======================================================================//
 (() => {
   if (cluster.isPrimary && mode === 'CLUSTER') {
     for (let i = 0; i < cpus().length; i++) cluster.fork();

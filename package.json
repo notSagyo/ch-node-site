@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
     "build": "tsc --build --verbose",
-    "preview": "pm2 start dist/app.js --watch",
+    "preview": "pm2-runtime start ecosystem.config.js --env production",
     "start": "npm run preview",
     "watch": "nodemon --exec ts-node",
     "watchjs": "nodemon --exec node",
@@ -46,6 +46,7 @@
     "normalizr": "^3.6.2",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "pm2": "^5.2.0",
     "socket.io": "^4.5.1",
     "sqlite3": "^5.0.9",
     "typescript": "^4.7.4",
