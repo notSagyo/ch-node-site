@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@faker-js/faker': ^7.3.0
+  '@faker-js/faker': ^7.4.0
   '@firebase/firestore': ^3.4.12
   '@types/autocannon': ^7.6.1
   '@types/bcrypt': ^5.0.0
@@ -47,6 +47,7 @@ specifiers:
   uuid: ^8.3.2
 
 dependencies:
+  '@faker-js/faker': 7.4.0
   '@firebase/firestore': 3.4.12
   autocannon: 7.9.0
   bcrypt: 5.0.1
@@ -75,7 +76,6 @@ dependencies:
   uuid: 8.3.2
 
 devDependencies:
-  '@faker-js/faker': 7.3.0
   '@types/autocannon': 7.6.1
   '@types/bcrypt': 5.0.0
   '@types/compression': 1.7.2
@@ -131,10 +131,10 @@ packages:
       - supports-color
     dev: true
 
-  /@faker-js/faker/7.3.0:
-    resolution: {integrity: sha512-1W0PZezq2rxlAssoWemi9gFRD8IQxvf0FPL5Km3TOmGHFG7ib0TbFBJ0yC7D/1NsxunjNTK6WjUXV8ao/mKZ5w==}
+  /@faker-js/faker/7.4.0:
+    resolution: {integrity: sha512-xDd3Tvkt2jgkx1LkuwwxpNBy/Oe+LkZBTwkgEFTiWpVSZgQ5sc/LenbHKRHbFl0dq/KFeeq/szyyPtpJRKY0fg==}
     engines: {node: '>=14.0.0', npm: '>=6.0.0'}
-    dev: true
+    dev: false
 
   /@firebase/analytics-compat/0.1.13_xtfl75etjf2254vbvv3gd6b4ze:
     resolution: {integrity: sha512-QC1DH/Dwc8fBihn0H+jocBWyE17GF1fOCpCrpAiQ2u16F/NqsVDVG4LjIqdhq963DXaXneNY7oDwa25Up682AA==}

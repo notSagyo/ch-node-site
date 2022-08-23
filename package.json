@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/notSagyo/ch-node-site#readme",
   "dependencies": {
+    "@faker-js/faker": "^7.4.0",
     "@firebase/firestore": "^3.4.12",
     "autocannon": "^7.9.0",
     "bcrypt": "^5.0.1",
@@ -53,7 +54,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.3.0",
     "@types/autocannon": "^7.6.1",
     "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
