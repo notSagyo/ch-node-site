@@ -29,7 +29,7 @@ import { cpus } from 'os';
 // Get args
 const args = minimist(process.argv.slice(2));
 const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
-export const PORT = args.port || 8080;
+export const PORT = args.port || process.env.PORT || 8080;
 
 (() => {
   if (cluster.isPrimary && mode === 'CLUSTER') {
