@@ -54,7 +54,7 @@ export default class Container<T> {
     let result: T[] | null = null;
     const allOrFilter = filter === '*' ? {} : filter;
     try {
-      result = (await this.model.find(allOrFilter).lean().exec()) as T[];
+      result = (await this.model.find(allOrFilter).lean()) as T[];
       logger.info(
         `Retrieved from '${this.collection}' elements matching:`,
         filter

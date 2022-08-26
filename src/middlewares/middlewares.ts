@@ -1,19 +1,32 @@
+import MongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
 import express from 'express';
-import { ejsDefaultData } from '../settings/ejs';
+import session from 'express-session';
+import path from 'path';
+import { mongooseOptions } from '../settings/mongoose';
+import { baseDir } from '../utils/utils';
+import log from './log';
+import passport from './passport';
+import { resetAge } from './cookies';
+import { updateEjsDefaultData } from './ejs';
 
-/** Reset cookies' age. */
-export const resetAge: express.RequestHandler = (req, res, next) => {
-  req.session.touch();
-  next();
-};
+const middlewares = [
+  express.json(),
+  express.urlencoded({ extended: true }),
+  express.static(path.join(baseDir, 'public')),
+  session({
+    store: MongoStore.create({ mongoUrl: mongooseOptions.uri }),
+    cookie: { maxAge: 10 * 60 * 1000 },
+    secret: 'TheCookieNeverRests',
+    resave: false,
+    saveUninitialized: false,
+  }),
+  cookieParser('TheCookieNeverRests'),
+  passport.initialize(),
+  passport.session(),
+  resetAge,
+  updateEjsDefaultData,
+  log,
+];
 
-/**
- * Ensures data passed to EJS is synced with session data.
- *
- * Access previous data with "res.locals.oldEjsDefaultData"
-*/
-export const updateEjsDefaultData: express.RequestHandler = (req, res, next) => {
-  res.locals.oldEjsDefaultData = ejsDefaultData;
-  ejsDefaultData.user = req.user;
-  next();
-};
+export default middlewares;
