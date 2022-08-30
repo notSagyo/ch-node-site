@@ -16,6 +16,7 @@ import { Server as HttpServer } from 'http';
 import { baseDir } from './utils/utils';
 import { cpus } from 'os';
 
+// INIT ====================================================================//
 // Get args
 const args = minimist(process.argv.slice(2));
 const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
@@ -32,7 +33,6 @@ export const PORT = args.port || process.env.PORT || 8080;
     return;
   }
 
-  // INIT ====================================================================//
   // Constants
   const app = express();
   const httpServer = new HttpServer(app);
@@ -67,7 +67,7 @@ export const PORT = args.port || process.env.PORT || 8080;
   });
 
   // Listen ====================================================================//
-  app.listen(PORT, () => {
+  httpServer.listen(PORT, () => {
     const time = new Date().toLocaleTimeString();
     console.log(
       `[${time}]: Server on port ${PORT} in ${mode},` +

@@ -9,37 +9,47 @@ const parseUser = (user) => {
         return null;
     const isValidPassword = typeof user?.password === 'string' && user.password.length > 1;
     const isValidName = typeof user?.name === 'string' && user.name.length > 1;
-    const isValidAge = typeof user?.age === 'number' && user.age > 0;
     const isValidId = typeof user?.id === 'string' && (0, uuid_1.validate)(user.id);
+    const isValidRole = typeof user?.isAdmin === 'boolean';
     const isValidLastName = typeof user?.lastName === 'string' && user.lastName.length > 1;
     const isValidUsername = typeof user?.username === 'string' && user.username.length > 2;
     const isValidAvatar = typeof user?.avatar === 'string' && user.avatar.length > 0;
     const isValidEmail = typeof user?.email === 'string' && (0, utils_1.validateEmail)(user.email);
+    const isValidAge = user?.age && !isNaN(Number(user?.age)) && Number(user?.age) > 0;
+    const phoneNoSpaces = user?.phone
+        ? parseInt(String(user?.phone).replaceAll(' ', ''))
+        : null;
     if (!isValidAge)
-        logger_1.logger.error('Invalid user age');
+        logger_1.logger.error('Invalid user age:', user?.age);
     if (!isValidName)
-        logger_1.logger.error('Invalid user name');
+        logger_1.logger.error('Invalid user name:', user?.name);
     if (!isValidEmail)
-        logger_1.logger.error('Invalid user email');
+        logger_1.logger.error('Invalid user email:', user?.email);
     if (!isValidUsername)
-        logger_1.logger.error('Invalid user username');
+        logger_1.logger.error('Invalid user username:', user?.username);
     if (!isValidLastName)
-        logger_1.logger.error('Invalid user last name');
+        logger_1.logger.error('Invalid user last name:', user?.lastName);
     if (!isValidPassword)
         logger_1.logger.error('Invalid user password');
-    const isValid = isValidEmail &&
-        isValidName &&
-        isValidLastName &&
-        isValidUsername &&
+    if (!phoneNoSpaces)
+        logger_1.logger.error('Invalid user phone:', phoneNoSpaces);
+    const isValid = isValidUsername &&
         isValidPassword &&
-        isValidAge;
+        isValidLastName &&
+        isValidEmail &&
+        isValidName &&
+        isValidAge &&
+        phoneNoSpaces;
     if (!isValid)
         return null;
     const id = isValidId ? user.id : (0, uuid_1.v4)();
     const avatar = isValidAvatar ? user.avatar : '';
+    const isAdmin = isValidRole ? user.isAdmin : false;
     return {
         id,
         avatar,
+        isAdmin,
+        phone: phoneNoSpaces,
         age: user.age,
         name: user.name,
         email: user.email,
@@ -52,12 +62,12 @@ exports.parseUser = parseUser;
 const parseMessage = (msg) => {
     if (msg == null)
         return null;
-    const author = (0, exports.parseUser)(msg?.author);
     const id = typeof msg?.id === 'string' ? msg.id : (0, uuid_1.v4)();
+    const author = (0, exports.parseUser)(msg?.author);
+    const time = msg?.time && !isNaN(Number(msg?.time)) ? Number(msg.time) : Date.now();
     const content = typeof msg?.content === 'string' && msg?.content.length > 0
         ? msg.content
         : '';
-    const time = msg?.time && !isNaN(Number(msg?.time)) ? Number(msg.time) : Date.now();
     if (author == null) {
         logger_1.logger.error('Invalid message author');
         return null;
@@ -87,18 +97,20 @@ exports.parseProduct = parseProduct;
 const parseCart = (cart) => {
     let products = [];
     let timestamp = Date.now();
-    let id = (0, uuid_1.v4)();
     if (cart != null) {
         const isValidId = typeof cart?.id === 'string' && (0, uuid_1.validate)(cart.id);
         const isValidTimestamp = typeof cart?.timestamp === 'number' && !isNaN(cart.timestamp);
         const isValidProducts = Array.isArray(cart?.products) &&
             cart.products.length > 0 &&
             cart.products.every((prod) => (0, exports.parseProduct)(prod) != null);
-        isValidId && (id = cart.id);
+        if (!isValidId) {
+            logger_1.logger.error(`parseCart: ID ${cart.id} is not a valid ID`);
+            return null;
+        }
         isValidProducts && cart.products;
         isValidTimestamp && (timestamp = cart.timestamp);
     }
-    return { id, timestamp, products };
+    return { id: cart?.id, timestamp, products };
 };
 exports.parseCart = parseCart;
 const parseCartProduct = (prod) => {

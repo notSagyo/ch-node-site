@@ -14,7 +14,7 @@
     },
     "rules": {
         "linebreak-style": ["error", "windows"],
-        "quotes": ["warn", "single"],
+        "quotes": ["warn", "single", { "avoidEscape": true }],
         "semi": ["warn", "always"],
         "prefer-const": "off",
         "@typescript-eslint/indent": ["error", 2],

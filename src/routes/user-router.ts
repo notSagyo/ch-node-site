@@ -4,6 +4,10 @@ import { ejsDefaultData } from '../settings/ejs';
 import { iRouter } from '../types/types';
 import passport from 'passport';
 import { logger } from '../utils/logger';
+import { uploadsDir as uploadsDir } from '../utils/utils';
+import path from 'path';
+import fs from 'fs/promises';
+import imageType from 'image-type';
 
 export default class UserRouter implements iRouter {
   loginHtmlPath: string;
@@ -66,7 +70,7 @@ export default class UserRouter implements iRouter {
         });
       }
 
-      ejsDefaultData.user = null;
+      ejsDefaultData.reset();
       res.render(this.logoutHtmlPath, { user: destroyedUser });
     });
   }
@@ -91,14 +95,28 @@ export default class UserRouter implements iRouter {
     const upload = multer();
     this.router.post(
       '/signup',
-      upload.none(),
+      upload.single('avatar'),
       passport.authenticate('registration', {
         failureRedirect:
           '/error' +
           '?errorTitle=Registration error' +
-          '&errorDescription=User with the same email/username already exists',
+          '&errorDescription=User with the same email/username/phone already exists',
       }),
-      (req, res) => res.redirect('/')
+      (req, res) => {
+        if (!req.user) return;
+
+        // If file is provided and is an image, upload it
+        if (req.file) {
+          const imgExtension = imageType(req.file.buffer)?.ext;
+          imgExtension &&
+            fs.writeFile(
+              path.join(uploadsDir, `${req.user?.id}.${imgExtension}`),
+              req.file.buffer
+            );
+        }
+
+        res.redirect('/signup-messages');
+      }
     );
   }
 

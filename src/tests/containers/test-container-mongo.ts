@@ -12,7 +12,7 @@ export const testContainerMongo = async () => {
   });
 
   await testFunction('close()', async () => {
-    await container.close();
+    await container.disconnect();
   });
 
   await testFunction('insert()', async () => {

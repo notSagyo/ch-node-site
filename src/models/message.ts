@@ -8,12 +8,17 @@ export const messageSchema: mongoose.Schema<iMessage> = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   time: { type: Number, required: true },
   author: { type: userSchema, required: true },
-  content: { type: String, required: true }
+  content: { type: String, required: true },
 });
 export const messageModel = mongoose.model('messages', messageSchema);
 
 // Normalizr Schema ==========================================================//
-export const normalizrAuthorSchema: Schema<iUser> =
-  new schema.Entity('authors', {  }, { idAttribute: 'email' });
-export const normalizerMessageSchema: Schema<iMessage> =
-  new schema.Entity('messages', { author: normalizrAuthorSchema, });
+export const normalizrAuthorSchema: Schema<iUser> = new schema.Entity(
+  'authors',
+  {},
+  { idAttribute: 'email' }
+);
+export const normalizerMessageSchema: Schema<iMessage> = new schema.Entity(
+  'messages',
+  { author: normalizrAuthorSchema }
+);

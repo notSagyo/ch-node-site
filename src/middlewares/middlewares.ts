@@ -1,7 +1,7 @@
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import session from 'express-session';
+import expressSession from 'express-session';
 import path from 'path';
 import { mongooseOptions } from '../settings/mongoose';
 import { baseDir } from '../utils/utils';
@@ -14,7 +14,7 @@ const middlewares = [
   express.json(),
   express.urlencoded({ extended: true }),
   express.static(path.join(baseDir, 'public')),
-  session({
+  expressSession({
     store: MongoStore.create({ mongoUrl: mongooseOptions.uri }),
     cookie: { maxAge: 10 * 60 * 1000 },
     secret: 'TheCookieNeverRests',

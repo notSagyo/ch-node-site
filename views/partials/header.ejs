@@ -1,3 +1,6 @@
-<header class="bg-dark text-light sticky-top mb-3">
-  <%- include('../partials/user-header', locals.user ? user : { }) %>
+<header class="bg-dark text-light sticky-top mb-3 header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <%- include('../partials/header-links', locals.user ? user : { }) %>
+    <%- include('../partials/header-user') %>
+  </div>
 </header>

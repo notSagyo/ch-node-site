@@ -14,7 +14,7 @@ const testContainerMongo = async () => {
         await container.connect();
     });
     await (0, tests_1.testFunction)('close()', async () => {
-        await container.close();
+        await container.disconnect();
     });
     await (0, tests_1.testFunction)('insert()', async () => {
         await container.insert({ id: (0, uuid_1.v4)(), name: 'Test', price: 100 });

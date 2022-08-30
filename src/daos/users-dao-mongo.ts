@@ -9,8 +9,7 @@ export class UserDao implements iDao<iUser> {
 
   async save(user: Partial<iUser>) {
     const parsedUser = parseUser(user);
-    if (parsedUser != null)
-      return await this.container.insert(parsedUser);
+    if (parsedUser != null) return await this.container.insert(parsedUser);
     return false;
   }
 
@@ -27,7 +26,7 @@ export class UserDao implements iDao<iUser> {
   }
 
   async getAll(): Promise<iUser[]> {
-    return await this.container.find('*') || [];
+    return (await this.container.find('*')) || [];
   }
 
   async updateById(id: string, data: Partial<iUser>) {

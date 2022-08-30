@@ -9,8 +9,9 @@ export default class CartsDao implements iDao<iCart> {
   container = new Container<iCart>('carts');
 
   async save(cart: Partial<iCart>) {
-    const parsedCart = parseCart(cart) as iCart;
-    return await this.container.insert(parsedCart);
+    const parsed = parseCart(cart);
+    const success = parsed ? await this.container.insert(parsed) : false;
+    return success;
   }
 
   async getById(id: string) {

@@ -3,13 +3,8 @@
   <%- include('../partials/header') %>
 
   <div class="d-flex align-items-start">
-    <!-- PRODUCT FORM -->
-    <div class="d-flex align-items-center mx-3">
-      <%- include('../partials/product-form') %>
-    </div>
-
      <!-- PRODUCT TABLE -->
-      <div class="border rounded-bottom">
+      <div class="border rounded mx-3">
         <table id="productsTable" class="table m-0 <%= productList.length > 0 ? "" : "d-none" %>">
           <thead>
             <tr>
@@ -17,6 +12,7 @@
               <th scope="col">Preview</th>
               <th scope="col">Prod. Name</th>
               <th scope="col">Price</th>
+              <th scope="col"></th>
             </tr>
           </thead>
 
@@ -31,6 +27,11 @@
             <% }) %>
           </tbody>
         </table>
+      </div>
+
+      <!-- PRODUCT FORM -->
+      <div class="d-flex align-items-center mx-3">
+        <%- include('../partials/product-form') %>
       </div>
 
       <div id="noProductAlert" class="alert alert-warning <%= productList.length > 0 ? "d-none" : "" %>" style="max-width: fit-content;">
