@@ -8,8 +8,6 @@
     "build": "tsc --build --verbose",
     "preview": "pm2-runtime start ecosystem.config.js --env development",
     "start": "npm run preview",
-    "watch": "nodemon --exec ts-node",
-    "watchjs": "nodemon --exec node",
     "test": "ts-node src/tests/tests.ts",
     "fork": "pm2 start dist/app.js --name app8080 --watch -- --port 8080",
     "cluster": "pm2 start dist/app.js --name app8081 --watch -i max -- --port 8081"
