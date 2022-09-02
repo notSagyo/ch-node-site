@@ -1,6 +1,7 @@
 import { QueryConstraint } from '@firebase/firestore';
 import mongoose from 'mongoose';
 import { Router } from 'express';
+import { iUser } from './models';
 
 interface iRouter {
   router: Router;
@@ -37,8 +38,7 @@ declare module 'Express' {
 
 declare global {
   namespace Express {
-    interface User {
-      email: string;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface User extends iUser {}
   }
 }

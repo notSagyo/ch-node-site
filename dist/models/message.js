@@ -11,8 +11,8 @@ exports.messageSchema = new mongoose_1.default.Schema({
     id: { type: String, required: true, unique: true },
     time: { type: Number, required: true },
     author: { type: user_1.userSchema, required: true },
-    content: { type: String, required: true }
+    content: { type: String, required: true },
 });
 exports.messageModel = mongoose_1.default.model('messages', exports.messageSchema);
 exports.normalizrAuthorSchema = new normalizr_1.schema.Entity('authors', {}, { idAttribute: 'email' });
-exports.normalizerMessageSchema = new normalizr_1.schema.Entity('messages', { author: exports.normalizrAuthorSchema, });
+exports.normalizerMessageSchema = new normalizr_1.schema.Entity('messages', { author: exports.normalizrAuthorSchema });

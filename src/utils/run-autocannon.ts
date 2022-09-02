@@ -17,6 +17,6 @@ export default async function runAutocannon(url: string) {
 
   autocannon.track(inst, { outputStream });
 
-  outputStream.on('data', (data: any) => buf.push(data));
+  outputStream.on('data', (data) => buf.push(data));
   inst.on('done', () => process.stdout.write(Buffer.concat(buf)));
 }

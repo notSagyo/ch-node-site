@@ -8,9 +8,12 @@ const util_1 = require("util");
 const testNormalizr = async () => {
     const authorSchema = new normalizr_1.schema.Entity('authors');
     const messageSchema = new normalizr_1.schema.Entity('messages', {
-        author: authorSchema
+        author: authorSchema,
     });
-    const messages = await messages_dao_mongo_1.messagesDao.getAll().then(messages => { console.log(typeof []); return messages; });
+    const messages = await messages_dao_mongo_1.messagesDao.getAll().then((messages) => {
+        console.log(typeof []);
+        return messages;
+    });
     let normalizedMessages;
     let denormalizedMessages;
     await (0, tests_1.testFunction)('Normalize messages', () => {
@@ -26,7 +29,8 @@ const testNormalizr = async () => {
         const uncompressed = JSON.stringify(denormalizedMessages);
         console.log(`normalized: ${compressed.length} bytes`);
         console.log(`denormalized: ${uncompressed.length} bytes`);
-        console.log(`compression rate: ${(100 - compressed.length / uncompressed.length * 100).toFixed(2)}%`);
+        console.log(`compression rate: ${(100 -
+            (compressed.length / uncompressed.length) * 100).toFixed(2)}%`);
     });
 };
 exports.testNormalizr = testNormalizr;

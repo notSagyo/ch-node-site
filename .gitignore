@@ -1,6 +1,7 @@
 # Custom
 *.ignore*
 clase*
+**/*clase*/**
 
 # Logs
 logs

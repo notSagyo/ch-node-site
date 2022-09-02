@@ -12,11 +12,12 @@ import { logger } from './logger';
 
 export const parseUser: iParser<iUser> = (user) => {
   if (user == null) return null;
+
   const isValidPassword =
     typeof user?.password === 'string' && user.password.length > 1;
   const isValidName = typeof user?.name === 'string' && user.name.length > 1;
-  const isValidAge = typeof user?.age === 'number' && user.age > 0;
   const isValidId = typeof user?.id === 'string' && validate(user.id);
+  const isValidRole = typeof user?.isAdmin === 'boolean';
   const isValidLastName =
     typeof user?.lastName === 'string' && user.lastName.length > 1;
   const isValidUsername =
@@ -25,28 +26,40 @@ export const parseUser: iParser<iUser> = (user) => {
     typeof user?.avatar === 'string' && user.avatar.length > 0;
   const isValidEmail =
     typeof user?.email === 'string' && validateEmail(user.email);
+  const isValidAge =
+    user?.age && !isNaN(Number(user?.age)) && Number(user?.age) > 0;
+  const phoneNoSpaces = user?.phone
+    ? parseInt(String(user?.phone).replaceAll(' ', ''))
+    : null;
 
-  if (!isValidAge) logger.error('Invalid user age');
-  if (!isValidName) logger.error('Invalid user name');
-  if (!isValidEmail) logger.error('Invalid user email');
-  if (!isValidUsername) logger.error('Invalid user username');
-  if (!isValidLastName) logger.error('Invalid user last name');
+  if (!isValidAge) logger.error('Invalid user age:', user?.age);
+  if (!isValidName) logger.error('Invalid user name:', user?.name);
+  if (!isValidEmail) logger.error('Invalid user email:', user?.email);
+  if (!isValidUsername) logger.error('Invalid user username:', user?.username);
+  if (!isValidLastName) logger.error('Invalid user last name:', user?.lastName);
   if (!isValidPassword) logger.error('Invalid user password');
+  if (!phoneNoSpaces) logger.error('Invalid user phone:', phoneNoSpaces);
 
   const isValid =
-    isValidEmail &&
-    isValidName &&
-    isValidLastName &&
     isValidUsername &&
     isValidPassword &&
-    isValidAge;
+    isValidLastName &&
+    isValidEmail &&
+    isValidName &&
+    isValidAge &&
+    phoneNoSpaces;
   if (!isValid) return null;
 
+  // Non-required fields
   const id = isValidId ? (user.id as string) : v4();
   const avatar = isValidAvatar ? (user.avatar as string) : '';
+  const isAdmin = isValidRole ? (user.isAdmin as boolean) : false;
+
   return {
     id,
     avatar,
+    isAdmin,
+    phone: phoneNoSpaces,
     age: user.age as number,
     name: user.name as string,
     email: user.email as string,
@@ -58,14 +71,14 @@ export const parseUser: iParser<iUser> = (user) => {
 
 export const parseMessage: iParser<iMessage> = (msg) => {
   if (msg == null) return null;
-  const author = parseUser(msg?.author as Record<string, unknown>);
   const id = typeof msg?.id === 'string' ? msg.id : v4();
+  const author = parseUser(msg?.author as Record<string, unknown>);
+  const time =
+    msg?.time && !isNaN(Number(msg?.time)) ? Number(msg.time) : Date.now();
   const content =
     typeof msg?.content === 'string' && msg?.content.length > 0
       ? msg.content
       : '';
-  const time =
-    msg?.time && !isNaN(Number(msg?.time)) ? Number(msg.time) : Date.now();
 
   if (author == null) {
     logger.error('Invalid message author');
@@ -99,10 +112,9 @@ export const parseProduct: iParser<iProduct> = (prod) => {
   return null;
 };
 
-export const parseCart: iParser<iCart> = (cart): iCart => {
+export const parseCart: iParser<iCart> = (cart): iCart | null => {
   let products: iCartProduct[] = [];
   let timestamp = Date.now();
-  let id = v4();
 
   if (cart != null) {
     const isValidId = typeof cart?.id === 'string' && validate(cart.id);
@@ -113,12 +125,15 @@ export const parseCart: iParser<iCart> = (cart): iCart => {
       cart.products.length > 0 &&
       cart.products.every((prod) => parseProduct(prod) != null);
 
-    isValidId && (id = cart.id as string);
+    if (!isValidId) {
+      logger.error(`parseCart: ID ${cart.id} is not a valid ID`);
+      return null;
+    }
     isValidProducts && (cart.products as iCartProduct[]);
     isValidTimestamp && (timestamp = cart.timestamp as number);
   }
 
-  return { id, timestamp, products };
+  return { id: cart?.id as string, timestamp, products };
 };
 
 export const parseCartProduct: iParser<iCartProduct> = (prod) => {

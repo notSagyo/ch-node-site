@@ -7,22 +7,32 @@ import { inspect } from 'util';
 export const testNormalizr = async () => {
   const authorSchema: Schema<iUser> = new schema.Entity('authors');
   const messageSchema: Schema<iMessage> = new schema.Entity('messages', {
-    author: authorSchema
+    author: authorSchema,
   });
 
-  const messages = await messagesDao.getAll().then(messages => { console.log(typeof []); return messages;});
+  const messages = await messagesDao.getAll().then((messages) => {
+    console.log(typeof []);
+    return messages;
+  });
   /* eslint-disable @typescript-eslint/no-explicit-any */
   let normalizedMessages: any;
   let denormalizedMessages: any;
   /* eslint-disable @typescript-eslint/no-explicit-any */
 
   await testFunction('Normalize messages', () => {
-    normalizedMessages = normalize(messages, [ messageSchema ]);
-    console.log('normalizedMessages:', inspect(normalizedMessages, false, 12, true));
+    normalizedMessages = normalize(messages, [messageSchema]);
+    console.log(
+      'normalizedMessages:',
+      inspect(normalizedMessages, false, 12, true)
+    );
   });
 
   await testFunction('Denormalize messages', () => {
-    denormalizedMessages = denormalize(normalizedMessages.result, [ messageSchema ], normalizedMessages.entities);
+    denormalizedMessages = denormalize(
+      normalizedMessages.result,
+      [messageSchema],
+      normalizedMessages.entities
+    );
     console.log('denormalizedMessages:', denormalizedMessages);
   });
 
@@ -31,6 +41,11 @@ export const testNormalizr = async () => {
     const uncompressed = JSON.stringify(denormalizedMessages);
     console.log(`normalized: ${compressed.length} bytes`);
     console.log(`denormalized: ${uncompressed.length} bytes`);
-    console.log(`compression rate: ${(100 - compressed.length / uncompressed.length * 100).toFixed(2)}%`);
+    console.log(
+      `compression rate: ${(
+        100 -
+        (compressed.length / uncompressed.length) * 100
+      ).toFixed(2)}%`
+    );
   });
 };

@@ -1,7 +1,11 @@
 import express from 'express';
 import { cartsDao } from '../daos/carts-dao-mongo';
+import { authn } from '../middlewares/auth';
 import { ejsDefaultData } from '../settings/ejs';
+import { iProduct } from '../types/models';
 import { iRouter } from '../types/types';
+import { logger } from '../utils/logger';
+import { cartProductsToProducts } from '../utils/utils';
 
 export default class CartRouter implements iRouter {
   cartHtmlPath: string;
@@ -27,7 +31,17 @@ export default class CartRouter implements iRouter {
 
   private getCartPage() {
     this.router.get('/', async (req, res) => {
-      res.render(this.cartHtmlPath, ejsDefaultData);
+      const userId = req.user?.id;
+      const cart = userId ? await cartsDao.getById(userId) : null;
+      let products: iProduct[] = [];
+
+      if (cart?.products != null)
+        products = await cartProductsToProducts(cart.products);
+
+      res.render(this.cartHtmlPath, {
+        ...ejsDefaultData,
+        cartProducts: products,
+      });
     });
   }
 
@@ -65,13 +79,30 @@ export default class CartRouter implements iRouter {
 
   /** Sample POST body: { "id": 1 } */
   private postCartProduct() {
-    this.apiRouter.post('/:id/productos', async (req, res) => {
-      const cartId = req.params.id;
+    this.apiRouter.post('/:cartId/productos', authn, async (req, res) => {
       const productId = req.body.id;
-      const success = await cartsDao.addProductById(cartId, productId);
+      const cartId =
+        req.params.cartId == '0' ? req.user?.id : req.params.cartId;
 
-      if (success == false)
-        return res.status(400).send('400: Error while saving product in cart');
+      // If cart doesn't exists create it
+      if (cartId) {
+        const foundCart = await cartsDao.getById(cartId);
+        if (foundCart == null) {
+          logger.warn('Cart not found, creating...');
+          await cartsDao.save({ id: cartId });
+        }
+      }
+
+      // Try add prodduct to cart
+      const success = cartId
+        ? await cartsDao.addProductById(cartId, productId)
+        : false;
+
+      if (success == false) {
+        const msg = '400: Error while saving product in cart';
+        logger.error(msg);
+        return res.status(400).send(msg);
+      }
       res.status(201).send('201: Product added succesfully');
     });
   }
@@ -83,7 +114,9 @@ export default class CartRouter implements iRouter {
       const success = await cartsDao.removeProductById(cartId, productId);
 
       if (success == false)
-        return res.status(400).send('400: Error while deleting product from cart');
+        return res
+          .status(400)
+          .send('400: Error while deleting product from cart');
       res.status(200).send('200: CartProduct deleted succesfully');
     });
   }

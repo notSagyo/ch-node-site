@@ -1,7 +1,7 @@
 import express from 'express';
 import { productsDao } from '../daos/products-dao-mongo';
 import { parseProduct } from '../utils/parsers';
-import { authn } from '../middlewares/auth';
+import { authn, authz } from '../middlewares/auth';
 import { faker } from '@faker-js/faker';
 import { iProduct } from '../types/models';
 import { iRouter } from '../types/types';
@@ -68,7 +68,7 @@ export default class ProductsRouter implements iRouter {
   }
 
   private postProduct() {
-    this.apiRouter.post('/', authn, async (req, res) => {
+    this.apiRouter.post('/', authz, async (req, res) => {
       const newProd = parseProduct(req.body);
 
       if (newProd == null) {
@@ -83,7 +83,7 @@ export default class ProductsRouter implements iRouter {
   }
 
   private deleteProductById() {
-    this.apiRouter.delete('/:id', authn, async (req, res) => {
+    this.apiRouter.delete('/:id', authz, async (req, res) => {
       const prodId = req.params.id;
       const success = await productsDao.deleteById(prodId);
 
@@ -98,7 +98,7 @@ export default class ProductsRouter implements iRouter {
   }
 
   private putProductById() {
-    this.apiRouter.put('/:id', authn, async (req, res) => {
+    this.apiRouter.put('/:id', authz, async (req, res) => {
       const prodId = req.params.id;
       const newProd = parseProduct(req.body);
 

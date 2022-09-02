@@ -22,22 +22,37 @@ socket.on('products_updated', (productList) => {
       <td><img src="${product.thumbnail}" alt="${product.name}" class="img-fluid" width="32" /></td>
       <td>${product.name}</td>
       <td>$${product.price}</td>
+      <th scope="col"></th>
+      <td>
+        <button class="btn btn-outline-success btn-small" onclick="addToCart('${product.id}')">Add to cart</button>
+      </td>
     </tr>
     `;
   });
 
-  productsTableBody && (productsTableBody.innerHTML =  newTableContent);
+  productsTableBody && (productsTableBody.innerHTML = newTableContent);
 });
 
 // Event listeners ===========================================================//
 const productForm = document.getElementById('productForm');
+productForm &&
+  productForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const product = {
+      name: document.getElementById('productNameInput').value,
+      price: document.getElementById('productPriceInput').value,
+      thumbnail: document.getElementById('productThumbnailInput').value,
+    };
+    socket.emit('create_product', product);
+  });
 
-productForm && productForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const product = {
-    name: document.getElementById('productNameInput').value,
-    price: document.getElementById('productPriceInput').value,
-    thumbnail: document.getElementById('productThumbnailInput').value,
-  };
-  socket.emit('create_product', product);
-});
+// Add to cart ===============================================================//
+function addToCart(productId) {
+  fetch('/api/carrito/0/productos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: productId }),
+  }).then((res) => {
+    if (res.status == '401') alert('Please log in to complete this action');
+  });
+}

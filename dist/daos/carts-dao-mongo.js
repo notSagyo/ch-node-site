@@ -11,8 +11,9 @@ const logger_1 = require("../utils/logger");
 class CartsDao {
     container = new container_mongo_1.default(cart_1.cartModel);
     async save(cart) {
-        const parsedCart = (0, parsers_1.parseCart)(cart);
-        return await this.container.insert(parsedCart);
+        const parsed = (0, parsers_1.parseCart)(cart);
+        const success = parsed ? await this.container.insert(parsed) : false;
+        return success;
     }
     async getById(id) {
         const res = await this.container.find({ id });

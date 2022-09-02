@@ -1,4 +1,3 @@
-
 export interface iProduct {
   description?: string;
   thumbnail?: string;
@@ -24,7 +23,9 @@ export interface iUser {
   lastName: string;
   username: string;
   password: string;
+  isAdmin: boolean;
   avatar: string;
+  phone: number;
   email: string;
   name: string;
   age: number;

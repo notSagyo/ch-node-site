@@ -26,7 +26,7 @@ class UserDao {
         return user;
     }
     async getAll() {
-        return await this.container.find('*') || [];
+        return (await this.container.find('*')) || [];
     }
     async updateById(id, data) {
         return await this.container.update({ id }, data);
