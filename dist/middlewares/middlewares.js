@@ -8,8 +8,8 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const path_1 = __importDefault(require("path"));
-const mongoose_1 = require("../settings/mongoose");
-const utils_1 = require("../utils/utils");
+const mongoose_1 = require("../config/mongoose");
+const paths_1 = require("../utils/paths");
 const log_1 = __importDefault(require("./log"));
 const passport_1 = __importDefault(require("./passport"));
 const cookies_1 = require("./cookies");
@@ -17,7 +17,7 @@ const ejs_1 = require("./ejs");
 const middlewares = [
     express_1.default.json(),
     express_1.default.urlencoded({ extended: true }),
-    express_1.default.static(path_1.default.join(utils_1.baseDir, 'public')),
+    express_1.default.static(path_1.default.join(paths_1.baseDirLocal, 'public')),
     (0, express_session_1.default)({
         store: connect_mongo_1.default.create({ mongoUrl: mongoose_1.mongooseOptions.uri }),
         cookie: { maxAge: 10 * 60 * 1000 },

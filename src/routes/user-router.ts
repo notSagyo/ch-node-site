@@ -1,10 +1,10 @@
 import express from 'express';
 import multer from 'multer';
-import { ejsDefaultData } from '../settings/ejs';
+import { ejsDefaultData } from '../config/ejs';
 import { iRouter } from '../types/types';
 import passport from 'passport';
 import { logger } from '../utils/logger';
-import { uploadsDir as uploadsDir } from '../utils/utils';
+import { uploadsDirLocal } from '../utils/paths';
 import path from 'path';
 import fs from 'fs/promises';
 import imageType from 'image-type';
@@ -110,7 +110,7 @@ export default class UserRouter implements iRouter {
           const imgExtension = imageType(req.file.buffer)?.ext;
           imgExtension &&
             fs.writeFile(
-              path.join(uploadsDir, `${req.user?.id}.${imgExtension}`),
+              path.join(uploadsDirLocal, `${req.user?.id}.${imgExtension}`),
               req.file.buffer
             );
         }

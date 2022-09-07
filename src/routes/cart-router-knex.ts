@@ -1,6 +1,6 @@
 import express from 'express';
 import { cartsDao } from '../daos/carts-dao-knex';
-import { ejsDefaultData } from '../settings/ejs';
+import { ejsDefaultData } from '../config/ejs';
 import { iRouter } from '../types/types';
 
 export default class CartRouter implements iRouter {

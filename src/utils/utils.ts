@@ -1,10 +1,5 @@
-import path from 'path';
 import { productsDao } from '../daos/products-dao-mongo';
 import { iCartProduct, iProduct } from '../types/models';
-
-export const baseDir = path.join(__dirname, '..', '..');
-export const publicDir = path.join(baseDir, 'public');
-export const uploadsDir = path.join(publicDir, 'uploads');
 
 export const cartProductsToProducts = async (cartProds: iCartProduct[]) => {
   const promises = [];

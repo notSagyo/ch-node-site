@@ -10,7 +10,6 @@ export interface iDao<T> {
 }
 
 export interface iCartDao extends iDao<iCart> {
-  save(data?: Partial<iCart>): Promise<boolean>;
   addProductById(cartId: string, productId: string, quantity?: number): Promise<boolean>;
   removeProductById(cartId: string, productId: string): Promise<boolean>;
 }

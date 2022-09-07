@@ -1,10 +1,10 @@
 import { iRouter } from '../types/types';
 import express from 'express';
-import { TEST_MAIL, transporter } from '../settings/nodemailer';
+import { TEST_MAIL, transporter } from '../config/nodemailer';
 import { cartsDao } from '../daos/carts-dao-mongo';
 import { authn } from '../middlewares/auth';
 import { cartProductsToProducts } from '../utils/utils';
-import { client, twilioNumber } from '../settings/twilio';
+import { client, twilioNumber } from '../config/twilio';
 import { logger } from '../utils/logger';
 
 export default class CommunicationRouter implements iRouter {

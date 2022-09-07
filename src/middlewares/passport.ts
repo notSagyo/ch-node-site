@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { usersDao } from '../daos/users-dao-mongo';
 import { iUser } from '../types/models';
-import { saltRounds } from '../settings/bcrypt';
+import { saltRounds } from '../config/bcrypt';
 import { parseUser } from '../utils/parsers';
 import { logger } from '../utils/logger';
 

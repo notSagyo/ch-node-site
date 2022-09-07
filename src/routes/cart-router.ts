@@ -1,7 +1,7 @@
 import express from 'express';
 import { cartsDao } from '../daos/carts-dao-mongo';
 import { authn } from '../middlewares/auth';
-import { ejsDefaultData } from '../settings/ejs';
+import { ejsDefaultData } from '../config/ejs';
 import { iProduct } from '../types/models';
 import { iRouter } from '../types/types';
 import { logger } from '../utils/logger';
@@ -77,7 +77,10 @@ export default class CartRouter implements iRouter {
     });
   }
 
-  /** Sample POST body: { "id": 1 } */
+  /**
+   * Sample POST body: { "id": 1 }
+   * cartId = 0 uses the current user's ID as cartId
+   */
   private postCartProduct() {
     this.apiRouter.post('/:cartId/productos', authn, async (req, res) => {
       const productId = req.body.id;

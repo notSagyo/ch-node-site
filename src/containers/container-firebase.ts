@@ -1,5 +1,14 @@
-import { addDoc, collection, CollectionReference, deleteDoc, DocumentData, getDocs, query, updateDoc } from '@firebase/firestore';
-import { db } from '../settings/firebase';
+import {
+  addDoc,
+  collection,
+  CollectionReference,
+  deleteDoc,
+  DocumentData,
+  getDocs,
+  query,
+  updateDoc,
+} from '@firebase/firestore';
+import { db } from '../config/firebase';
 import { filterFirebase } from '../types/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,28 +33,31 @@ export default class Container<T extends Record<string, any>> {
   async find(filter: filterFirebase): Promise<T[] | null> {
     let res: T[] | null = null;
     try {
-      const q = filter === '*'
-        ? this.collectionRef
-        : query(this.collectionRef, filter);
+      const q =
+        filter === '*' ? this.collectionRef : query(this.collectionRef, filter);
       const qSnapshot = await getDocs(q);
       res = qSnapshot.docs.map((docSnap) => docSnap.data() as T);
-    } catch(err) {
+    } catch (err) {
       console.error(err);
     }
     return res;
   }
 
-  async update(filter: filterFirebase, data: Partial<T> | {[x: string]: unknown}) {
+  async update(
+    filter: filterFirebase,
+    data: Partial<T> | { [x: string]: unknown }
+  ) {
     let success = false;
     try {
-      const q = filter === '*'
-        ? this.collectionRef
-        : query(this.collectionRef, filter);
+      const q =
+        filter === '*' ? this.collectionRef : query(this.collectionRef, filter);
       const qSnapshot = await getDocs(q);
-      const allPromises = qSnapshot.docs.map(async (docSnap) => updateDoc(docSnap.ref, data as DocumentData));
+      const allPromises = qSnapshot.docs.map(async (docSnap) =>
+        updateDoc(docSnap.ref, data as DocumentData)
+      );
       await Promise.all(allPromises);
       success = true;
-    } catch(err) {
+    } catch (err) {
       console.error(err);
     }
     return success;
@@ -54,14 +66,15 @@ export default class Container<T extends Record<string, any>> {
   async delete(filter: filterFirebase): Promise<boolean> {
     let success = false;
     try {
-      const q = filter === '*'
-        ? this.collectionRef
-        : query(this.collectionRef, filter);
+      const q =
+        filter === '*' ? this.collectionRef : query(this.collectionRef, filter);
       const qSnapshot = await getDocs(q);
-      const allPromises = qSnapshot.docs.map(async (docSnap) => deleteDoc(docSnap.ref));
+      const allPromises = qSnapshot.docs.map(async (docSnap) =>
+        deleteDoc(docSnap.ref)
+      );
       await Promise.all(allPromises);
       success = true;
-    } catch(err) {
+    } catch (err) {
       console.error(err);
     }
     return success;

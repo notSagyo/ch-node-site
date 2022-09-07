@@ -1,5 +1,5 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
-import { mongooseOptions } from '../settings/mongoose';
+import { mongooseOptions } from '../config/mongoose';
 import { filterMongo } from '../types/types';
 import { logger } from '../utils/logger';
 

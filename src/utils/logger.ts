@@ -3,13 +3,13 @@ import path from 'path';
 
 let logger = Log4js.getLogger();
 
-const initLogger = (outPath: string) => {
+const initLogger = (outDir: string) => {
   Log4js.configure({
     appenders: {
       console: { type: 'console' },
-      fileDebug: { type: 'file', filename: path.join(outPath, 'debug.log') },
-      fileError: { type: 'file', filename: path.join(outPath, 'error.log') },
-      fileWarn: { type: 'file', filename: path.join(outPath, 'warn.log') },
+      fileDebug: { type: 'file', filename: path.join(outDir, 'debug.log') },
+      fileError: { type: 'file', filename: path.join(outDir, 'error.log') },
+      fileWarn: { type: 'file', filename: path.join(outDir, 'warn.log') },
 
       loggerWarn: {
         type: 'logLevelFilter',

@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
-import { ejsDefaultData } from '../settings/ejs';
+import { ejsDefaultData } from '../config/ejs';
 import { logger } from '../utils/logger';
-import { baseDir } from '../utils/utils';
+import { baseDirLocal } from '../utils/paths';
 import CartRouter from './cart-router';
 import CommunicationRouter from './communication-router';
 import ProductsRouter from './products-router';
@@ -11,7 +11,7 @@ import UtilsRouter from './utils-router';
 
 // Routers
 const router = express.Router();
-router.use(express.static(path.join(baseDir, 'public')));
+router.use(express.static(path.join(baseDirLocal, 'public')));
 
 const productsRouter = new ProductsRouter('pages/products.ejs');
 const communicationRouter = new CommunicationRouter();

@@ -13,7 +13,7 @@ import { messagesDao } from './daos/messages-dao-mongo';
 import { initLogger, logger } from './utils/logger';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import { baseDir } from './utils/utils';
+import { baseDirLocal } from './utils/paths';
 import { cpus } from 'os';
 
 // INIT ====================================================================//
@@ -40,7 +40,7 @@ export const PORT = args.port || process.env.PORT || 8080;
 
   // Config
   app.set('view engine', 'ejs');
-  app.set('views', path.join(baseDir, 'views'));
+  app.set('views', path.join(baseDirLocal, 'views'));
   initLogger(path.join(process.cwd(), 'logs'));
 
   // Middlewares & Routes
@@ -66,7 +66,7 @@ export const PORT = args.port || process.env.PORT || 8080;
     });
   });
 
-  // Listen ====================================================================//
+  // Listen ==================================================================//
   httpServer.listen(PORT, () => {
     const time = new Date().toLocaleTimeString();
     console.log(

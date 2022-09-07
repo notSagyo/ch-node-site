@@ -1,5 +1,5 @@
 import Container from '../containers/container-knex';
-import { maridadbOptions } from '../settings/mariadb';
+import { maridadbOptions } from '../config/mariadb';
 import { iCart } from '../types/models';
 import { iCartDao } from '../types/daos';
 import { parseCart, parseCartProduct } from '../utils/parsers';

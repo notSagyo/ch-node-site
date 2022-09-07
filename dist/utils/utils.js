@@ -1,14 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateEmail = exports.cartProductsToProducts = exports.uploadsDir = exports.publicDir = exports.baseDir = void 0;
-const path_1 = __importDefault(require("path"));
+exports.validateEmail = exports.cartProductsToProducts = void 0;
 const products_dao_mongo_1 = require("../daos/products-dao-mongo");
-exports.baseDir = path_1.default.join(__dirname, '..', '..');
-exports.publicDir = path_1.default.join(exports.baseDir, 'public');
-exports.uploadsDir = path_1.default.join(exports.publicDir, 'uploads');
 const cartProductsToProducts = async (cartProds) => {
     const promises = [];
     const products = [];

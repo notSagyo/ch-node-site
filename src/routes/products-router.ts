@@ -5,7 +5,7 @@ import { authn, authz } from '../middlewares/auth';
 import { faker } from '@faker-js/faker';
 import { iProduct } from '../types/models';
 import { iRouter } from '../types/types';
-import { ejsDefaultData } from '../settings/ejs';
+import { ejsDefaultData } from '../config/ejs';
 import { logger } from '../utils/logger';
 
 export default class ProductsRouter implements iRouter {
