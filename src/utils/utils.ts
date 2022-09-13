@@ -1,4 +1,4 @@
-import { productsDao } from '../daos/products-dao-mongo';
+import ProductsDao from '../modules/product/products-dao-mongo';
 import { iCartProduct, iProduct } from '../types/models';
 
 export const cartProductsToProducts = async (cartProds: iCartProduct[]) => {
@@ -7,7 +7,7 @@ export const cartProductsToProducts = async (cartProds: iCartProduct[]) => {
 
   for (let i = 0; i < cartProds.length; i++) {
     const element = cartProds[i];
-    promises.push(productsDao.getById(element.id));
+    promises.push(ProductsDao.dao.getById(element.id));
   }
 
   await Promise.allSettled(promises).then((results) =>
@@ -24,7 +24,7 @@ export const cartProductsToProducts = async (cartProds: iCartProduct[]) => {
 
 export const validateEmail = (email: string) => {
   const regex = new RegExp(
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
   return regex.test(email);
 };

@@ -1,12 +1,12 @@
 import express from 'express';
 import path from 'path';
 import { ejsDefaultData } from '../config/ejs';
+import CartRouter from '../modules/cart/cart-router';
+import ProductsRouter from '../modules/product/products-router';
+import UserRouter from '../modules/user/user-router';
 import { logger } from '../utils/logger';
 import { baseDirLocal } from '../utils/paths';
-import CartRouter from './cart-router';
 import CommunicationRouter from './communication-router';
-import ProductsRouter from './products-router';
-import UserRouter from './user-router';
 import UtilsRouter from './utils-router';
 
 // Routers

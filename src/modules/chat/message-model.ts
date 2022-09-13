@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { schema, Schema } from 'normalizr';
-import { iMessage, iUser } from '../types/models';
-import { userSchema } from './user';
+import { iMessage, iUser } from '../../types/models';
+import { userSchema } from '../user/user-model';
 
 // Mongoose Schema ===========================================================//
 export const messageSchema: mongoose.Schema<iMessage> = new mongoose.Schema({

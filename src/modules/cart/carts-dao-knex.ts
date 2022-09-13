@@ -1,16 +1,21 @@
-import Container from '../containers/container-knex';
-import { maridadbOptions } from '../config/mariadb';
-import { iCart } from '../types/models';
-import { iCartDao } from '../types/daos';
-import { parseCart, parseCartProduct } from '../utils/parsers';
-import { logger } from '../utils/logger';
+import { maridadbOptions } from '../../config/mariadb';
+import Container from '../../containers/container-knex';
+import { iCartDao } from '../../types/daos';
+import { iCart } from '../../types/models';
+import { logger } from '../../utils/logger';
+import { parseCart, parseCartProduct } from '../../utils/parsers';
 
 export default class CartsDao implements iCartDao {
+  static dao = new CartsDao();
   container = new Container<iCart>(
     maridadbOptions.connection.database,
     'carts',
     maridadbOptions
   );
+
+  constructor() {
+    return CartsDao.dao;
+  }
 
   save(cart?: iCart) {
     const parsedCart = parseCart(cart) as iCart;
@@ -72,5 +77,3 @@ export default class CartsDao implements iCartDao {
     return success;
   }
 }
-
-export const cartsDao = new CartsDao();

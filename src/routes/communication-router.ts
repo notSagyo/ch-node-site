@@ -1,11 +1,11 @@
 import { iRouter } from '../types/types';
 import express from 'express';
 import { TEST_MAIL, transporter } from '../config/nodemailer';
-import { cartsDao } from '../daos/carts-dao-mongo';
 import { authn } from '../middlewares/auth';
 import { cartProductsToProducts } from '../utils/utils';
 import { client, twilioNumber } from '../config/twilio';
 import { logger } from '../utils/logger';
+import CartsDao from '../modules/cart/carts-dao-mongo';
 
 export default class CommunicationRouter implements iRouter {
   router = express.Router();
@@ -24,7 +24,7 @@ export default class CommunicationRouter implements iRouter {
       if (!req.user)
         return res.status(400).send("Error request's reading user");
 
-      const userCart = await cartsDao.getById(req.user.id);
+      const userCart = await CartsDao.dao.getById(req.user.id);
       if (userCart == null)
         return res.status(404).send("Couldn't find a cart for active user");
       const products = await cartProductsToProducts(userCart.products);

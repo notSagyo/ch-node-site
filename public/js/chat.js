@@ -33,7 +33,8 @@ socket.on('messages_updated', (normalizedMessages) => {
     `;
   });
 
-  compressionRate && (compressionRate.innerHTML = getCompressionRate(normalizedMessages, denormalizedMessages));
+  compressionRate && (compressionRate.innerHTML 
+    = Math.max(0, getCompressionRate(normalizedMessages, denormalizedMessages)));
   messagesWindow && (messagesWindow.innerHTML = newMessagesWindowContent);
 });
 

@@ -1,11 +1,16 @@
-import Container from '../containers/container-mongo';
-import { parseUser } from '../utils/parsers';
-import { usersModel } from '../models/user';
-import { iUser } from '../types/models';
-import { iDao } from '../types/daos';
+import Container from '../../containers/container-mongo';
+import { iDao } from '../../types/daos';
+import { iUser } from '../../types/models';
+import { parseUser } from '../../utils/parsers';
+import { usersModel } from './user-model';
 
-export class UserDao implements iDao<iUser> {
+export default class UsersDao implements iDao<iUser> {
+  static dao = new UsersDao();
   container = new Container(usersModel);
+
+  constructor() {
+    return UsersDao.dao;
+  }
 
   async save(user: Partial<iUser>) {
     const parsedUser = parseUser(user);
@@ -41,5 +46,3 @@ export class UserDao implements iDao<iUser> {
     return await this.container.delete('*');
   }
 }
-
-export const usersDao = new UserDao();

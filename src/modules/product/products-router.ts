@@ -1,12 +1,12 @@
-import express from 'express';
-import { productsDao } from '../daos/products-dao-mongo';
-import { parseProduct } from '../utils/parsers';
-import { authn, authz } from '../middlewares/auth';
 import { faker } from '@faker-js/faker';
-import { iProduct } from '../types/models';
-import { iRouter } from '../types/types';
-import { ejsDefaultData } from '../config/ejs';
-import { logger } from '../utils/logger';
+import express from 'express';
+import { ejsDefaultData } from '../../config/ejs';
+import { authz } from '../../middlewares/auth';
+import { iProduct } from '../../types/models';
+import { iRouter } from '../../types/types';
+import { logger } from '../../utils/logger';
+import { parseProduct } from '../../utils/parsers';
+import ProductsDao from './products-dao-mongo';
 
 export default class ProductsRouter implements iRouter {
   router = express.Router();
@@ -36,7 +36,7 @@ export default class ProductsRouter implements iRouter {
 
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
-      const prods = await productsDao.getAll();
+      const prods = await ProductsDao.dao.getAll();
       res.render(this.productsHtmlPath, {
         ...ejsDefaultData,
         productList: prods,
@@ -46,7 +46,7 @@ export default class ProductsRouter implements iRouter {
 
   private getProducts() {
     this.apiRouter.get('/', async (req, res) => {
-      const prods = await productsDao.getAll();
+      const prods = await ProductsDao.dao.getAll();
       if (prods.length < 1) logger.warn('Empty products list');
       res.json(prods);
     });
@@ -55,7 +55,7 @@ export default class ProductsRouter implements iRouter {
   private getProductsById() {
     this.apiRouter.get('/:id', async (req, res) => {
       const prodId = req.params.id;
-      const prod = await productsDao.getById(prodId);
+      const prod = await ProductsDao.dao.getById(prodId);
 
       if (prod == null) {
         const msg = `Product with ID=${prodId} not found`;
@@ -77,7 +77,7 @@ export default class ProductsRouter implements iRouter {
         return res.status(400).send(`400: ${msg}`);
       }
 
-      await productsDao.save(newProd);
+      await ProductsDao.dao.save(newProd);
       res.status(201).redirect('/productos');
     });
   }
@@ -85,7 +85,7 @@ export default class ProductsRouter implements iRouter {
   private deleteProductById() {
     this.apiRouter.delete('/:id', authz, async (req, res) => {
       const prodId = req.params.id;
-      const success = await productsDao.deleteById(prodId);
+      const success = await ProductsDao.dao.deleteById(prodId);
 
       if (success == false) {
         const msg = 'Error while deleting product';
@@ -109,9 +109,9 @@ export default class ProductsRouter implements iRouter {
       }
 
       let success = false;
-      const exists = (await productsDao.getById(prodId)) != null ? true : false;
-      if (exists) success = await productsDao.updateById(prodId, newProd);
-      else success = await productsDao.save(newProd);
+      const exists = (await ProductsDao.dao.getById(prodId)) != null;
+      if (exists) success = await ProductsDao.dao.updateById(prodId, newProd);
+      else success = await ProductsDao.dao.save(newProd);
 
       if (success == false) {
         const msg = 'Error while updating product';

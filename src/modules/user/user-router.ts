@@ -1,13 +1,13 @@
 import express from 'express';
-import multer from 'multer';
-import { ejsDefaultData } from '../config/ejs';
-import { iRouter } from '../types/types';
-import passport from 'passport';
-import { logger } from '../utils/logger';
-import { uploadsDirLocal } from '../utils/paths';
-import path from 'path';
 import fs from 'fs/promises';
 import imageType from 'image-type';
+import multer from 'multer';
+import passport from 'passport';
+import path from 'path';
+import { ejsDefaultData } from '../../config/ejs';
+import { iRouter } from '../../types/types';
+import { logger } from '../../utils/logger';
+import { uploadsDirLocal } from '../../utils/paths';
 
 export default class UserRouter implements iRouter {
   loginHtmlPath: string;
@@ -80,7 +80,7 @@ export default class UserRouter implements iRouter {
     this.router.post(
       '/login',
       upload.none(),
-      passport.authenticate('authn', {
+      passport.authenticate('login', {
         failureRedirect:
           '/error' +
           '?errorTitle=Login error' +

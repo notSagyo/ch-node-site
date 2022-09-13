@@ -1,11 +1,16 @@
-import Container from '../containers/container-firebase';
-import { iProduct } from '../types/models';
-import { iDao } from '../types/daos';
-import { v4 } from 'uuid';
 import { where } from '@firebase/firestore';
+import { v4 } from 'uuid';
+import Container from '../../containers/container-firebase';
+import { iDao } from '../../types/daos';
+import { iProduct } from '../../types/models';
 
 export default class ProductsDao implements iDao<iProduct> {
+  static dao = new ProductsDao();
   container = new Container<iProduct>('products');
+
+  constructor() {
+    return ProductsDao.dao;
+  }
 
   async save(product: iProduct) {
     const prodWithId = { ...product, id: v4() };
@@ -19,7 +24,7 @@ export default class ProductsDao implements iDao<iProduct> {
   }
 
   async getAll() {
-    return await this.container.find('*') || [];
+    return (await this.container.find('*')) || [];
   }
 
   async updateById(id: string, data: Partial<iProduct>) {
@@ -34,5 +39,3 @@ export default class ProductsDao implements iDao<iProduct> {
     return await this.container.delete('*');
   }
 }
-
-export const productsDao = new ProductsDao();

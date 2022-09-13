@@ -1,7 +1,7 @@
 import express from 'express';
-import { cartsDao } from '../daos/carts-dao-knex';
-import { ejsDefaultData } from '../config/ejs';
-import { iRouter } from '../types/types';
+import { ejsDefaultData } from '../../config/ejs';
+import { iRouter } from '../../types/types';
+import CartsDao from './carts-dao-knex';
 
 export default class CartRouter implements iRouter {
   router = express.Router();
@@ -34,7 +34,7 @@ export default class CartRouter implements iRouter {
   private getCartProductsById() {
     this.apiRouter.get('/:id/productos', async (req, res) => {
       const cartId = req.params.id;
-      const cart = await cartsDao.getById(cartId);
+      const cart = await CartsDao.dao.getById(cartId);
 
       if (!cart)
         return res.status(404).send(`404: Cart with ID:${cartId} not found`);
@@ -44,7 +44,7 @@ export default class CartRouter implements iRouter {
 
   private postCart() {
     this.apiRouter.post('/', async (req, res) => {
-      const newCartId = await cartsDao.save();
+      const newCartId = await CartsDao.dao.save();
 
       if (newCartId == null)
         return res.status(400).send('400: Error while saving cart');
@@ -55,7 +55,7 @@ export default class CartRouter implements iRouter {
   private deleteCartById() {
     this.apiRouter.delete('/:id', async (req, res) => {
       const cartId = req.params.id;
-      const success = await cartsDao.deleteById(cartId);
+      const success = await CartsDao.dao.deleteById(cartId);
 
       if (success == null)
         return res.status(400).send('400: Error while deleting cart');
@@ -68,7 +68,7 @@ export default class CartRouter implements iRouter {
     this.apiRouter.post('/:id/productos', async (req, res) => {
       const cartId = req.params.id;
       const productId = req.body.id;
-      const success = cartsDao.addProductById(cartId, productId);
+      const success = CartsDao.dao.addProductById(cartId, productId);
 
       if (success == null)
         return res.status(400).send('400: Error while saving cart');
@@ -80,7 +80,7 @@ export default class CartRouter implements iRouter {
     this.apiRouter.delete('/:cartId/productos/:productId', async (req, res) => {
       const cartId = req.params.cartId;
       const productId = req.params.productId;
-      const success = await cartsDao.removeProductById(cartId, productId);
+      const success = await CartsDao.dao.removeProductById(cartId, productId);
 
       if (success == null)
         return res.status(400).send('400: Error while saving cart');

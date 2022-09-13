@@ -1,12 +1,17 @@
-import Container from '../containers/container-mongo';
-import { cartModel } from '../models/cart';
-import { iCart, iCartProduct } from '../types/models';
-import { iCartDao } from '../types/daos';
-import { parseCart } from '../utils/parsers';
-import { logger } from '../utils/logger';
+import Container from '../../containers/container-mongo';
+import { iCartDao } from '../../types/daos';
+import { iCart, iCartProduct } from '../../types/models';
+import { logger } from '../../utils/logger';
+import { parseCart } from '../../utils/parsers';
+import { cartModel } from './cart-model';
 
 export default class CartsDao implements iCartDao {
+  static dao = new CartsDao();
   container = new Container(cartModel);
+
+  constructor() {
+    return CartsDao.dao;
+  }
 
   async save(cart?: Partial<iCart>) {
     const parsed = parseCart(cart);
@@ -72,5 +77,3 @@ export default class CartsDao implements iCartDao {
     return success;
   }
 }
-
-export const cartsDao = new CartsDao();

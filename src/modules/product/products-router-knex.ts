@@ -1,11 +1,11 @@
 import express from 'express';
-import { parseProduct } from '../utils/parsers';
-import { authn, authz } from '../middlewares/auth';
-import Container from '../containers/container-knex';
-import { iProduct } from '../types/models';
-import { maridadbOptions as mariadbOptions } from '../config/mariadb';
-import { iRouter } from '../types/types';
-import { ejsDefaultData } from '../config/ejs';
+import { ejsDefaultData } from '../../config/ejs';
+import Container from '../../containers/container-knex';
+import { authn, authz } from '../../middlewares/auth';
+import { iProduct } from '../../types/models';
+import { iRouter } from '../../types/types';
+import { maridadbOptions as mariadbOptions } from '../../config/mariadb';
+import { parseProduct } from '../../utils/parsers';
 
 export default class ProductsRouter implements iRouter {
   router = express.Router();

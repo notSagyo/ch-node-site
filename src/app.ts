@@ -8,13 +8,13 @@ import cluster from 'cluster';
 import express from 'express';
 import path from 'path';
 import middlewares from './middlewares/middlewares';
-import { productsDao } from './daos/products-dao-mongo';
-import { messagesDao } from './daos/messages-dao-mongo';
 import { initLogger, logger } from './utils/logger';
 import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
 import { baseDirLocal } from './utils/paths';
 import { cpus } from 'os';
+import ProductsDao from './modules/product/products-dao-mongo';
+import MessagesDao from './modules/chat/messages-dao-mongo';
 
 // INIT ====================================================================//
 // Get args
@@ -51,18 +51,21 @@ export const PORT = args.port || process.env.PORT || 8080;
   ioServer.on('connection', async (socket) => {
     logger.info('New client connected:', socket.id);
 
-    ioServer.emit('products_updated', await productsDao.getAll());
-    ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
+    ioServer.emit('products_updated', await ProductsDao.dao.getAll());
+    ioServer.emit('messages_updated', await MessagesDao.dao.getAllNormalized());
 
     socket.on('create_product', async (product) => {
-      await productsDao.save(product);
-      ioServer.emit('products_updated', await productsDao.getAll());
+      await ProductsDao.dao.save(product);
+      ioServer.emit('products_updated', await ProductsDao.dao.getAll());
     });
 
     socket.on('create_message', async (message) => {
-      const success = await messagesDao.save(message);
+      const success = await MessagesDao.dao.save(message);
       if (!success) return socket.emit('message_error', 'Invalid message');
-      ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
+      ioServer.emit(
+        'messages_updated',
+        await MessagesDao.dao.getAllNormalized()
+      );
     });
   });
 

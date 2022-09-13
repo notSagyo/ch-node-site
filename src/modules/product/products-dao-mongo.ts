@@ -1,17 +1,21 @@
-import Container from '../containers/container-mongo';
-import { productsModel } from '../models/product';
-import { iProduct } from '../types/models';
-import { iDao } from '../types/daos';
-import { parseProduct } from '../utils/parsers';
+import Container from '../../containers/container-mongo';
+import { iDao } from '../../types/daos';
+import { iProduct } from '../../types/models';
+import { parseProduct } from '../../utils/parsers';
+import { productsModel } from './product-model';
 
-export default class ProductsDao implements iDao<iProduct>{
+export default class ProductsDao implements iDao<iProduct> {
+  static dao = new ProductsDao();
   container = new Container(productsModel);
+
+  constructor() {
+    return ProductsDao.dao;
+  }
 
   async save(product: iProduct) {
     const parsedProd = parseProduct(product);
     let success = false;
-    if (parsedProd != null)
-      success = await this.container.insert(parsedProd);
+    if (parsedProd != null) success = await this.container.insert(parsedProd);
     return success;
   }
 
@@ -22,7 +26,7 @@ export default class ProductsDao implements iDao<iProduct>{
   }
 
   async getAll() {
-    return await this.container.find('*') || [];
+    return (await this.container.find('*')) || [];
   }
 
   async updateById(id: string, data: Partial<iProduct>) {
@@ -37,5 +41,3 @@ export default class ProductsDao implements iDao<iProduct>{
     return await this.container.delete('*');
   }
 }
-
-export const productsDao = new ProductsDao();
