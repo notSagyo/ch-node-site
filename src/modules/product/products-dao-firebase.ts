@@ -1,8 +1,8 @@
 import { where } from '@firebase/firestore';
-import { v4 } from 'uuid';
 import Container from '../../containers/container-firebase';
 import { iDao } from '../../types/daos';
 import { iProduct } from '../../types/models';
+import { parseProduct } from '../../utils/parsers';
 
 export default class ProductsDao implements iDao<iProduct> {
   static dao = new ProductsDao();
@@ -13,8 +13,10 @@ export default class ProductsDao implements iDao<iProduct> {
   }
 
   async save(product: iProduct) {
-    const prodWithId = { ...product, id: v4() };
-    return await this.container.insert(prodWithId);
+    const parsedProd = parseProduct(product);
+    let success = false;
+    if (parsedProd != null) success = await this.container.insert(parsedProd);
+    return success;
   }
 
   async getById(id: string) {

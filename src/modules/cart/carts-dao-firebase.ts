@@ -1,11 +1,11 @@
 import { arrayRemove, arrayUnion, where } from '@firebase/firestore';
 import Container from '../../containers/container-firebase';
-import { iDao } from '../../types/daos';
+import { iCartDao } from '../../types/daos';
 import { iCart, iCartProduct } from '../../types/models';
 import { logger } from '../../utils/logger';
 import { parseCart } from '../../utils/parsers';
 
-export default class CartsDao implements iDao<iCart> {
+export default class CartsDao implements iCartDao {
   static dao = new CartsDao();
   container = new Container<iCart>('carts');
 
@@ -13,7 +13,7 @@ export default class CartsDao implements iDao<iCart> {
     return CartsDao.dao;
   }
 
-  async save(cart: Partial<iCart>) {
+  async save(cart?: Partial<iCart>) {
     const parsed = parseCart(cart);
     const success = parsed ? await this.container.insert(parsed) : false;
     return success;

@@ -2,21 +2,21 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import router from './routes/routes';
-import minimist from 'minimist';
+import { cpus } from 'os';
+import { Server as HttpServer } from 'http';
+import { Server as IOServer } from 'socket.io';
 import cluster from 'cluster';
 import express from 'express';
+import minimist from 'minimist';
 import path from 'path';
-import middlewares from './middlewares/middlewares';
-import { initLogger, logger } from './utils/logger';
-import { Server as IOServer } from 'socket.io';
-import { Server as HttpServer } from 'http';
 import { baseDirLocal } from './utils/paths';
-import { cpus } from 'os';
-import ProductsDao from './modules/product/products-dao-mongo';
+import { initLogger, logger } from './utils/logger';
 import MessagesDao from './modules/chat/messages-dao-mongo';
+import middlewares from './middlewares/middlewares';
+import ProductsDao from './modules/product/products-dao-mongo';
+import router from './routes/routes';
 
-// INIT ====================================================================//
+// INIT ======================================================================//
 // Get args
 const args = minimist(process.argv.slice(2));
 const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';

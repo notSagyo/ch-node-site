@@ -1,11 +1,3 @@
-// import { normalize } from 'normalizr';
-// import { messageModel, normalizerMessageSchema } from '../models/message';
-// import Container from '../containers/container-mongo';
-// import { parseMessage } from '../utils/parsers';
-// import { iMessage } from '../types/models';
-// import { iDao } from '../types/daos';
-// import UsersDao from './users-dao-mongo';
-
 import { normalize } from 'normalizr';
 import Container from '../../containers/container-mongo';
 import { iDao } from '../../types/daos';
@@ -22,7 +14,7 @@ export default class MessagesDao implements iDao<iMessage> {
     return MessagesDao.dao;
   }
 
-  async save(message: Partial<iMessage>) {
+  async save(message?: Partial<iMessage>) {
     const parsedMessage = parseMessage(message);
     if (parsedMessage == null) return false;
 
