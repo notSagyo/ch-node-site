@@ -6,10 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.testContainerMongo = void 0;
 const uuid_1 = require("uuid");
 const container_mongo_1 = __importDefault(require("../../containers/container-mongo"));
-const product_1 = require("../../models/product");
+const product_model_1 = require("../../modules/product/product-model");
 const tests_1 = require("../tests");
 const testContainerMongo = async () => {
-    const container = new container_mongo_1.default(product_1.productsModel);
+    const container = new container_mongo_1.default(product_model_1.productsModel);
     await (0, tests_1.testFunction)('connect()', async () => {
         await container.connect();
     });

@@ -1,16 +1,19 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testNormalizr = void 0;
-const messages_dao_mongo_1 = require("../daos/messages-dao-mongo");
 const tests_1 = require("./tests");
 const normalizr_1 = require("normalizr");
 const util_1 = require("util");
+const messages_dao_mongo_1 = __importDefault(require("../modules/chat/messages-dao-mongo"));
 const testNormalizr = async () => {
     const authorSchema = new normalizr_1.schema.Entity('authors');
     const messageSchema = new normalizr_1.schema.Entity('messages', {
         author: authorSchema,
     });
-    const messages = await messages_dao_mongo_1.messagesDao.getAll().then((messages) => {
+    const messages = await messages_dao_mongo_1.default.dao.getAll().then((messages) => {
         console.log(typeof []);
         return messages;
     });

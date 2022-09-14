@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const nodemailer_1 = require("../config/nodemailer");
-const carts_dao_mongo_1 = require("../daos/carts-dao-mongo");
 const auth_1 = require("../middlewares/auth");
 const utils_1 = require("../utils/utils");
 const twilio_1 = require("../config/twilio");
 const logger_1 = require("../utils/logger");
+const carts_dao_mongo_1 = __importDefault(require("../modules/cart/carts-dao-mongo"));
 class CommunicationRouter {
     router = express_1.default.Router();
     constructor() {
@@ -23,7 +23,7 @@ class CommunicationRouter {
         this.router.get('/checkout-messages', auth_1.authn, async (req, res) => {
             if (!req.user)
                 return res.status(400).send("Error request's reading user");
-            const userCart = await carts_dao_mongo_1.cartsDao.getById(req.user.id);
+            const userCart = await carts_dao_mongo_1.default.dao.getById(req.user.id);
             if (userCart == null)
                 return res.status(404).send("Couldn't find a cart for active user");
             const products = await (0, utils_1.cartProductsToProducts)(userCart.products);
