@@ -1,4 +1,4 @@
-import { iCart } from './models';
+import { ICartDto } from './models';
 
 export interface iDao<T> {
   save(data?: Partial<T>): Promise<boolean>;
@@ -9,7 +9,11 @@ export interface iDao<T> {
   deleteAll(): Promise<boolean>;
 }
 
-export interface iCartDao extends iDao<iCart> {
-  addProductById(cartId: string, productId: string, quantity?: number): Promise<boolean>;
+export interface iCartDao extends iDao<ICartDto> {
+  addProductById(
+    cartId: string,
+    productId: string,
+    quantity?: number
+  ): Promise<boolean>;
   removeProductById(cartId: string, productId: string): Promise<boolean>;
 }

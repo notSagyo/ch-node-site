@@ -1,4 +1,4 @@
-export interface iProduct {
+export interface IProductDto {
   description?: string;
   thumbnail?: string;
   price: number;
@@ -6,20 +6,20 @@ export interface iProduct {
   id: string;
 }
 
-export interface iCartProduct {
+export interface ICartProductDto {
   timestamp: number;
   quantity: number;
   code: string;
   id: string;
 }
 
-export interface iCart {
-  products: iCartProduct[];
+export interface ICartDto {
+  products: ICartProductDto[];
   timestamp: number;
   id: string;
 }
 
-export interface iUser {
+export interface IUserDto {
   lastName: string;
   username: string;
   password: string;
@@ -32,9 +32,9 @@ export interface iUser {
   id: string;
 }
 
-export interface iMessage {
+export interface IMessageDto {
   content: string;
-  author: iUser;
+  author: IUserDto;
   time: number;
   id: string;
 }
