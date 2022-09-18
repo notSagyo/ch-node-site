@@ -2,7 +2,7 @@ import { validate } from 'uuid';
 import { CartDto, CartDtoOptional, CartProductDto } from '../../types/dtos';
 import { IParser } from '../../types/types';
 import { logger } from '../../utils/logger';
-import { parseProduct } from '../../utils/parsers';
+import { parseCartProduct } from '../../utils/parsers';
 
 export default class Cart implements CartDto {
   products: CartProductDto[];
@@ -18,12 +18,7 @@ export default class Cart implements CartDto {
   static fromDto(dto: CartDtoOptional): Cart {
     const parsedCart = parseCart(dto);
     if (parsedCart == null) throw new Error('Cart: error parsing cart');
-    const result = new Cart(
-      parsedCart.id,
-      parsedCart.products,
-      parsedCart.timestamp
-    );
-    return result;
+    return new Cart(parsedCart.id, parsedCart.products, parsedCart.timestamp);
   }
 
   toDto(): CartDto {
@@ -44,7 +39,7 @@ export const parseCart: IParser<CartDto> = (cart) => {
   const isValidProducts =
     Array.isArray(cart?.products) &&
     cart.products.length > 0 &&
-    cart.products.every((prod) => parseProduct(prod) != null);
+    cart.products.every((prod) => parseCartProduct(prod) != null);
 
   if (!isValidId) {
     logger.error(`parseCart: ID ${cart.id} is not a valid ID`);

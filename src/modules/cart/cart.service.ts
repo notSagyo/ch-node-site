@@ -12,6 +12,10 @@ class CartService implements ICartService {
     return cart;
   }
 
+  getAllCarts(): Promise<Cart[]> {
+    throw new Error('Method not implemented.');
+  }
+
   async getCartById(id: string): Promise<Cart | null> {
     return await CartDao.dao.getById(id);
   }

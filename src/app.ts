@@ -13,8 +13,8 @@ import { baseDirLocal } from './utils/paths';
 import { initLogger, logger } from './utils/logger';
 import MessageDao from './modules/chat/message.dao';
 import middlewares from './middlewares/middlewares';
-import ProductDao from './modules/product/product.dao';
 import router from './routes/routes';
+import productService from './modules/product/product.service';
 
 // INIT ======================================================================//
 // Get args
@@ -51,12 +51,12 @@ export const PORT = args.port || process.env.PORT || 8080;
   ioServer.on('connection', async (socket) => {
     logger.info('New client connected:', socket.id);
 
-    ioServer.emit('products_updated', await ProductDao.dao.getAll());
+    ioServer.emit('products_updated', await productService.getAllProducts());
     ioServer.emit('messages_updated', await MessageDao.dao.getAllNormalized());
 
     socket.on('create_product', async (product) => {
-      await ProductDao.dao.save(product);
-      ioServer.emit('products_updated', await ProductDao.dao.getAll());
+      await productService.createProduct(product);
+      ioServer.emit('products_updated', await productService.getAllProducts());
     });
 
     socket.on('create_message', async (message) => {

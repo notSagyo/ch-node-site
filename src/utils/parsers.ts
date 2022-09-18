@@ -82,30 +82,6 @@ export const parseMessage: IParser<MessageDto> = (msg) => {
   return { id, time, author, content };
 };
 
-export const parseProduct: IParser<ProductDto> = (prod) => {
-  const placeholder = 'https://via.placeholder.com/256';
-
-  const isValidName = typeof prod?.name === 'string' && prod.name.length > 0;
-  const isValidId = typeof prod?.id === 'string' && validate(prod.id);
-  const isValidDescription = typeof prod?.description === 'string';
-  const isValidPrice =
-    prod?.price && !isNaN(Number(prod?.price)) && Number(prod?.price) > 0;
-  const isValidThumbnail =
-    typeof prod?.thumbnail === 'string' && prod?.thumbnail.length > 0;
-
-  const description = isValidDescription
-    ? (prod.description as string)
-    : undefined;
-  const thumbnail = isValidThumbnail ? (prod.thumbnail as string) : placeholder;
-  const price = isValidPrice ? Number(prod.price) : null;
-  const name = isValidName ? (prod.name as string) : null;
-  const id = isValidId ? (prod.id as string) : v4();
-
-  if (name != null && price != null)
-    return { id, name, price, thumbnail, description };
-  return null;
-};
-
 export const parseCartProduct: IParser<CartProductDto> = (prod) => {
   const isValidCode = typeof prod?.code === 'string' && prod.code.length > 0;
   const isValidId = typeof prod?.id === 'string' && validate(prod.id);

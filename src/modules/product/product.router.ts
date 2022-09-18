@@ -5,8 +5,7 @@ import { authz } from '../../middlewares/auth';
 import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
-import { parseProduct } from '../../utils/parsers';
-import ProductDao from './product.dao';
+import productService from './product.service';
 
 export default class ProductRouter implements IRouter {
   router = express.Router();
@@ -36,7 +35,7 @@ export default class ProductRouter implements IRouter {
 
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
-      const prods = await ProductDao.dao.getAll();
+      const prods = await productService.getAllProducts();
       res.render(this.productsHtmlPath, {
         ...ejsDefaultData,
         productList: prods,
@@ -46,16 +45,16 @@ export default class ProductRouter implements IRouter {
 
   private getProducts() {
     this.apiRouter.get('/', async (req, res) => {
-      const prods = await ProductDao.dao.getAll();
+      const prods = await productService.getAllProducts();
       if (prods.length < 1) logger.warn('Empty products list');
       res.json(prods);
     });
   }
 
   private getProductsById() {
-    this.apiRouter.get('/:id', async (req, res) => {
-      const prodId = req.params.id;
-      const prod = await ProductDao.dao.getById(prodId);
+    this.apiRouter.get('/:prodId', async (req, res) => {
+      const prodId = req.params.prodId;
+      const prod = await productService.getProductById(prodId);
 
       if (prod == null) {
         const msg = `Product with ID=${prodId} not found`;
@@ -69,23 +68,15 @@ export default class ProductRouter implements IRouter {
 
   private postProduct() {
     this.apiRouter.post('/', authz, async (req, res) => {
-      const newProd = parseProduct(req.body);
-
-      if (newProd == null) {
-        const msg = '400: Error parsing product, malformed request body';
-        logger.error(msg);
-        return res.status(400).send(`400: ${msg}`);
-      }
-
-      await ProductDao.dao.save(newProd);
+      await productService.createProduct(req.body);
       res.status(201).redirect('/productos');
     });
   }
 
   private deleteProductById() {
-    this.apiRouter.delete('/:id', authz, async (req, res) => {
-      const prodId = req.params.id;
-      const success = await ProductDao.dao.deleteById(prodId);
+    this.apiRouter.delete('/:prodId', authz, async (req, res) => {
+      const prodId = req.params.prodId;
+      const success = await productService.deleteProductById(prodId);
 
       if (success == false) {
         const msg = 'Error while deleting product';
@@ -98,20 +89,17 @@ export default class ProductRouter implements IRouter {
   }
 
   private putProductById() {
-    this.apiRouter.put('/:id', authz, async (req, res) => {
-      const prodId = req.params.id;
-      const newProd = parseProduct(req.body);
-
-      if (newProd == null) {
+    this.apiRouter.put('/:prodId', authz, async (req, res) => {
+      if (req.body == null) {
         const msg = 'Error parsing product, malformed request body';
         logger.error(msg);
         return res.status(400).send(`400: ${msg}`);
       }
 
-      let success = false;
-      const exists = (await ProductDao.dao.getById(prodId)) != null;
-      if (exists) success = await ProductDao.dao.updateById(prodId, newProd);
-      else success = await ProductDao.dao.save(newProd);
+      const prodId = req.params.prodId;
+      const newProd = req.body as Partial<ProductDto>;
+
+      let success = await productService.updateProductById(prodId, newProd);
 
       if (success == false) {
         const msg = 'Error while updating product';

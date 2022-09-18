@@ -1,4 +1,12 @@
 export interface ProductDto {
+  description: string;
+  thumbnail: string;
+  price: number;
+  name: string;
+  id: string;
+}
+
+export interface ProductDtoOptional {
   description?: string;
   thumbnail?: string;
   price: number;

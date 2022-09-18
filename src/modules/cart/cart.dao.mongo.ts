@@ -15,8 +15,7 @@ export default class CartDao implements ICartDao {
 
   async save(cart: Cart) {
     const dto = cart.toDto();
-    const success = await this.container.insert(dto);
-    return success;
+    return await this.container.insert(dto);
   }
 
   async getById(id: string) {

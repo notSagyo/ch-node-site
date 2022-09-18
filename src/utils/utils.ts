@@ -1,6 +1,7 @@
 import ProductDao from '../modules/product/product.dao';
 import { CartProductDto, ProductDto } from '../types/dtos';
 
+// TODO: move to cart service
 export const cartProductsToProducts = async (cartProds: CartProductDto[]) => {
   const promises = [];
   const products: ProductDto[] = [];
