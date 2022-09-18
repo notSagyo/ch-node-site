@@ -11,9 +11,9 @@ import minimist from 'minimist';
 import path from 'path';
 import { baseDirLocal } from './utils/paths';
 import { initLogger, logger } from './utils/logger';
-import MessagesDao from './modules/chat/messages-dao';
+import MessageDao from './modules/chat/message.dao';
 import middlewares from './middlewares/middlewares';
-import ProductsDao from './modules/product/products-dao';
+import ProductDao from './modules/product/product.dao';
 import router from './routes/routes';
 
 // INIT ======================================================================//
@@ -51,20 +51,20 @@ export const PORT = args.port || process.env.PORT || 8080;
   ioServer.on('connection', async (socket) => {
     logger.info('New client connected:', socket.id);
 
-    ioServer.emit('products_updated', await ProductsDao.dao.getAll());
-    ioServer.emit('messages_updated', await MessagesDao.dao.getAllNormalized());
+    ioServer.emit('products_updated', await ProductDao.dao.getAll());
+    ioServer.emit('messages_updated', await MessageDao.dao.getAllNormalized());
 
     socket.on('create_product', async (product) => {
-      await ProductsDao.dao.save(product);
-      ioServer.emit('products_updated', await ProductsDao.dao.getAll());
+      await ProductDao.dao.save(product);
+      ioServer.emit('products_updated', await ProductDao.dao.getAll());
     });
 
     socket.on('create_message', async (message) => {
-      const success = await MessagesDao.dao.save(message);
+      const success = await MessageDao.dao.save(message);
       if (!success) return socket.emit('message_error', 'Invalid message');
       ioServer.emit(
         'messages_updated',
-        await MessagesDao.dao.getAllNormalized()
+        await MessageDao.dao.getAllNormalized()
       );
     });
   });

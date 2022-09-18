@@ -7,7 +7,7 @@ import { IRouter } from '../../types/types';
 import { maridadbOptions as mariadbOptions } from '../../config/mariadb';
 import { parseProduct } from '../../utils/parsers';
 
-export default class ProductsRouter implements IRouter {
+export default class ProductRouter implements IRouter {
   router = express.Router();
   apiRouter = express.Router();
   table: Container<ProductDto>;

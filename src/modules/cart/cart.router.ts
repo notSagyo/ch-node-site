@@ -5,7 +5,7 @@ import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
 import { cartProductsToProducts } from '../../utils/utils';
-import cartService from './cart-service';
+import cartService from './cart.service';
 
 export default class CartRouter implements IRouter {
   cartHtmlPath: string;

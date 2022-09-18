@@ -3,15 +3,15 @@ import Container from '../../containers/container-mongo';
 import { IDao } from '../../types/daos';
 import { MessageDto } from '../../types/dtos';
 import { parseMessage } from '../../utils/parsers';
-import UsersDao from '../user/users-dao';
-import { messageModel, normalizerMessageSchema } from './message-model';
+import UserDao from '../user/user.dao';
+import { messageModel, normalizerMessageSchema } from './message.model';
 
-export default class MessagesDao implements IDao<MessageDto> {
-  static dao = new MessagesDao();
+export default class MessageDao implements IDao<MessageDto> {
+  static dao = new MessageDao();
   container = new Container(messageModel);
 
   constructor() {
-    return MessagesDao.dao;
+    return MessageDao.dao;
   }
 
   async save(message?: Partial<MessageDto>) {
@@ -19,10 +19,10 @@ export default class MessagesDao implements IDao<MessageDto> {
     if (parsedMessage == null) return false;
 
     // If the user doesn't exist create it
-    let foundUser = await UsersDao.dao.getByEmail(parsedMessage.author.email);
+    let foundUser = await UserDao.dao.getByEmail(parsedMessage.author.email);
     if (foundUser == null) {
-      await UsersDao.dao.save(parsedMessage.author);
-      foundUser = await UsersDao.dao.getByEmail(parsedMessage.author.email);
+      await UserDao.dao.save(parsedMessage.author);
+      foundUser = await UserDao.dao.getByEmail(parsedMessage.author.email);
 
       // Return false if still doesn't exist after trying to create it
       if (foundUser == null) return false;

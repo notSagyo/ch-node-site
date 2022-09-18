@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { schema, Schema } from 'normalizr';
 import { MessageDto, UserDto } from '../../types/dtos';
-import { userSchema } from '../user/user-model';
+import { userSchema } from '../user/user.model';
 
 // Mongoose Schema ===========================================================//
 export const messageSchema: mongoose.Schema<MessageDto> = new mongoose.Schema({

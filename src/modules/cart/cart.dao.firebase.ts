@@ -5,12 +5,12 @@ import { CartDto, CartProductDto } from '../../types/dtos';
 import { logger } from '../../utils/logger';
 import Cart from './cart';
 
-export default class CartsDao implements ICartDao {
-  static dao = new CartsDao();
+export default class CartDao implements ICartDao {
+  static dao = new CartDao();
   container = new Container<CartDto>('carts');
 
   constructor() {
-    return CartsDao.dao;
+    return CartDao.dao;
   }
 
   async save(cart: Cart) {

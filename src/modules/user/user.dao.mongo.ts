@@ -2,14 +2,14 @@ import Container from '../../containers/container-mongo';
 import { IDao } from '../../types/daos';
 import { UserDto } from '../../types/dtos';
 import { parseUser } from '../../utils/parsers';
-import { usersModel } from './user-model';
+import { usersModel } from './user.model';
 
-export default class UsersDao implements IDao<UserDto> {
-  static dao = new UsersDao();
+export default class UserDao implements IDao<UserDto> {
+  static dao = new UserDao();
   container = new Container(usersModel);
 
   constructor() {
-    return UsersDao.dao;
+    return UserDao.dao;
   }
 
   async save(user: UserDto) {

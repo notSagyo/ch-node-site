@@ -1,16 +1,21 @@
-import Container from '../../containers/container-mongo';
+import { maridadbOptions } from '../../config/mariadb';
+import Container from '../../containers/container-knex';
 import { ICartDao } from '../../types/daos';
-import { CartDto, CartProductDto } from '../../types/dtos';
+import { CartDto } from '../../types/dtos';
 import { logger } from '../../utils/logger';
+import { parseCartProduct } from '../../utils/parsers';
 import Cart from './cart';
-import { cartModel } from './cart-model';
 
-export default class CartsDao implements ICartDao {
-  static dao = new CartsDao();
-  container = new Container(cartModel);
+export default class CartDao implements ICartDao {
+  static dao = new CartDao();
+  container = new Container<CartDto>(
+    maridadbOptions.connection.database,
+    'carts',
+    maridadbOptions
+  );
 
   constructor() {
-    return CartsDao.dao;
+    return CartDao.dao;
   }
 
   async save(cart: Cart) {
@@ -43,23 +48,17 @@ export default class CartsDao implements ICartDao {
     return await this.container.delete({});
   }
 
-  // TODO: move to service methods, use updateById instead of container methods
   // Product methods =========================================================//
   async addProductById(cartId: string, productId: string, quantity?: number) {
+    const parsedProd = parseCartProduct({ id: productId, quantity });
+    const cart = await this.getById(cartId);
     let success = false;
-    const cartProd: CartProductDto = {
-      id: productId,
-      quantity: quantity || 1,
-      code: '',
-      timestamp: Date.now(),
-    };
 
+    if (parsedProd == null || cart == null) return success;
+
+    cart.products.push(parsedProd);
     try {
-      await this.container.update(
-        { id: cartId },
-        { $push: { products: cartProd } }
-      );
-      success = true;
+      await this.container.update({ id: cartId }, { products: cart.products });
     } catch (error) {
       logger.error(error);
     }
@@ -67,13 +66,14 @@ export default class CartsDao implements ICartDao {
   }
 
   async removeProductById(cartId: string, productId: string) {
+    const cart = await this.getById(cartId);
     let success = false;
+
+    if (cart == null) return success;
+
+    cart.products = cart.products.filter((p) => p.id !== productId);
     try {
-      await this.container.update(
-        { id: cartId },
-        { $pull: { products: { id: productId } } }
-      );
-      success = true;
+      await this.container.update({ id: cartId }, { products: cart.products });
     } catch (error) {
       logger.error(error);
     }

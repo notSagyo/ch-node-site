@@ -1,15 +1,15 @@
-import Container from '../../containers/container-mongo';
+import { where } from '@firebase/firestore';
+import Container from '../../containers/container-firebase';
 import { IDao } from '../../types/daos';
 import { ProductDto } from '../../types/dtos';
 import { parseProduct } from '../../utils/parsers';
-import { productsModel } from './product-model';
 
-export default class ProductsDao implements IDao<ProductDto> {
-  static dao = new ProductsDao();
-  container = new Container(productsModel);
+export default class ProductDao implements IDao<ProductDto> {
+  static dao = new ProductDao();
+  container = new Container<ProductDto>('products');
 
   constructor() {
-    return ProductsDao.dao;
+    return ProductDao.dao;
   }
 
   async save(product: ProductDto) {
@@ -20,7 +20,7 @@ export default class ProductsDao implements IDao<ProductDto> {
   }
 
   async getById(id: string) {
-    const res = await this.container.find({ id });
+    const res = await this.container.find(where('id', '==', id));
     const product = res ? res[0] : null;
     return product;
   }
@@ -30,11 +30,11 @@ export default class ProductsDao implements IDao<ProductDto> {
   }
 
   async updateById(id: string, data: Partial<ProductDto>) {
-    return await this.container.update({ id }, data);
+    return await this.container.update(where('id', '==', id), data);
   }
 
   async deleteById(id: string) {
-    return await this.container.delete({ id });
+    return await this.container.delete(where('id', '==', id));
   }
 
   async deleteAll() {

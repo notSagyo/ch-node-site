@@ -5,7 +5,7 @@ import { authn } from '../middlewares/auth';
 import { cartProductsToProducts } from '../utils/utils';
 import { client, twilioNumber } from '../config/twilio';
 import { logger } from '../utils/logger';
-import CartsDao from '../modules/cart/carts-dao';
+import CartDao from '../modules/cart/cart.dao';
 
 export default class CommunicationRouter implements IRouter {
   router = express.Router();
@@ -24,7 +24,7 @@ export default class CommunicationRouter implements IRouter {
       if (!req.user)
         return res.status(400).send("Error request's reading user");
 
-      const userCart = await CartsDao.dao.getById(req.user.id);
+      const userCart = await CartDao.dao.getById(req.user.id);
       if (userCart == null)
         return res.status(404).send("Couldn't find a cart for active user");
       const products = await cartProductsToProducts(userCart.products);

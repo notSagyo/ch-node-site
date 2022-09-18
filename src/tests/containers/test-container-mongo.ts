@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import Container from '../../containers/container-mongo';
-import { productsModel } from '../../modules/product/product-model';
+import { productsModel } from '../../modules/product/product.model';
 import { ProductDto } from '../../types/dtos';
 import { testFunction } from '../tests';
 

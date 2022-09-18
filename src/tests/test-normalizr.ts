@@ -2,7 +2,7 @@ import { testFunction } from './tests';
 import { denormalize, normalize, schema, Schema } from 'normalizr';
 import { UserDto, MessageDto } from '../types/dtos';
 import { inspect } from 'util';
-import MessagesDao from '../modules/chat/messages-dao';
+import MessageDao from '../modules/chat/message.dao';
 
 export const testNormalizr = async () => {
   const authorSchema: Schema<UserDto> = new schema.Entity('authors');
@@ -10,7 +10,7 @@ export const testNormalizr = async () => {
     author: authorSchema,
   });
 
-  const messages = await MessagesDao.dao.getAll().then((messages) => {
+  const messages = await MessageDao.dao.getAll().then((messages) => {
     console.log(typeof []);
     return messages;
   });

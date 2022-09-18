@@ -6,9 +6,9 @@ import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
 import { parseProduct } from '../../utils/parsers';
-import ProductsDao from './products-dao';
+import ProductDao from './product.dao';
 
-export default class ProductsRouter implements IRouter {
+export default class ProductRouter implements IRouter {
   router = express.Router();
   apiRouter = express.Router();
   testRouter = express.Router();
@@ -36,7 +36,7 @@ export default class ProductsRouter implements IRouter {
 
   private getProductsPage() {
     this.router.get('/', async (req, res) => {
-      const prods = await ProductsDao.dao.getAll();
+      const prods = await ProductDao.dao.getAll();
       res.render(this.productsHtmlPath, {
         ...ejsDefaultData,
         productList: prods,
@@ -46,7 +46,7 @@ export default class ProductsRouter implements IRouter {
 
   private getProducts() {
     this.apiRouter.get('/', async (req, res) => {
-      const prods = await ProductsDao.dao.getAll();
+      const prods = await ProductDao.dao.getAll();
       if (prods.length < 1) logger.warn('Empty products list');
       res.json(prods);
     });
@@ -55,7 +55,7 @@ export default class ProductsRouter implements IRouter {
   private getProductsById() {
     this.apiRouter.get('/:id', async (req, res) => {
       const prodId = req.params.id;
-      const prod = await ProductsDao.dao.getById(prodId);
+      const prod = await ProductDao.dao.getById(prodId);
 
       if (prod == null) {
         const msg = `Product with ID=${prodId} not found`;
@@ -77,7 +77,7 @@ export default class ProductsRouter implements IRouter {
         return res.status(400).send(`400: ${msg}`);
       }
 
-      await ProductsDao.dao.save(newProd);
+      await ProductDao.dao.save(newProd);
       res.status(201).redirect('/productos');
     });
   }
@@ -85,7 +85,7 @@ export default class ProductsRouter implements IRouter {
   private deleteProductById() {
     this.apiRouter.delete('/:id', authz, async (req, res) => {
       const prodId = req.params.id;
-      const success = await ProductsDao.dao.deleteById(prodId);
+      const success = await ProductDao.dao.deleteById(prodId);
 
       if (success == false) {
         const msg = 'Error while deleting product';
@@ -109,9 +109,9 @@ export default class ProductsRouter implements IRouter {
       }
 
       let success = false;
-      const exists = (await ProductsDao.dao.getById(prodId)) != null;
-      if (exists) success = await ProductsDao.dao.updateById(prodId, newProd);
-      else success = await ProductsDao.dao.save(newProd);
+      const exists = (await ProductDao.dao.getById(prodId)) != null;
+      if (exists) success = await ProductDao.dao.updateById(prodId, newProd);
+      else success = await ProductDao.dao.save(newProd);
 
       if (success == false) {
         const msg = 'Error while updating product';
