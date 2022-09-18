@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { iUser } from '../../types/models';
+import { UserDto } from '../../types/dtos';
 
-export const userSchema: mongoose.Schema<iUser> = new mongoose.Schema({
+export const userSchema: mongoose.Schema<UserDto> = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },

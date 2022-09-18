@@ -1,13 +1,14 @@
 import { maridadbOptions } from '../../config/mariadb';
 import Container from '../../containers/container-knex';
-import { iCartDao } from '../../types/daos';
-import { iCart } from '../../types/models';
+import { ICartDao } from '../../types/daos';
+import { CartDto } from '../../types/dtos';
 import { logger } from '../../utils/logger';
-import { parseCart, parseCartProduct } from '../../utils/parsers';
+import { parseCartProduct } from '../../utils/parsers';
+import Cart from './cart';
 
-export default class CartsDao implements iCartDao {
+export default class CartsDao implements ICartDao {
   static dao = new CartsDao();
-  container = new Container<iCart>(
+  container = new Container<CartDto>(
     maridadbOptions.connection.database,
     'carts',
     maridadbOptions
@@ -17,23 +18,25 @@ export default class CartsDao implements iCartDao {
     return CartsDao.dao;
   }
 
-  save(cart?: iCart) {
-    const parsedCart = parseCart(cart) as iCart;
-    const success = this.container.insert(parsedCart);
+  async save(cart: Cart) {
+    const dto = cart.toDto();
+    const success = await this.container.insert(dto);
     return success;
   }
 
   async getById(id: string) {
-    const result = await this.container.find({ id });
-    const cart = result ? result[0] : null;
-    return cart;
+    const res = await this.container.find({ id });
+    const cartDto = res ? Cart.fromDto(res[0]) : null;
+    return cartDto;
   }
 
   async getAll() {
-    return (await this.container.find({})) || [];
+    const cartsDto = (await this.container.find({})) || [];
+    const carts = cartsDto.map((cart) => Cart.fromDto(cart));
+    return carts;
   }
 
-  async updateById(id: string, data: Partial<iCart>) {
+  async updateById(id: string, data: Partial<CartDto>) {
     return await this.container.update({ id }, data);
   }
 

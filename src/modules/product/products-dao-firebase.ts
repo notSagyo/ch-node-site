@@ -1,18 +1,18 @@
 import { where } from '@firebase/firestore';
 import Container from '../../containers/container-firebase';
-import { iDao } from '../../types/daos';
-import { iProduct } from '../../types/models';
+import { IDao } from '../../types/daos';
+import { ProductDto } from '../../types/dtos';
 import { parseProduct } from '../../utils/parsers';
 
-export default class ProductsDao implements iDao<iProduct> {
+export default class ProductsDao implements IDao<ProductDto> {
   static dao = new ProductsDao();
-  container = new Container<iProduct>('products');
+  container = new Container<ProductDto>('products');
 
   constructor() {
     return ProductsDao.dao;
   }
 
-  async save(product: iProduct) {
+  async save(product: ProductDto) {
     const parsedProd = parseProduct(product);
     let success = false;
     if (parsedProd != null) success = await this.container.insert(parsedProd);
@@ -29,7 +29,7 @@ export default class ProductsDao implements iDao<iProduct> {
     return (await this.container.find('*')) || [];
   }
 
-  async updateById(id: string, data: Partial<iProduct>) {
+  async updateById(id: string, data: Partial<ProductDto>) {
     return await this.container.update(where('id', '==', id), data);
   }
 

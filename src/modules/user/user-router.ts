@@ -5,11 +5,11 @@ import multer from 'multer';
 import passport from 'passport';
 import path from 'path';
 import { ejsDefaultData } from '../../config/ejs';
-import { iRouter } from '../../types/types';
+import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
 import { uploadsDirLocal } from '../../utils/paths';
 
-export default class UserRouter implements iRouter {
+export default class UserRouter implements IRouter {
   loginHtmlPath: string;
   logoutHtmlPath: string;
   signupHtmlPath: string;

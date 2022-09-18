@@ -1,35 +1,37 @@
 import { arrayRemove, arrayUnion, where } from '@firebase/firestore';
 import Container from '../../containers/container-firebase';
-import { iCartDao } from '../../types/daos';
-import { iCart, iCartProduct } from '../../types/models';
+import { ICartDao } from '../../types/daos';
+import { CartDto, CartProductDto } from '../../types/dtos';
 import { logger } from '../../utils/logger';
-import { parseCart } from '../../utils/parsers';
+import Cart from './cart';
 
-export default class CartsDao implements iCartDao {
+export default class CartsDao implements ICartDao {
   static dao = new CartsDao();
-  container = new Container<iCart>('carts');
+  container = new Container<CartDto>('carts');
 
   constructor() {
     return CartsDao.dao;
   }
 
-  async save(cart?: Partial<iCart>) {
-    const parsed = parseCart(cart);
-    const success = parsed ? await this.container.insert(parsed) : false;
+  async save(cart: Cart) {
+    const dto = cart.toDto();
+    const success = await this.container.insert(dto);
     return success;
   }
 
   async getById(id: string) {
     const res = await this.container.find(where('id', '==', id));
-    const product = res ? res[0] : null;
-    return product;
+    const cartDto = res ? Cart.fromDto(res[0]) : null;
+    return cartDto;
   }
 
   async getAll() {
-    return (await this.container.find('*')) || [];
+    const cartsDto = (await this.container.find('*')) || [];
+    const carts = cartsDto.map((cart) => Cart.fromDto(cart));
+    return carts;
   }
 
-  async updateById(id: string, data: Partial<iCart>) {
+  async updateById(id: string, data: Partial<CartDto>) {
     return await this.container.update(where('id', '==', id), data);
   }
 
@@ -44,7 +46,7 @@ export default class CartsDao implements iCartDao {
   // Product methods =========================================================//
   async addProductById(cartId: string, productId: string, quantity?: number) {
     let success = false;
-    const cartProd: iCartProduct = {
+    const cartProd: CartProductDto = {
       id: productId,
       quantity: quantity || 1,
       code: '',

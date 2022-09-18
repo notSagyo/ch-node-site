@@ -1,13 +1,13 @@
 import express from 'express';
 import { ejsDefaultData } from '../../config/ejs';
 import { authn } from '../../middlewares/auth';
-import { iProduct } from '../../types/models';
-import { iRouter } from '../../types/types';
+import { ProductDto } from '../../types/dtos';
+import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
 import { cartProductsToProducts } from '../../utils/utils';
-import CartsDao from './carts-dao-mongo';
+import cartService from './cart-service';
 
-export default class CartRouter implements iRouter {
+export default class CartRouter implements IRouter {
   cartHtmlPath: string;
   router = express.Router();
   apiRouter = express.Router();
@@ -32,23 +32,24 @@ export default class CartRouter implements iRouter {
   private getCartPage() {
     this.router.get('/', async (req, res) => {
       const userId = req.user?.id;
-      const cart = userId ? await CartsDao.dao.getById(userId) : null;
-      let products: iProduct[] = [];
+      const cartProds = userId ? await cartService.getAllProducts(userId) : [];
+      let prods: ProductDto[] = [];
 
-      if (cart?.products != null)
-        products = await cartProductsToProducts(cart.products);
+      if (cartProds.length < 1) prods = await cartProductsToProducts(cartProds);
 
       res.render(this.cartHtmlPath, {
         ...ejsDefaultData,
-        cartProducts: products,
+        cartProducts: prods,
       });
     });
   }
 
   private postCart() {
     this.apiRouter.post('/', authn, async (req, res) => {
-      const user = req.user;
-      const success = await CartsDao.dao.save(user);
+      const userId = req.user?.id;
+      const success = userId
+        ? await cartService.createCart({ id: userId })
+        : false;
 
       if (success == false)
         return res.status(400).send('400: Error while saving cart');
@@ -59,18 +60,15 @@ export default class CartRouter implements iRouter {
   private getCartProducts() {
     this.apiRouter.get('/:id/productos', async (req, res) => {
       const cartId = req.params.id;
-      const cart = await CartsDao.dao.getById(cartId);
-
-      if (cart == null)
-        return res.status(404).send(`404: Cart with ID:${cartId} not found`);
-      res.status(200).json(cart.products);
+      const products = await cartService.getAllProducts(cartId);
+      res.status(200).json(products);
     });
   }
 
   private deleteCart() {
     this.apiRouter.delete('/:id', async (req, res) => {
       const cartId = req.params.id;
-      const success = await CartsDao.dao.deleteById(cartId);
+      const success = await cartService.deleteCartById(cartId);
 
       if (success == false)
         return res.status(400).send('400: Error while deleting cart');
@@ -91,16 +89,16 @@ export default class CartRouter implements iRouter {
 
       // If cart doesn't exists create it
       if (cartId) {
-        const foundCart = await CartsDao.dao.getById(cartId);
+        const foundCart = await cartService.getCartById(cartId);
         if (foundCart == null) {
           logger.warn('Cart not found, creating...');
-          await CartsDao.dao.save({ id: cartId });
+          await cartService.createCart({ id: cartId });
         }
       }
 
       // Try add prodduct to cart
       const success = cartId
-        ? await CartsDao.dao.addProductById(cartId, productId)
+        ? await cartService.addProductById(cartId, productId)
         : false;
 
       if (success == false) {
@@ -116,7 +114,7 @@ export default class CartRouter implements iRouter {
     this.apiRouter.delete('/:cartId/productos', async (req, res) => {
       const cartId = req.params.cartId;
       const productId = req.body.id;
-      const success = await CartsDao.dao.removeProductById(cartId, productId);
+      const success = await cartService.removeProductById(cartId, productId);
 
       if (success == false)
         return res

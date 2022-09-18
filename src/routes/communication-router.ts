@@ -1,13 +1,13 @@
-import { iRouter } from '../types/types';
+import { IRouter } from '../types/types';
 import express from 'express';
 import { TEST_MAIL, transporter } from '../config/nodemailer';
 import { authn } from '../middlewares/auth';
 import { cartProductsToProducts } from '../utils/utils';
 import { client, twilioNumber } from '../config/twilio';
 import { logger } from '../utils/logger';
-import CartsDao from '../modules/cart/carts-dao-mongo';
+import CartsDao from '../modules/cart/carts-dao';
 
-export default class CommunicationRouter implements iRouter {
+export default class CommunicationRouter implements IRouter {
   router = express.Router();
 
   constructor() {

@@ -1,9 +1,9 @@
-import ProductsDao from '../modules/product/products-dao-mongo';
-import { iCartProduct, iProduct } from '../types/models';
+import ProductsDao from '../modules/product/products-dao';
+import { CartProductDto, ProductDto } from '../types/dtos';
 
-export const cartProductsToProducts = async (cartProds: iCartProduct[]) => {
+export const cartProductsToProducts = async (cartProds: CartProductDto[]) => {
   const promises = [];
-  const products: iProduct[] = [];
+  const products: ProductDto[] = [];
 
   for (let i = 0; i < cartProds.length; i++) {
     const element = cartProds[i];

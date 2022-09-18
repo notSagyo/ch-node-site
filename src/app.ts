@@ -11,9 +11,9 @@ import minimist from 'minimist';
 import path from 'path';
 import { baseDirLocal } from './utils/paths';
 import { initLogger, logger } from './utils/logger';
-import MessagesDao from './modules/chat/messages-dao-mongo';
+import MessagesDao from './modules/chat/messages-dao';
 import middlewares from './middlewares/middlewares';
-import ProductsDao from './modules/product/products-dao-mongo';
+import ProductsDao from './modules/product/products-dao';
 import router from './routes/routes';
 
 // INIT ======================================================================//

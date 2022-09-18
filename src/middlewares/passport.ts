@@ -1,11 +1,10 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { iUser } from '../types/models';
 import { saltRounds } from '../config/bcrypt';
 import { parseUser } from '../utils/parsers';
 import { logger } from '../utils/logger';
-import UsersDao from '../modules/user/users-dao-mongo';
+import UsersDao from '../modules/user/users-dao';
 
 passport.use(
   'registration',
@@ -66,7 +65,7 @@ passport.serializeUser((user, callback) => {
 });
 
 passport.deserializeUser(async (user: string, callback) => {
-  const foundUser = (await UsersDao.dao.getByEmail(user)) || ({} as iUser);
+  const foundUser = await UsersDao.dao.getByEmail(user);
   callback(null, foundUser);
 });
 

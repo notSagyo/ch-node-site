@@ -1,11 +1,11 @@
 import Container from '../../containers/container-mongo';
-import { iCartDao } from '../../types/daos';
-import { iCart, iCartProduct } from '../../types/models';
+import { ICartDao } from '../../types/daos';
+import { CartDto, CartProductDto } from '../../types/dtos';
 import { logger } from '../../utils/logger';
-import { parseCart } from '../../utils/parsers';
+import Cart from './cart';
 import { cartModel } from './cart-model';
 
-export default class CartsDao implements iCartDao {
+export default class CartsDao implements ICartDao {
   static dao = new CartsDao();
   container = new Container(cartModel);
 
@@ -13,23 +13,25 @@ export default class CartsDao implements iCartDao {
     return CartsDao.dao;
   }
 
-  async save(cart?: Partial<iCart>) {
-    const parsed = parseCart(cart);
-    const success = parsed ? await this.container.insert(parsed) : false;
+  async save(cart: Cart) {
+    const dto = cart.toDto();
+    const success = await this.container.insert(dto);
     return success;
   }
 
   async getById(id: string) {
     const res = await this.container.find({ id });
-    const product = res ? res[0] : null;
-    return product;
+    const cartDto = res ? Cart.fromDto(res[0]) : null;
+    return cartDto;
   }
 
-  async getAll(): Promise<iCart[]> {
-    return (await this.container.find({})) || [];
+  async getAll() {
+    const cartsDto = (await this.container.find({})) || [];
+    const carts = cartsDto.map((cart) => Cart.fromDto(cart));
+    return carts;
   }
 
-  async updateById(id: string, data: Partial<iCart>) {
+  async updateById(id: string, data: Partial<CartDto>) {
     return await this.container.update({ id }, data);
   }
 
@@ -41,10 +43,11 @@ export default class CartsDao implements iCartDao {
     return await this.container.delete({});
   }
 
+  // TODO: move to service methods, use updateById instead of container methods
   // Product methods =========================================================//
   async addProductById(cartId: string, productId: string, quantity?: number) {
     let success = false;
-    const cartProd: iCartProduct = {
+    const cartProd: CartProductDto = {
       id: productId,
       quantity: quantity || 1,
       code: '',

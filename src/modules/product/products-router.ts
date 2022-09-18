@@ -2,13 +2,13 @@ import { faker } from '@faker-js/faker';
 import express from 'express';
 import { ejsDefaultData } from '../../config/ejs';
 import { authz } from '../../middlewares/auth';
-import { iProduct } from '../../types/models';
-import { iRouter } from '../../types/types';
+import { ProductDto } from '../../types/dtos';
+import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
 import { parseProduct } from '../../utils/parsers';
-import ProductsDao from './products-dao-mongo';
+import ProductsDao from './products-dao';
 
-export default class ProductsRouter implements iRouter {
+export default class ProductsRouter implements IRouter {
   router = express.Router();
   apiRouter = express.Router();
   testRouter = express.Router();
@@ -125,9 +125,9 @@ export default class ProductsRouter implements iRouter {
 
   private productsTest() {
     this.testRouter.get('/productos-test', async (req, res) => {
-      const products: iProduct[] = [];
+      const products: ProductDto[] = [];
       for (let i = 0; i < 5; i++) {
-        const prod: iProduct = {
+        const prod: ProductDto = {
           id: '0',
           name: faker.commerce.product(),
           price: Number(faker.commerce.price()),

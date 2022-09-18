@@ -1,10 +1,10 @@
 import Container from '../../containers/container-mongo';
-import { iDao } from '../../types/daos';
-import { iUser } from '../../types/models';
+import { IDao } from '../../types/daos';
+import { UserDto } from '../../types/dtos';
 import { parseUser } from '../../utils/parsers';
 import { usersModel } from './user-model';
 
-export default class UsersDao implements iDao<iUser> {
+export default class UsersDao implements IDao<UserDto> {
   static dao = new UsersDao();
   container = new Container(usersModel);
 
@@ -12,7 +12,7 @@ export default class UsersDao implements iDao<iUser> {
     return UsersDao.dao;
   }
 
-  async save(user: Partial<iUser>) {
+  async save(user: UserDto) {
     const parsedUser = parseUser(user);
     if (parsedUser != null) return await this.container.insert(parsedUser);
     return false;
@@ -30,11 +30,11 @@ export default class UsersDao implements iDao<iUser> {
     return user;
   }
 
-  async getAll(): Promise<iUser[]> {
+  async getAll(): Promise<UserDto[]> {
     return (await this.container.find('*')) || [];
   }
 
-  async updateById(id: string, data: Partial<iUser>) {
+  async updateById(id: string, data: Partial<UserDto>) {
     return await this.container.update({ id }, data);
   }
 

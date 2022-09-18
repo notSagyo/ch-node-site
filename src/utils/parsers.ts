@@ -1,16 +1,10 @@
-import { iParser } from '../types/types';
-import {
-  iUser,
-  iMessage,
-  iProduct,
-  iCartProduct,
-  iCart,
-} from '../types/models';
+import { IParser } from '../types/types';
+import { UserDto, MessageDto, ProductDto, CartProductDto } from '../types/dtos';
 import { validateEmail } from './utils';
 import { validate, v4 } from 'uuid';
 import { logger } from './logger';
 
-export const parseUser: iParser<iUser> = (user) => {
+export const parseUser: IParser<UserDto> = (user) => {
   if (user == null) return null;
 
   const isValidPassword =
@@ -69,7 +63,7 @@ export const parseUser: iParser<iUser> = (user) => {
   };
 };
 
-export const parseMessage: iParser<iMessage> = (msg) => {
+export const parseMessage: IParser<MessageDto> = (msg) => {
   if (msg == null) return null;
   const id = typeof msg?.id === 'string' ? msg.id : v4();
   const author = parseUser(msg?.author as Record<string, unknown>);
@@ -88,7 +82,7 @@ export const parseMessage: iParser<iMessage> = (msg) => {
   return { id, time, author, content };
 };
 
-export const parseProduct: iParser<iProduct> = (prod) => {
+export const parseProduct: IParser<ProductDto> = (prod) => {
   const placeholder = 'https://via.placeholder.com/256';
 
   const isValidName = typeof prod?.name === 'string' && prod.name.length > 0;
@@ -112,31 +106,7 @@ export const parseProduct: iParser<iProduct> = (prod) => {
   return null;
 };
 
-export const parseCart: iParser<iCart> = (cart): iCart | null => {
-  let products: iCartProduct[] = [];
-  let timestamp = Date.now();
-
-  if (cart != null) {
-    const isValidId = typeof cart?.id === 'string' && validate(cart.id);
-    const isValidTimestamp =
-      typeof cart?.timestamp === 'number' && !isNaN(cart.timestamp);
-    const isValidProducts =
-      Array.isArray(cart?.products) &&
-      cart.products.length > 0 &&
-      cart.products.every((prod) => parseProduct(prod) != null);
-
-    if (!isValidId) {
-      logger.error(`parseCart: ID ${cart.id} is not a valid ID`);
-      return null;
-    }
-    isValidProducts && (cart.products as iCartProduct[]);
-    isValidTimestamp && (timestamp = cart.timestamp as number);
-  }
-
-  return { id: cart?.id as string, timestamp, products };
-};
-
-export const parseCartProduct: iParser<iCartProduct> = (prod) => {
+export const parseCartProduct: IParser<CartProductDto> = (prod) => {
   const isValidCode = typeof prod?.code === 'string' && prod.code.length > 0;
   const isValidId = typeof prod?.id === 'string' && validate(prod.id);
   const isValidTimestamp =

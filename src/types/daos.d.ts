@@ -1,7 +1,7 @@
-import { ICartDto } from './models';
+import Cart from '../modules/cart/cart';
 
-export interface iDao<T> {
-  save(data?: Partial<T>): Promise<boolean>;
+export interface IDao<T> {
+  save(data?: T): Promise<boolean>;
   getById(id: string): Promise<T | null>;
   getAll(): Promise<T[]>;
   updateById(id: string, data: Partial<T>): Promise<boolean>;
@@ -9,7 +9,7 @@ export interface iDao<T> {
   deleteAll(): Promise<boolean>;
 }
 
-export interface iCartDao extends iDao<ICartDto> {
+export interface ICartDao extends IDao<Cart> {
   addProductById(
     cartId: string,
     productId: string,

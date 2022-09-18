@@ -1,12 +1,12 @@
 import { normalize } from 'normalizr';
 import Container from '../../containers/container-mongo';
-import { iDao } from '../../types/daos';
-import { iMessage } from '../../types/models';
+import { IDao } from '../../types/daos';
+import { MessageDto } from '../../types/dtos';
 import { parseMessage } from '../../utils/parsers';
-import UsersDao from '../user/users-dao-mongo';
+import UsersDao from '../user/users-dao';
 import { messageModel, normalizerMessageSchema } from './message-model';
 
-export default class MessagesDao implements iDao<iMessage> {
+export default class MessagesDao implements IDao<MessageDto> {
   static dao = new MessagesDao();
   container = new Container(messageModel);
 
@@ -14,7 +14,7 @@ export default class MessagesDao implements iDao<iMessage> {
     return MessagesDao.dao;
   }
 
-  async save(message?: Partial<iMessage>) {
+  async save(message?: Partial<MessageDto>) {
     const parsedMessage = parseMessage(message);
     if (parsedMessage == null) return false;
 
@@ -32,7 +32,7 @@ export default class MessagesDao implements iDao<iMessage> {
     return await this.container.insert(messageWithAuthor);
   }
 
-  async getById(id: string): Promise<iMessage | null> {
+  async getById(id: string): Promise<MessageDto | null> {
     const res = await this.container.find({ id });
     const message = res ? res[0] : null;
     return message;
@@ -42,7 +42,7 @@ export default class MessagesDao implements iDao<iMessage> {
     return (await this.container.find('*')) || [];
   }
 
-  async updateById(id: string, data: Partial<iMessage>) {
+  async updateById(id: string, data: Partial<MessageDto>) {
     return await this.container.update({ id }, data);
   }
 

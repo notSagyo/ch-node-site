@@ -1,12 +1,12 @@
 import { testFunction } from './tests';
 import { denormalize, normalize, schema, Schema } from 'normalizr';
-import { iUser, iMessage } from '../types/models';
+import { UserDto, MessageDto } from '../types/dtos';
 import { inspect } from 'util';
-import MessagesDao from '../modules/chat/messages-dao-mongo';
+import MessagesDao from '../modules/chat/messages-dao';
 
 export const testNormalizr = async () => {
-  const authorSchema: Schema<iUser> = new schema.Entity('authors');
-  const messageSchema: Schema<iMessage> = new schema.Entity('messages', {
+  const authorSchema: Schema<UserDto> = new schema.Entity('authors');
+  const messageSchema: Schema<MessageDto> = new schema.Entity('messages', {
     author: authorSchema,
   });
 

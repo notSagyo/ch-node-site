@@ -2,21 +2,21 @@ import express from 'express';
 import { ejsDefaultData } from '../../config/ejs';
 import Container from '../../containers/container-knex';
 import { authn, authz } from '../../middlewares/auth';
-import { iProduct } from '../../types/models';
-import { iRouter } from '../../types/types';
+import { ProductDto } from '../../types/dtos';
+import { IRouter } from '../../types/types';
 import { maridadbOptions as mariadbOptions } from '../../config/mariadb';
 import { parseProduct } from '../../utils/parsers';
 
-export default class ProductsRouter implements iRouter {
+export default class ProductsRouter implements IRouter {
   router = express.Router();
   apiRouter = express.Router();
-  table: Container<iProduct>;
+  table: Container<ProductDto>;
   productsHtmlPath: string;
 
   constructor(productsHtmlPath: string) {
     this.productsHtmlPath = productsHtmlPath;
     this.initRoutes();
-    this.table = new Container<iProduct>(
+    this.table = new Container<ProductDto>(
       mariadbOptions.connection.database,
       'products',
       mariadbOptions
