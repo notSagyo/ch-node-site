@@ -41,7 +41,7 @@ export default class MessageDao implements IDao<Message> {
 
   async getById(id: string): Promise<Message | null> {
     const res = await this.container.find({ id });
-    const product = res ? Message.fromDto(res[0]) : null;
+    const product = res[0] ? Message.fromDto(res[0]) : null;
     return product;
   }
 

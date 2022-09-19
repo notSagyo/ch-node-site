@@ -9,8 +9,8 @@ export const userSchema: mongoose.Schema<UserDto> = new mongoose.Schema({
   name: { type: String, required: true },
   lastName: { type: String, required: true },
   age: { type: Number, required: true },
-  avatar: { type: String },
   password: { type: String, required: true },
+  avatar: { type: String },
   isAdmin: { type: Boolean },
 });
 

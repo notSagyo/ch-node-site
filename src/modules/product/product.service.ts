@@ -33,7 +33,7 @@ class ProductService implements IProductService {
   ): Promise<boolean> {
     let success = false;
 
-    const exists = (await productService.getProductById(productId)) != null;
+    const exists = (await this.getProductById(productId)) != null;
     if (exists) success = await ProductDao.dao.updateById(productId, data);
     else {
       const parsedProd = parseProduct(data);

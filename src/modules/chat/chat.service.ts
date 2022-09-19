@@ -32,7 +32,7 @@ class ChatService implements IChatService {
   ): Promise<boolean> {
     let success = false;
 
-    const exists = (await messageService.getMessageById(messageId)) != null;
+    const exists = (await this.getMessageById(messageId)) != null;
     if (exists) success = await MessageDao.dao.updateById(messageId, data);
     else {
       const parsedMessage = parseMessage(data);

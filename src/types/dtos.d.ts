@@ -46,6 +46,19 @@ export interface UserDto {
   id: string;
 }
 
+export interface UserDtoOptional {
+  lastName: string;
+  username: string;
+  password: string;
+  phone: number;
+  email: string;
+  name: string;
+  age: number;
+  id: string;
+  isAdmin?: boolean;
+  avatar?: string;
+}
+
 // ?TODO: Replace author for real user
 // * Keeping commented code to make author real user
 export interface MessageDto {

@@ -1,10 +1,10 @@
 import Container from '../../containers/container-mongo';
 import { IDao } from '../../types/daos';
 import { UserDto } from '../../types/dtos';
-import { parseUser } from '../../utils/parsers';
+import User from './user';
 import { usersModel } from './user.model';
 
-export default class UserDao implements IDao<UserDto> {
+export default class UserDao implements IDao<User> {
   static dao = new UserDao();
   container = new Container(usersModel);
 
@@ -12,26 +12,27 @@ export default class UserDao implements IDao<UserDto> {
     return UserDao.dao;
   }
 
-  async save(user: UserDto) {
-    const parsedUser = parseUser(user);
-    if (parsedUser != null) return await this.container.insert(parsedUser);
-    return false;
+  async save(user: User) {
+    const dto = user.toDto();
+    return await this.container.insert(dto);
   }
 
-  async getById(id: string) {
+  async getById(id: string): Promise<User | null> {
     const res = await this.container.find({ id });
-    const user = res ? res[0] : null;
-    return user;
+    const product = res[0] ? User.fromDto(res[0]) : null;
+    return product;
   }
 
-  async getByEmail(email: string) {
+  async getByEmail(email: string): Promise<User | null> {
     const res = await this.container.find({ email });
-    const user = res ? res[0] : null;
+    const user = res[0] ? User.fromDto(res[0]) : null;
     return user;
   }
 
-  async getAll(): Promise<UserDto[]> {
-    return (await this.container.find('*')) || [];
+  async getAll(): Promise<User[]> {
+    const usersDto = (await this.container.find('*')) || [];
+    const users = usersDto.map((u) => User.fromDto(u));
+    return users;
   }
 
   async updateById(id: string, data: Partial<UserDto>) {
