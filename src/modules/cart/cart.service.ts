@@ -31,7 +31,7 @@ class CartService implements ICartService {
   // Cart Products Methods ===================================================//
   async getAllProducts(cartId: string): Promise<CartProductDto[]> {
     const cart = await CartDao.dao.getById(cartId);
-    if (!cart) throw new Error(`Cart service: error retrieving cart ${cartId}`);
+    if (!cart) return [];
     const items = cart.products;
     return items;
   }

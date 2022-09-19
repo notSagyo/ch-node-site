@@ -35,7 +35,7 @@ export default class CartRouter implements IRouter {
       const cartProds = userId ? await cartService.getAllProducts(userId) : [];
       let prods: ProductDto[] = [];
 
-      if (cartProds.length < 1) prods = await cartProductsToProducts(cartProds);
+      if (cartProds.length > 0) prods = await cartProductsToProducts(cartProds);
 
       res.render(this.cartHtmlPath, {
         ...ejsDefaultData,

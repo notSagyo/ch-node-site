@@ -1,4 +1,4 @@
-import ProductDao from '../modules/product/product.dao';
+import productService from '../modules/product/product.service';
 import { CartProductDto, ProductDto } from '../types/dtos';
 
 // TODO: move to cart service
@@ -7,8 +7,8 @@ export const cartProductsToProducts = async (cartProds: CartProductDto[]) => {
   const products: ProductDto[] = [];
 
   for (let i = 0; i < cartProds.length; i++) {
-    const element = cartProds[i];
-    promises.push(ProductDao.dao.getById(element.id));
+    const cartProd = cartProds[i];
+    promises.push(productService.getProductById(cartProd.id));
   }
 
   await Promise.allSettled(promises).then((results) =>
