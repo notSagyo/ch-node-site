@@ -46,9 +46,25 @@ export interface UserDto {
   id: string;
 }
 
+// ?TODO: Replace author for real user
+// * Keeping commented code to make author real user
 export interface MessageDto {
   content: string;
-  author: UserDto;
+  author: string;
   time: number;
   id: string;
 }
+
+export interface MessageDtoOptional {
+  content: string;
+  author: string;
+  time?: number;
+  id?: string;
+}
+
+// export interface MessageDto {
+//   content: string;
+//   author: UserDto;
+//   time: number;
+//   id: string;
+// }

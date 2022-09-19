@@ -1,5 +1,6 @@
-import { CartDtoOptional, CartProductDto } from '../../types/dtos';
+import { CartDtoOptional, CartProductDto, ProductDto } from '../../types/dtos';
 import { ICartService } from '../../types/services';
+import productService from '../product/product.service';
 import Cart from './cart';
 import CartDao from './cart.dao';
 
@@ -12,8 +13,8 @@ class CartService implements ICartService {
     return cart;
   }
 
-  getAllCarts(): Promise<Cart[]> {
-    throw new Error('Method not implemented.');
+  async getAllCarts(): Promise<Cart[]> {
+    return await CartDao.dao.getAll();
   }
 
   async getCartById(id: string): Promise<Cart | null> {
@@ -50,6 +51,27 @@ class CartService implements ICartService {
 
   async removeAllProducts(cartId: string): Promise<boolean> {
     return await CartDao.dao.updateById(cartId, { products: [] });
+  }
+
+  async cartProductsToProducts(cartProds: CartProductDto[]) {
+    const promises = [];
+    const products: ProductDto[] = [];
+
+    for (let i = 0; i < cartProds.length; i++) {
+      const cartProd = cartProds[i];
+      promises.push(productService.getProductById(cartProd.id));
+    }
+
+    await Promise.allSettled(promises).then((results) =>
+      results.forEach(
+        (result) =>
+          result.status === 'fulfilled' &&
+          result.value &&
+          products.push(result.value)
+      )
+    );
+
+    return products;
   }
 }
 

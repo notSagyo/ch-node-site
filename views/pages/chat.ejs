@@ -2,19 +2,22 @@
 <body>
   <%- include('../partials/header') %>
 
+  <!-- ?TODO: Replace author for real user -->
+  <!-- * Keeping commented code to make author real user -->
   <div class="p-2">
     <!-- Filled with JS -->
     <ul id="messagesWindow" class="mb-0"></ul>
-    <div class="mb-2">Compression rate:
+    <!-- <div class="mb-2">Compression rate:
       <span class="fw-bold text-primary"><span id="compressionRate"></span>%</span>
-    </div>
+    </div> -->
     <form
       id="messageForm"
       enctype="multipart/form-data"
-      class="d-flex"
+      class="d-flex mt-4"
       style="gap: 8px;"
     >
-    <div>
+    <input id="messageAuthorUsername" class="form-control" type="text" placeholder="username" size="18" style="width: auto;" required>
+    <!-- <div>
       <input id="messageAuthorEmail" class="form-control" type="email" placeholder="email" size="18" style="width: auto;" required>
       <input id="messageAuthorUsername" class="form-control" type="text" placeholder="username" size="18" style="width: auto;" required>
     </div>
@@ -25,7 +28,7 @@
     <div>
       <input id="messageAuthorAvatar" class="form-control" type="text" placeholder="avatar URL" size="18" style="width: auto;" required>
       <input id="messageAuthorAge" class="form-control" type="number" placeholder="age" size="18" style="width: auto;" required>
-    </div>
+    </div> -->
       <input id="messageContent" class="form-control" type="text" placeholder="message" size="32" style="width: auto;" required autocomplete="off">
       <input class="btn btn-primary d-inline-block" type="submit" value="Send >">
     </form>

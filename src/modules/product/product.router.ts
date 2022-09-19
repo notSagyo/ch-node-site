@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import express from 'express';
 import { ejsDefaultData } from '../../config/ejs';
 import { authz } from '../../middlewares/auth';
+import { productSocket } from '../../middlewares/sockets';
 import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
@@ -34,7 +35,7 @@ export default class ProductRouter implements IRouter {
   }
 
   private getProductsPage() {
-    this.router.get('/', async (req, res) => {
+    this.router.get('/', productSocket, async (req, res) => {
       const prods = await productService.getAllProducts();
       res.render(this.productsHtmlPath, {
         ...ejsDefaultData,

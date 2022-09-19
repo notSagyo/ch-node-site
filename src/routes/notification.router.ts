@@ -1,13 +1,13 @@
-import { IRouter } from '../types/types';
 import express from 'express';
 import { TEST_MAIL, transporter } from '../config/nodemailer';
-import { authn } from '../middlewares/auth';
-import { cartProductsToProducts } from '../utils/utils';
 import { client, twilioNumber } from '../config/twilio';
-import { logger } from '../utils/logger';
+import { authn } from '../middlewares/auth';
 import CartDao from '../modules/cart/cart.dao';
+import cartService from '../modules/cart/cart.service';
+import { IRouter } from '../types/types';
+import { logger } from '../utils/logger';
 
-export default class CommunicationRouter implements IRouter {
+export default class NotificationRouter implements IRouter {
   router = express.Router();
 
   constructor() {
@@ -27,7 +27,9 @@ export default class CommunicationRouter implements IRouter {
       const userCart = await CartDao.dao.getById(req.user.id);
       if (userCart == null)
         return res.status(404).send("Couldn't find a cart for active user");
-      const products = await cartProductsToProducts(userCart.products);
+      const products = await cartService.cartProductsToProducts(
+        userCart.products
+      );
 
       const mailBody = `¡Compra exitosa!<br><br>
         Productos inlcuidos en el pedido:

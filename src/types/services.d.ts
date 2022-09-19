@@ -1,8 +1,11 @@
 import Cart from '../modules/cart/cart';
+import Message from '../modules/chat/message';
 import Product from '../modules/product/product';
 import {
   CartDtoOptional,
   CartProductDto,
+  MessageDto,
+  MessageDtoOptional,
   ProductDto,
   ProductDtoOptional,
 } from './dtos';
@@ -23,12 +26,24 @@ export interface ICartService {
 
 export interface IProductService {
   createProduct(productDto: ProductDtoOptional): Promise<Product>;
-  getAllProducts(cartId: string): Promise<Product[]>;
+  getAllProducts(productId: string): Promise<Product[]>;
   getProductById(id: string): Promise<Product | null>;
-  deleteProductById(cartId: string): Promise<boolean>;
+  deleteProductById(productId: string): Promise<boolean>;
   deleteAllProducts(): Promise<boolean>;
   updateProductById(
     productId: string,
     data: Partial<ProductDto>
+  ): Promise<boolean>;
+}
+
+export interface IChatService {
+  createMessage(messageDto: MessageDtoOptional): Promise<Message>;
+  getAllMessages(): Promise<Message[]>;
+  getMessageById(messageId: string): Promise<Message | null>;
+  deleteMessageById(messageId: string): Promise<boolean>;
+  deleteAllMessages(): Promise<boolean>;
+  updateMessageById(
+    messageId: string,
+    data: Partial<MessageDto>
   ): Promise<boolean>;
 }

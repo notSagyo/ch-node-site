@@ -3,11 +3,14 @@ import { schema, Schema } from 'normalizr';
 import { MessageDto, UserDto } from '../../types/dtos';
 import { userSchema } from '../user/user.model';
 
+// ?TODO: Replace author for real user
+// * Keeping commented code to make author real user
 // Mongoose Schema ===========================================================//
 export const messageSchema: mongoose.Schema<MessageDto> = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   time: { type: Number, required: true },
-  author: { type: userSchema, required: true },
+  author: { type: String, required: true },
+  // author: { type: userSchema, required: true },
   content: { type: String, required: true },
 });
 export const messageModel = mongoose.model('messages', messageSchema);

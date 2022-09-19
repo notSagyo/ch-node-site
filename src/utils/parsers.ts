@@ -63,25 +63,6 @@ export const parseUser: IParser<UserDto> = (user) => {
   };
 };
 
-export const parseMessage: IParser<MessageDto> = (msg) => {
-  if (msg == null) return null;
-  const id = typeof msg?.id === 'string' ? msg.id : v4();
-  const author = parseUser(msg?.author as Record<string, unknown>);
-  const time =
-    msg?.time && !isNaN(Number(msg?.time)) ? Number(msg.time) : Date.now();
-  const content =
-    typeof msg?.content === 'string' && msg?.content.length > 0
-      ? msg.content
-      : '';
-
-  if (author == null) {
-    logger.error('Invalid message author');
-    return null;
-  }
-
-  return { id, time, author, content };
-};
-
 export const parseCartProduct: IParser<CartProductDto> = (prod) => {
   const isValidCode = typeof prod?.code === 'string' && prod.code.length > 0;
   const isValidId = typeof prod?.id === 'string' && validate(prod.id);

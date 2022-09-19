@@ -4,7 +4,6 @@ import { authn } from '../../middlewares/auth';
 import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
-import { cartProductsToProducts } from '../../utils/utils';
 import cartService from './cart.service';
 
 export default class CartRouter implements IRouter {
@@ -35,7 +34,8 @@ export default class CartRouter implements IRouter {
       const cartProds = userId ? await cartService.getAllProducts(userId) : [];
       let prods: ProductDto[] = [];
 
-      if (cartProds.length > 0) prods = await cartProductsToProducts(cartProds);
+      if (cartProds.length > 0)
+        prods = await cartService.cartProductsToProducts(cartProds);
 
       res.render(this.cartHtmlPath, {
         ...ejsDefaultData,
