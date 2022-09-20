@@ -42,9 +42,9 @@ export default class Container<T extends Record<string, any>> {
     condition: filterSql<T>,
     sortColumn?: string,
     ascending?: boolean
-  ): Promise<T[] | null> {
+  ): Promise<T[]> {
     const kn = knex(this.options);
-    let rows: T[] | null = null;
+    let rows: T[] = [];
     if (sortColumn != null) {
       await kn
         .from(this.table)

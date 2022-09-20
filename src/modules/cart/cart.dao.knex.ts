@@ -3,8 +3,7 @@ import Container from '../../containers/container-knex';
 import { ICartDao } from '../../types/daos';
 import { CartDto } from '../../types/dtos';
 import { logger } from '../../utils/logger';
-import { parseCartProduct } from '../../utils/parsers';
-import Cart from './cart';
+import Cart, { parseCartProduct } from './cart';
 
 export default class CartDao implements ICartDao {
   static dao = new CartDao();
@@ -26,7 +25,7 @@ export default class CartDao implements ICartDao {
 
   async getById(id: string) {
     const res = await this.container.find({ id });
-    const cartDto = res ? Cart.fromDto(res[0]) : null;
+    const cartDto = res[0] ? Cart.fromDto(res[0]) : null;
     return cartDto;
   }
 

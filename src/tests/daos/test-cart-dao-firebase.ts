@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
+import { parseCartProduct } from '../../modules/cart/cart';
 import CartDao from '../../modules/cart/cart.dao.firebase';
-import { parseCartProduct } from '../../utils/parsers';
 import { testFunction } from '../tests';
 
 export const testCartDaoFirebase = async () => {

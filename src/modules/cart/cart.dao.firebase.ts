@@ -21,7 +21,7 @@ export default class CartDao implements ICartDao {
 
   async getById(id: string) {
     const res = await this.container.find(where('id', '==', id));
-    const cartDto = res ? Cart.fromDto(res[0]) : null;
+    const cartDto = res[0] ? Cart.fromDto(res[0]) : null;
     return cartDto;
   }
 

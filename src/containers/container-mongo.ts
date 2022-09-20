@@ -1,5 +1,6 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
 import { mongooseOptions } from '../config/mongoose';
+import { ServerError } from '../modules/errors/errors';
 import { filterMongo } from '../types/types';
 import { logger } from '../utils/logger';
 
@@ -92,7 +93,7 @@ export default class Container<T> {
         filter
       );
     } catch (err) {
-      logger.error(err);
+      if (err instanceof Error) throw new ServerError(err);
     }
     return success;
   }

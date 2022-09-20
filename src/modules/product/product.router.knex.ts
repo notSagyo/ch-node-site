@@ -5,7 +5,7 @@ import { authn, authz } from '../../middlewares/auth';
 import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { maridadbOptions as mariadbOptions } from '../../config/mariadb';
-import { parseProduct } from '../../utils/parsers';
+import { parseProduct } from './product';
 
 export default class ProductRouter implements IRouter {
   router = express.Router();

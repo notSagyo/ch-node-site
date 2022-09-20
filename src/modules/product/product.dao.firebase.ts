@@ -19,7 +19,7 @@ export default class ProductDao implements IDao<Product> {
 
   async getById(id: string) {
     const res = await this.container.find(where('id', '==', id));
-    const product = res ? Product.fromDto(res[0]) : null;
+    const product = res[0] ? Product.fromDto(res[0]) : null;
     return product;
   }
 

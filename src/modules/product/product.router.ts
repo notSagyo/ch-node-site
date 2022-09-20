@@ -1,11 +1,14 @@
 import { faker } from '@faker-js/faker';
 import express from 'express';
+import _ from 'lodash';
 import { ejsDefaultData } from '../../config/ejs';
 import { authz } from '../../middlewares/auth';
 import { productSocket } from '../../middlewares/sockets';
 import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
+import { NotFoundError, NullError } from '../errors/errors';
+import { HttpErrorHandler } from '../errors/http-error-handler';
 import productService from './product.service';
 
 export default class ProductRouter implements IRouter {
@@ -57,11 +60,10 @@ export default class ProductRouter implements IRouter {
       const prodId = req.params.prodId;
       const prod = await productService.getProductById(prodId);
 
-      if (prod == null) {
-        const msg = `Product with ID=${prodId} not found`;
-        logger.error(msg);
-        return res.status(404).send(`404: ${msg}`);
-      }
+      if (prod == null)
+        return new HttpErrorHandler(res)
+          .handleError(new NotFoundError('Product not found:'), prodId)
+          .send();
 
       res.json(prod);
     });
@@ -79,36 +81,34 @@ export default class ProductRouter implements IRouter {
       const prodId = req.params.prodId;
       const success = await productService.deleteProductById(prodId);
 
-      if (success == false) {
-        const msg = 'Error while deleting product';
-        logger.error(msg);
-        return res.status(400).send(`400: ${msg}`);
-      }
+      if (success == false)
+        return new HttpErrorHandler(res)
+          .handleError(new Error('Error deleting product:'), prodId)
+          .send();
 
-      res.status(200).send('200: Product deleted succesfully');
+      res.status(200).send('[200]: Product deleted succesfully');
     });
   }
 
   private putProductById() {
     this.apiRouter.put('/:prodId', authz, async (req, res) => {
-      if (req.body == null) {
-        const msg = 'Error parsing product, malformed request body';
-        logger.error(msg);
-        return res.status(400).send(`400: ${msg}`);
-      }
-
       const prodId = req.params.prodId;
-      const newProd = req.body as Partial<ProductDto>;
+      const newProd = req.body;
+      const httpErrorHandler = new HttpErrorHandler(res, newProd);
+      let success = false;
 
-      let success = await productService.updateProductById(prodId, newProd);
+      if (newProd == null || _.isEmpty(req.body))
+        return httpErrorHandler
+          .handleError(new NullError('Empty body:'))
+          .send();
 
-      if (success == false) {
-        const msg = 'Error while updating product';
-        logger.error(msg);
-        return res.status(400).send(`400: ${msg}`);
-      }
+      success = await productService.updateProductById(prodId, newProd);
+      if (success == false)
+        return httpErrorHandler
+          .handleError(new Error('Error while updating product:'))
+          .send();
 
-      res.status(200).send('200: Product updated succesfully');
+      res.status(200).send('[200]: Product updated succesfully');
     });
   }
 

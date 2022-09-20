@@ -30,8 +30,8 @@ export default class Container<T extends Record<string, any>> {
     return success;
   }
 
-  async find(filter: filterFirebase): Promise<T[] | null> {
-    let res: T[] | null = null;
+  async find(filter: filterFirebase): Promise<T[]> {
+    let res: T[] = [];
     try {
       const q =
         filter === '*' ? this.collectionRef : query(this.collectionRef, filter);
