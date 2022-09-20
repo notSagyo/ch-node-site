@@ -1,8 +1,8 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { ejsDefaultData } from '../settings/ejs';
-import { uploadsDir } from '../utils/utils';
+import { ejsDefaultData } from '../config/ejs';
+import { uploadsDirLocal } from '../utils/paths';
 
 /**
  * Ensures data passed to EJS is synced with session data.
@@ -17,7 +17,7 @@ export const updateEjsDefaultData: express.RequestHandler = (
   res.locals.oldEjsDefaultData = ejsDefaultData;
   ejsDefaultData.user = req.user;
   if (!ejsDefaultData.avatarUrl && req.user) {
-    const uploads = fs.readdirSync(uploadsDir);
+    const uploads = fs.readdirSync(uploadsDirLocal);
     const userId = req.user.id;
     const avatarFilename = uploads.find((f) => f.includes(userId));
     avatarFilename &&

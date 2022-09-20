@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cartsDao = void 0;
 const container_knex_1 = __importDefault(require("../containers/container-knex"));
-const mariadb_1 = require("../settings/mariadb");
+const mariadb_1 = require("../config/mariadb");
 const parsers_1 = require("../utils/parsers");
 const logger_1 = require("../utils/logger");
 class CartsDao {

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const carts_dao_knex_1 = require("../daos/carts-dao-knex");
-const ejs_1 = require("../settings/ejs");
+const ejs_1 = require("../config/ejs");
 class CartRouter {
     router = express_1.default.Router();
     apiRouter = express_1.default.Router();

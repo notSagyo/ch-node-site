@@ -8,7 +8,7 @@ const products_dao_mongo_1 = require("../daos/products-dao-mongo");
 const parsers_1 = require("../utils/parsers");
 const auth_1 = require("../middlewares/auth");
 const faker_1 = require("@faker-js/faker");
-const ejs_1 = require("../settings/ejs");
+const ejs_1 = require("../config/ejs");
 const logger_1 = require("../utils/logger");
 class ProductsRouter {
     router = express_1.default.Router();

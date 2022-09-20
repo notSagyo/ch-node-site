@@ -1,16 +1,16 @@
-import { messagesDao } from '../daos/messages-dao-mongo';
 import { testFunction } from './tests';
 import { denormalize, normalize, schema, Schema } from 'normalizr';
-import { iUser, iMessage } from '../types/models';
+import { UserDto, MessageDto } from '../types/dtos';
 import { inspect } from 'util';
+import MessageDao from '../modules/chat/chat.dao';
 
 export const testNormalizr = async () => {
-  const authorSchema: Schema<iUser> = new schema.Entity('authors');
-  const messageSchema: Schema<iMessage> = new schema.Entity('messages', {
+  const authorSchema: Schema<UserDto> = new schema.Entity('authors');
+  const messageSchema: Schema<MessageDto> = new schema.Entity('messages', {
     author: authorSchema,
   });
 
-  const messages = await messagesDao.getAll().then((messages) => {
+  const messages = await MessageDao.dao.getAll().then((messages) => {
     console.log(typeof []);
     return messages;
   });

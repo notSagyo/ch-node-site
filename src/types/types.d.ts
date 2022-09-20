@@ -1,16 +1,16 @@
 import { QueryConstraint } from '@firebase/firestore';
 import mongoose from 'mongoose';
 import { Router } from 'express';
-import { iUser } from './models';
+import { UserDto } from './dtos';
 
-interface iRouter {
+export interface IRouter {
   router: Router;
   apiRouter?: Router;
   initRoutes(): void;
 }
 
-interface iParser<T> {
-  (obj: Partial<T> | Record<string, unknown> | null | undefined): T | null;
+export interface IParser<dto> {
+  (obj: Partial<dto> | Record<string, unknown> | null | undefined): dto | null;
 }
 
 // Databases
@@ -39,6 +39,6 @@ declare module 'Express' {
 declare global {
   namespace Express {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface User extends iUser {}
+    interface User extends UserDto {}
   }
 }

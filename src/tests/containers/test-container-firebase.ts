@@ -1,11 +1,11 @@
 import { where } from '@firebase/firestore';
 import { v4 } from 'uuid';
 import Container from '../../containers/container-firebase';
-import { iProduct } from '../../types/models';
+import { ProductDto } from '../../types/dtos';
 import { testFunction } from '../tests';
 
 export const testContainerFirebase = async () => {
-  const container = new Container<iProduct>('products');
+  const container = new Container<ProductDto>('products');
 
   await testFunction('insert()', async () => {
     await container.insert({ id: v4(), name: 'Test', price: 100 });
@@ -19,7 +19,7 @@ export const testContainerFirebase = async () => {
   });
 
   await testFunction('find() {name: Test}', async () => {
-    const res = await container.find(where('name', '==','Test'));
+    const res = await container.find(where('name', '==', 'Test'));
     console.log(res);
   });
 

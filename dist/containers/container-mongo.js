@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const mongoose_2 = require("../settings/mongoose");
+const mongoose_2 = require("../config/mongoose");
 const logger_1 = require("../utils/logger");
 class Container {
     static connection;

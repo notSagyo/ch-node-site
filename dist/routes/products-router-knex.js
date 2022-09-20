@@ -7,8 +7,8 @@ const express_1 = __importDefault(require("express"));
 const parsers_1 = require("../utils/parsers");
 const auth_1 = require("../middlewares/auth");
 const container_knex_1 = __importDefault(require("../containers/container-knex"));
-const mariadb_1 = require("../settings/mariadb");
-const ejs_1 = require("../settings/ejs");
+const mariadb_1 = require("../config/mariadb");
+const ejs_1 = require("../config/ejs");
 class ProductsRouter {
     router = express_1.default.Router();
     apiRouter = express_1.default.Router();
@@ -18,7 +18,7 @@ class ProductsRouter {
         this.productsHtmlPath = productsHtmlPath;
         this.initRoutes();
         this.table = new container_knex_1.default(mariadb_1.maridadbOptions.connection.database, 'products', mariadb_1.maridadbOptions);
-        this.table.createTable(table => {
+        this.table.createTable((table) => {
             table.increments('id').primary();
             table.string('name');
             table.integer('price');
@@ -37,7 +37,10 @@ class ProductsRouter {
     getProductsPage() {
         this.router.get('/', async (req, res) => {
             const prods = await this.table.find({});
-            res.render(this.productsHtmlPath, { ...ejs_1.ejsDefaultData, productList: prods });
+            res.render(this.productsHtmlPath, {
+                ...ejs_1.ejsDefaultData,
+                productList: prods,
+            });
         });
     }
     getProducts() {
@@ -61,7 +64,9 @@ class ProductsRouter {
         this.apiRouter.post('/', auth_1.authn, auth_1.authz, async (req, res) => {
             const newProd = (0, parsers_1.parseProduct)(req.body);
             if (!newProd)
-                return res.status(400).send('400: Error parsing product, malformed request body');
+                return res
+                    .status(400)
+                    .send('400: Error parsing product, malformed request body');
             await this.table.insert(newProd);
             res.status(201).redirect('/productos');
         });
@@ -84,7 +89,9 @@ class ProductsRouter {
                 return res.send('ID must be an integer number');
             const newProd = (0, parsers_1.parseProduct)(req.body);
             if (!newProd)
-                return res.status(400).send('400: Error parsing product, malformed request body');
+                return res
+                    .status(400)
+                    .send('400: Error parsing product, malformed request body');
             const success = await this.table.update(['id', '=', prodID], newProd);
             if (success == null)
                 return res.status(400).send('400: Error while updating product');

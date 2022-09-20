@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
-const ejs_1 = require("../settings/ejs");
+const ejs_1 = require("../config/ejs");
 const passport_1 = __importDefault(require("passport"));
 const logger_1 = require("../utils/logger");
-const utils_1 = require("../utils/utils");
+const paths_1 = require("../utils/paths");
 const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
 const image_type_1 = __importDefault(require("image-type"));
@@ -84,7 +84,7 @@ class UserRouter {
             if (req.file) {
                 const imgExtension = (0, image_type_1.default)(req.file.buffer)?.ext;
                 imgExtension &&
-                    promises_1.default.writeFile(path_1.default.join(utils_1.uploadsDir, `${req.user?.id}.${imgExtension}`), req.file.buffer);
+                    promises_1.default.writeFile(path_1.default.join(paths_1.uploadsDirLocal, `${req.user?.id}.${imgExtension}`), req.file.buffer);
             }
             res.redirect('/signup-messages');
         });

@@ -1,5 +1,6 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
-import { mongooseOptions } from '../settings/mongoose';
+import { mongooseOptions } from '../config/mongoose';
+import { ServerError } from '../modules/errors/errors';
 import { filterMongo } from '../types/types';
 import { logger } from '../utils/logger';
 
@@ -50,11 +51,11 @@ export default class Container<T> {
     return success;
   }
 
-  async find(filter: filterMongo<T>): Promise<T[] | null> {
-    let result: T[] | null = null;
+  async find(filter: filterMongo<T>): Promise<T[]> {
+    let result: T[] = [];
     const allOrFilter = filter === '*' ? {} : filter;
     try {
-      result = (await this.model.find(allOrFilter).lean()) as T[];
+      result = await this.model.find(allOrFilter).lean();
       logger.info(
         `Retrieved from "${this.collection}" elements matching:`,
         filter
@@ -92,7 +93,7 @@ export default class Container<T> {
         filter
       );
     } catch (err) {
-      logger.error(err);
+      if (err instanceof Error) throw new ServerError(err);
     }
     return success;
   }

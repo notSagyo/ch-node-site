@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const firestore_1 = require("@firebase/firestore");
-const firebase_1 = require("../settings/firebase");
+const firebase_1 = require("../config/firebase");
 class Container {
     collectionRef;
     constructor(collectionName) {
@@ -21,9 +21,7 @@ class Container {
     async find(filter) {
         let res = null;
         try {
-            const q = filter === '*'
-                ? this.collectionRef
-                : (0, firestore_1.query)(this.collectionRef, filter);
+            const q = filter === '*' ? this.collectionRef : (0, firestore_1.query)(this.collectionRef, filter);
             const qSnapshot = await (0, firestore_1.getDocs)(q);
             res = qSnapshot.docs.map((docSnap) => docSnap.data());
         }
@@ -35,9 +33,7 @@ class Container {
     async update(filter, data) {
         let success = false;
         try {
-            const q = filter === '*'
-                ? this.collectionRef
-                : (0, firestore_1.query)(this.collectionRef, filter);
+            const q = filter === '*' ? this.collectionRef : (0, firestore_1.query)(this.collectionRef, filter);
             const qSnapshot = await (0, firestore_1.getDocs)(q);
             const allPromises = qSnapshot.docs.map(async (docSnap) => (0, firestore_1.updateDoc)(docSnap.ref, data));
             await Promise.all(allPromises);
@@ -51,9 +47,7 @@ class Container {
     async delete(filter) {
         let success = false;
         try {
-            const q = filter === '*'
-                ? this.collectionRef
-                : (0, firestore_1.query)(this.collectionRef, filter);
+            const q = filter === '*' ? this.collectionRef : (0, firestore_1.query)(this.collectionRef, filter);
             const qSnapshot = await (0, firestore_1.getDocs)(q);
             const allPromises = qSnapshot.docs.map(async (docSnap) => (0, firestore_1.deleteDoc)(docSnap.ref));
             await Promise.all(allPromises);

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const carts_dao_mongo_1 = require("../daos/carts-dao-mongo");
 const auth_1 = require("../middlewares/auth");
-const ejs_1 = require("../settings/ejs");
+const ejs_1 = require("../config/ejs");
 const logger_1 = require("../utils/logger");
 const utils_1 = require("../utils/utils");
 class CartRouter {

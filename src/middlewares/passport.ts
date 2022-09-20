@@ -1,18 +1,17 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { usersDao } from '../daos/users-dao-mongo';
-import { iUser } from '../types/models';
-import { saltRounds } from '../settings/bcrypt';
-import { parseUser } from '../utils/parsers';
+import { saltRounds } from '../config/bcrypt';
 import { logger } from '../utils/logger';
+import { parseUser } from '../modules/user/user';
+import userService from '../modules/user/user.service';
 
 passport.use(
   'registration',
   new LocalStrategy(
     { usernameField: 'email', passReqToCallback: true },
     async (req, email, password, callback) => {
-      const foundUser = await usersDao.getByEmail(email);
+      const foundUser = await userService.getUserByEmail(email);
       if (foundUser != null)
         return callback(null, false, { message: 'User already exists' });
 
@@ -37,7 +36,7 @@ passport.use(
         return callback(null, null);
       }
 
-      const success = await usersDao.save(createdUser);
+      const success = await userService.createUser(createdUser);
       if (!success) {
         logger.error('Passport middleware: error saving user');
         return callback(null, null);
@@ -49,11 +48,11 @@ passport.use(
 );
 
 passport.use(
-  'authn',
+  'login',
   new LocalStrategy(
     { usernameField: 'email' },
     async (email, password, callback) => {
-      const dbUser = await usersDao.getByEmail(email);
+      const dbUser = await userService.getUserByEmail(email);
       if (dbUser == null || !bcrypt.compareSync(password, dbUser.password))
         return callback(null, false, { message: 'Invalid email/password' });
       callback(null, dbUser);
@@ -66,7 +65,7 @@ passport.serializeUser((user, callback) => {
 });
 
 passport.deserializeUser(async (user: string, callback) => {
-  const foundUser = (await usersDao.getByEmail(user)) || ({} as iUser);
+  const foundUser = await userService.getUserByEmail(user);
   callback(null, foundUser);
 });
 

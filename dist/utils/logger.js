@@ -8,13 +8,13 @@ const log4js_1 = __importDefault(require("log4js"));
 const path_1 = __importDefault(require("path"));
 let logger = log4js_1.default.getLogger();
 exports.logger = logger;
-const initLogger = (outPath) => {
+const initLogger = (outDir) => {
     log4js_1.default.configure({
         appenders: {
             console: { type: 'console' },
-            fileDebug: { type: 'file', filename: path_1.default.join(outPath, 'debug.log') },
-            fileError: { type: 'file', filename: path_1.default.join(outPath, 'error.log') },
-            fileWarn: { type: 'file', filename: path_1.default.join(outPath, 'warn.log') },
+            fileDebug: { type: 'file', filename: path_1.default.join(outDir, 'debug.log') },
+            fileError: { type: 'file', filename: path_1.default.join(outDir, 'error.log') },
+            fileWarn: { type: 'file', filename: path_1.default.join(outDir, 'warn.log') },
             loggerWarn: {
                 type: 'logLevelFilter',
                 appender: 'fileWarn',

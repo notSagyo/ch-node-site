@@ -1,21 +1,23 @@
 import express from 'express';
 import path from 'path';
-import { ejsDefaultData } from '../settings/ejs';
+import { ejsDefaultData } from '../config/ejs';
+import CartRouter from '../modules/cart/cart.router';
+import ChatRouter from '../modules/chat/chat.router';
+import ProductRouter from '../modules/product/product.router';
+import UserRouter from '../modules/user/user.router';
 import { logger } from '../utils/logger';
-import { baseDir } from '../utils/utils';
-import CartRouter from './cart-router';
-import CommunicationRouter from './communication-router';
-import ProductsRouter from './products-router';
-import UserRouter from './user-router';
-import UtilsRouter from './utils-router';
+import { baseDirLocal } from '../utils/paths';
+import NotificationRouter from './notification.router';
+import UtilsRouter from './utils.router';
 
 // Routers
 const router = express.Router();
-router.use(express.static(path.join(baseDir, 'public')));
+router.use(express.static(path.join(baseDirLocal, 'public')));
 
-const productsRouter = new ProductsRouter('pages/products.ejs');
-const communicationRouter = new CommunicationRouter();
+const productsRouter = new ProductRouter('pages/products.ejs');
 const cartRouter = new CartRouter('pages/cart.ejs');
+const chatRouter = new ChatRouter('pages/chat.ejs');
+const notificationRouter = new NotificationRouter();
 const utilsRouter = new UtilsRouter();
 const userRouter = new UserRouter(
   'pages/login.ejs',
@@ -27,7 +29,8 @@ const userRouter = new UserRouter(
 // Routes
 router.use('/', userRouter.router);
 router.use('/', utilsRouter.router);
-router.use('/', communicationRouter.router);
+router.use('/', notificationRouter.router);
+router.use('/chat', chatRouter.router);
 router.use('/carrito', cartRouter.router);
 router.use('/productos', productsRouter.router);
 router.use('/api', utilsRouter.apiRouter);
@@ -38,10 +41,6 @@ router.use('/api/productos', productsRouter.apiRouter);
 router.get('/', (req, res) => {
   logger.info('Req. user:', req.user);
   res.render('pages/index.ejs', ejsDefaultData);
-});
-
-router.get('/chat', async (req, res) => {
-  res.render('pages/chat.ejs', ejsDefaultData);
 });
 
 router.use((req, res) => {

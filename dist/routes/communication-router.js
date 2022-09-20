@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const nodemailer_1 = require("../settings/nodemailer");
+const nodemailer_1 = require("../config/nodemailer");
 const carts_dao_mongo_1 = require("../daos/carts-dao-mongo");
 const auth_1 = require("../middlewares/auth");
 const utils_1 = require("../utils/utils");
-const twilio_1 = require("../settings/twilio");
+const twilio_1 = require("../config/twilio");
 const logger_1 = require("../utils/logger");
 class CommunicationRouter {
     router = express_1.default.Router();

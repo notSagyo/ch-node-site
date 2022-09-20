@@ -2,25 +2,28 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import router from './routes/routes';
-import minimist from 'minimist';
 import cluster from 'cluster';
 import express from 'express';
-import path from 'path';
-import middlewares from './middlewares/middlewares';
-import { productsDao } from './daos/products-dao-mongo';
-import { messagesDao } from './daos/messages-dao-mongo';
-import { initLogger, logger } from './utils/logger';
-import { Server as IOServer } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import { baseDir } from './utils/utils';
+import minimist from 'minimist';
 import { cpus } from 'os';
+import path from 'path';
+import { Server as IOServer } from 'socket.io';
+import middlewares from './middlewares/middlewares';
+import router from './routes/routes';
+import { initLogger, logger } from './utils/logger';
+import { baseDirLocal } from './utils/paths';
 
-// INIT ====================================================================//
+// INIT ======================================================================//
 // Get args
-const args = minimist(process.argv.slice(2));
-const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
+export const args = minimist(process.argv.slice(2));
+export const mode = args.mode === 'cluster' ? 'CLUSTER' : 'FORK';
 export const PORT = args.port || process.env.PORT || 8080;
+
+// Constants
+export const app = express();
+export const httpServer = new HttpServer(app);
+export const ioServer = new IOServer(httpServer);
 
 (() => {
   // Check for cluster mode
@@ -33,14 +36,9 @@ export const PORT = args.port || process.env.PORT || 8080;
     return;
   }
 
-  // Constants
-  const app = express();
-  const httpServer = new HttpServer(app);
-  const ioServer = new IOServer(httpServer);
-
   // Config
   app.set('view engine', 'ejs');
-  app.set('views', path.join(baseDir, 'views'));
+  app.set('views', path.join(baseDirLocal, 'views'));
   initLogger(path.join(process.cwd(), 'logs'));
 
   // Middlewares & Routes
@@ -48,25 +46,8 @@ export const PORT = args.port || process.env.PORT || 8080;
   app.use(router);
 
   // Websockets ==============================================================//
-  ioServer.on('connection', async (socket) => {
-    logger.info('New client connected:', socket.id);
 
-    ioServer.emit('products_updated', await productsDao.getAll());
-    ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
-
-    socket.on('create_product', async (product) => {
-      await productsDao.save(product);
-      ioServer.emit('products_updated', await productsDao.getAll());
-    });
-
-    socket.on('create_message', async (message) => {
-      const success = await messagesDao.save(message);
-      if (!success) return socket.emit('message_error', 'Invalid message');
-      ioServer.emit('messages_updated', await messagesDao.getAllNormalized());
-    });
-  });
-
-  // Listen ====================================================================//
+  // Listen ==================================================================//
   httpServer.listen(PORT, () => {
     const time = new Date().toLocaleTimeString();
     console.log(
