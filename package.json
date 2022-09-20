@@ -4,11 +4,11 @@
   "description": "Sitio desarrollado para la cursada de Backend de Coderhouse",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/app.ts",
+    "dev": "nodemon --ignore test/* --exec ts-node src/app.ts ",
     "build": "tsc --build --verbose",
     "preview": "pm2-runtime start ecosystem.config.js --env development",
     "start": "npm run preview",
-    "test": "ts-node src/tests/tests.ts",
+    "test": "ts-node src/modules/test/test.ts",
     "fork": "pm2 start dist/app.js --name app8080 --watch -- --port 8080",
     "cluster": "pm2 start dist/app.js --name app8081 --watch -i max -- --port 8081"
   },
@@ -73,6 +73,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.35.1",
+    "axios": "^0.27.2",
     "eslint": "^8.22.0",
     "eslint-plugin-react": "^7.31.0",
     "ts-node": "^10.9.1"

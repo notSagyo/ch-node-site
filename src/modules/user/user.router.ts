@@ -87,7 +87,7 @@ export default class UserRouter implements IRouter {
           '&errorDescription=Invalid credentials: email/password combination' +
           ' do not match an existing user',
       }),
-      (req, res) => res.redirect('/')
+      (req, res) => res.redirect(303, '/')
     );
   }
 
@@ -130,7 +130,7 @@ export default class UserRouter implements IRouter {
       const errorDescription = req.query.errorDescription || 'Unknown error';
 
       logger.error(`${errorTitle} - ${errorDescription}`);
-      res.render(this.errorHtmlPath, {
+      res.status(401).render(this.errorHtmlPath, {
         ejsDefaultData,
         errorTitle: errorTitle,
         errorDescription: errorDescription,

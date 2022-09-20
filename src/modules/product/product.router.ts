@@ -7,10 +7,11 @@ import { productSocket } from '../../middlewares/sockets';
 import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
 import { logger } from '../../utils/logger';
-import { NotFoundError, NullError } from '../errors/errors';
-import { HttpErrorHandler } from '../errors/http-error-handler';
+import { NotFoundError, NullError } from '../error/errors';
+import { HttpErrorHandler } from '../error/http-error-handler';
 import productService from './product.service';
 
+// TODO: Uncomment authz (disabled for axios)
 export default class ProductRouter implements IRouter {
   router = express.Router();
   apiRouter = express.Router();
@@ -30,6 +31,7 @@ export default class ProductRouter implements IRouter {
     this.getProducts();
     this.getProductsById();
     this.postProduct();
+    this.deleteAllProducts();
     this.deleteProductById();
     this.putProductById();
 
@@ -70,14 +72,14 @@ export default class ProductRouter implements IRouter {
   }
 
   private postProduct() {
-    this.apiRouter.post('/', authz, async (req, res) => {
+    this.apiRouter.post('/', /* authz, */ async (req, res) => {
       await productService.createProduct(req.body);
       res.status(201).redirect('/productos');
     });
   }
 
   private deleteProductById() {
-    this.apiRouter.delete('/:prodId', authz, async (req, res) => {
+    this.apiRouter.delete('/:prodId', /* authz, */ async (req, res) => {
       const prodId = req.params.prodId;
       const success = await productService.deleteProductById(prodId);
 
@@ -90,8 +92,21 @@ export default class ProductRouter implements IRouter {
     });
   }
 
+  private deleteAllProducts() {
+    this.apiRouter.delete('/', /* authz, */ async (req, res) => {
+      const success = await productService.deleteAllProducts();
+
+      if (success == false)
+        return new HttpErrorHandler(res)
+          .handleError(new Error('Error deleting all products'))
+          .send();
+
+      res.status(200).send('[200]: All products deleted succesfully');
+    });
+  }
+
   private putProductById() {
-    this.apiRouter.put('/:prodId', authz, async (req, res) => {
+    this.apiRouter.put('/:prodId', /* authz, */ async (req, res) => {
       const prodId = req.params.prodId;
       const newProd = req.body;
       const httpErrorHandler = new HttpErrorHandler(res, newProd);
