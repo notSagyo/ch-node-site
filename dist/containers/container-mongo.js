@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const mongoose_2 = require("../config/mongoose");
+const errors_1 = require("../modules/error/errors");
 const logger_1 = require("../utils/logger");
 class Container {
     static connection;
@@ -72,10 +73,10 @@ class Container {
         return success;
     }
     async find(filter) {
-        let result = null;
+        let result = [];
         const allOrFilter = filter === '*' ? {} : filter;
         try {
-            result = (await this.model.find(allOrFilter).lean());
+            result = await this.model.find(allOrFilter).lean();
             logger_1.logger.info(`Retrieved from "${this.collection}" elements matching:`, filter);
         }
         catch (err) {
@@ -105,7 +106,8 @@ class Container {
             logger_1.logger.info(`Deleted from "${this.collection}" elements matching:`, filter);
         }
         catch (err) {
-            logger_1.logger.error(err);
+            if (err instanceof Error)
+                throw new errors_1.ServerError(err);
         }
         return success;
     }

@@ -112,19 +112,20 @@ export default class ProductRouter implements IRouter {
       const httpErrorHandler = new HttpErrorHandler(res, newProd);
       let success = false;
 
-      if (newProd == null || _.isEmpty(req.body))
-        return httpErrorHandler
-          .handleError(new NullError('Empty body:'))
-          .send();
-
-      success = await productService.updateProductById(prodId, newProd);
-      if (success == false)
-        return httpErrorHandler
-          .handleError(new Error('Error while updating product:'))
-          .send();
+      try {
+        if (newProd == null || _.isEmpty(req.body))
+          throw new NullError('Empty body:');
+        success = await productService.updateProductById(prodId, newProd);
+        if (success == false)
+          throw new Error('Error while updating product:');
+      } catch (error) {
+        if (error instanceof Error)
+          return httpErrorHandler.handleError(error).send();
+      }
 
       res.status(200).send('[200]: Product updated succesfully');
-    });
+    }
+    );
   }
 
   private productsTest() {

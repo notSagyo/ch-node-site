@@ -35,7 +35,7 @@ class Container {
     }
     async find(condition, sortColumn, ascending) {
         const kn = (0, knex_1.knex)(this.options);
-        let rows = null;
+        let rows = [];
         if (sortColumn != null) {
             await kn
                 .from(this.table)
