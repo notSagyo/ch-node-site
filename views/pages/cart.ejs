@@ -16,7 +16,7 @@
       <tbody id="cartProductsTableBody">
         <% cartProducts.forEach((elem) => { %>
           <tr class="text-capitalize">
-            <td><img src="<%= elem.thumbnail %>" alt="<%= elem.name %>" class="img-fluid" width="32" /></td>
+            <td><img src="<%= elem.thumbnail || 'https://via.placeholder.com/256' %>" alt="<%= elem.name %>" class="img-fluid" width="32" /></td>
             <td><%= elem.name %></td>
             <th><%= elem.id %></th>
             <td>$<%= elem.price %></td>

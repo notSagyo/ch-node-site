@@ -1,14 +1,8 @@
-import { faker } from '@faker-js/faker';
 import express from 'express';
-import _ from 'lodash';
 import { ejsDefaultData } from '../../config/ejs';
-import { authz } from '../../middlewares/auth';
 import { productSocket } from '../../middlewares/sockets';
-import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
-import { logger } from '../../utils/logger';
-import { NotFoundError, NullError } from '../error/errors';
-import { HttpErrorHandler } from '../error/http-error-handler';
+import productControllerRest from './product.controller.rest';
 import productService from './product.service';
 
 // TODO: Uncomment authz (disabled for axios)
@@ -51,97 +45,43 @@ export default class ProductRouter implements IRouter {
 
   private getProducts() {
     this.apiRouter.get('/', async (req, res) => {
-      const prods = await productService.getAllProducts();
-      if (prods.length < 1) logger.warn('Empty products list');
-      res.json(prods);
+      productControllerRest.getProducts(req, res);
     });
   }
 
   private getProductsById() {
     this.apiRouter.get('/:prodId', async (req, res) => {
-      const prodId = req.params.prodId;
-      const prod = await productService.getProductById(prodId);
-
-      if (prod == null)
-        return new HttpErrorHandler(res)
-          .handleError(new NotFoundError('Product not found:'), prodId)
-          .send();
-
-      res.json(prod);
+      productControllerRest.getProductsById(req, res);
     });
   }
 
   private postProduct() {
     this.apiRouter.post('/', /* authz, */ async (req, res) => {
-      await productService.createProduct(req.body);
-      res.status(201).redirect('/productos');
+      productControllerRest.postProduct(req, res);
     });
   }
 
   private deleteProductById() {
     this.apiRouter.delete('/:prodId', /* authz, */ async (req, res) => {
-      const prodId = req.params.prodId;
-      const success = await productService.deleteProductById(prodId);
-
-      if (success == false)
-        return new HttpErrorHandler(res)
-          .handleError(new Error('Error deleting product:'), prodId)
-          .send();
-
-      res.status(200).send('[200]: Product deleted succesfully');
+      productControllerRest.deleteProductById(req, res);
     });
   }
 
   private deleteAllProducts() {
     this.apiRouter.delete('/', /* authz, */ async (req, res) => {
-      const success = await productService.deleteAllProducts();
-
-      if (success == false)
-        return new HttpErrorHandler(res)
-          .handleError(new Error('Error deleting all products'))
-          .send();
-
-      res.status(200).send('[200]: All products deleted succesfully');
+      productControllerRest.deleteAllProducts(req, res);
     });
   }
 
   private putProductById() {
     this.apiRouter.put('/:prodId', /* authz, */ async (req, res) => {
-      const prodId = req.params.prodId;
-      const newProd = req.body;
-      const httpErrorHandler = new HttpErrorHandler(res, newProd);
-      let success = false;
-
-      try {
-        if (newProd == null || _.isEmpty(req.body))
-          throw new NullError('Empty body:');
-        success = await productService.updateProductById(prodId, newProd);
-        if (success == false)
-          throw new Error('Error while updating product:');
-      } catch (error) {
-        if (error instanceof Error)
-          return httpErrorHandler.handleError(error).send();
-      }
-
-      res.status(200).send('[200]: Product updated succesfully');
-    }
-    );
+      productControllerRest.getProductsById(req, res);
+    });
   }
 
   private productsTest() {
     this.testRouter.get('/productos-test', async (req, res) => {
-      const products: ProductDto[] = [];
-      for (let i = 0; i < 5; i++) {
-        const prod: ProductDto = {
-          id: '0',
-          name: faker.commerce.product(),
-          price: Number(faker.commerce.price()),
-          description: faker.commerce.productDescription(),
-          thumbnail: faker.image.abstract(),
-        };
-        products.push(prod);
-      }
-      res.status(200).json(products);
+      productControllerRest.productsTest(req, res);
     });
   }
 }

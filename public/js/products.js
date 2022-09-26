@@ -19,7 +19,7 @@ socket.on('products_updated', (productList) => {
     newTableContent += `
     <tr class="text-capitalize">
       <th>${product.id}</th>
-      <td><img src="${product.thumbnail}" alt="${product.name}" class="img-fluid" width="32" /></td>
+      <td><img src="${product.thumbnail || 'https://via.placeholder.com/256'}" alt="${product.name}" class="img-fluid" width="32" /></td>
       <td>${product.name}</td>
       <td>$${product.price}</td>
       <th scope="col"></th>
@@ -47,6 +47,7 @@ productForm &&
   });
 
 // Add to cart ===============================================================//
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function addToCart(productId) {
   fetch('/api/carrito/0/productos', {
     method: 'POST',
