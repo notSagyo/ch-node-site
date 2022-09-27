@@ -1,12 +1,17 @@
-import { CartDtoOptional, CartProductDto, ProductDto } from '../../types/dtos';
+import {
+  CartDto,
+  CartDtoPayload,
+  CartProductDto,
+  ProductDto,
+} from '../../types/dtos';
 import { ICartService } from '../../types/services';
 import productService from '../product/product.service';
-import Cart from './cart';
+import Cart, { parseCart } from './cart';
 import CartDao from './cart.dao';
 
 class CartService implements ICartService {
   // Cart Methods ============================================================//
-  async createCart(cartDto: CartDtoOptional): Promise<Cart> {
+  async createCart(cartDto: CartDtoPayload): Promise<Cart> {
     const cart = Cart.fromDto(cartDto);
     const success = await CartDao.dao.save(cart);
     if (!success) throw new Error('Cart service: error saving cartDto');
@@ -27,6 +32,19 @@ class CartService implements ICartService {
 
   async deleteAllCarts(): Promise<boolean> {
     return await CartDao.dao.deleteAll();
+  }
+
+  async updateCartById(
+    cartId: string,
+    data: Partial<CartDto>
+  ): Promise<boolean> {
+    const exists = (await this.getCartById(cartId)) != null;
+    if (exists) return await CartDao.dao.updateById(cartId, data);
+
+    const parsedProd = parseCart(data);
+    if (parsedProd) return await CartDao.dao.save(Cart.fromDto(parsedProd));
+
+    return false;
   }
 
   // Cart Products Methods ===================================================//

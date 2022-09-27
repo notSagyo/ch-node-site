@@ -1,10 +1,10 @@
-import { UserDto, UserDtoOptional } from '../../types/dtos';
+import { UserDto, UserDtoPayload } from '../../types/dtos';
 import { IUserService } from '../../types/services';
 import User, { parseUser } from './user';
 import UserDao from './user.dao';
 
 class UserService implements IUserService {
-  async createUser(userDto: UserDtoOptional): Promise<User> {
+  async createUser(userDto: UserDtoPayload): Promise<User> {
     const user = User.fromDto(userDto);
     const success = await UserDao.dao.save(user);
     if (!success) throw new Error('User service: error saving userDto');

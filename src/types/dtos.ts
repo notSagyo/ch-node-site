@@ -6,12 +6,12 @@ export interface ProductDto {
   id: string;
 }
 
-export interface ProductDtoOptional {
-  description?: string;
+export interface ProductDtoPayload {
+  id?: string;
   thumbnail?: string;
+  description?: string;
   price: number;
   name: string;
-  id: string;
 }
 
 export interface CartProductDto {
@@ -21,16 +21,16 @@ export interface CartProductDto {
   id: string;
 }
 
-export interface CartDtoOptional {
+export interface CartDto {
+  products: CartProductDto[];
+  timestamp: number;
   id: string;
-  timestamp?: number;
-  products?: CartProductDto[];
 }
 
-export interface CartDto {
-  id: string;
-  timestamp: number;
-  products: CartProductDto[];
+export interface CartDtoPayload {
+  id?: string;
+  timestamp?: number;
+  products?: CartProductDto[];
 }
 
 export interface UserDto {
@@ -46,7 +46,10 @@ export interface UserDto {
   id: string;
 }
 
-export interface UserDtoOptional {
+export interface UserDtoPayload {
+  id?: string;
+  avatar?: string;
+  isAdmin?: boolean;
   lastName: string;
   username: string;
   password: string;
@@ -54,9 +57,6 @@ export interface UserDtoOptional {
   email: string;
   name: string;
   age: number;
-  id: string;
-  isAdmin?: boolean;
-  avatar?: string;
 }
 
 // ?TODO: Replace author for real user
@@ -68,11 +68,11 @@ export interface MessageDto {
   id: string;
 }
 
-export interface MessageDtoOptional {
+export interface MessageDtoPayload {
+  id?: string;
+  time?: number;
   content: string;
   author: string;
-  time?: number;
-  id?: string;
 }
 
 // export interface MessageDto {

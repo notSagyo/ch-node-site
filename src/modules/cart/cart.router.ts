@@ -3,7 +3,8 @@ import { ejsDefaultData } from '../../config/ejs';
 import { authn } from '../../middlewares/auth';
 import { ProductDto } from '../../types/dtos';
 import { IRouter } from '../../types/types';
-import cartControllerRest from './cart.controller.rest';
+import cartController from './cart.controller';
+import { gqlMiddleware } from './cart.resolver';
 import cartService from './cart.service';
 
 export default class CartRouter implements IRouter {
@@ -21,11 +22,16 @@ export default class CartRouter implements IRouter {
     this.getCartPage();
 
     // API Router
+    this.graphql();
     this.postCart();
     this.getCartProducts();
     this.postCartProduct();
     this.deleteCart();
     this.deleteCartProductById();
+  }
+
+  private graphql() {
+    this.apiRouter.all('/graphql', gqlMiddleware);
   }
 
   private getCartPage() {
@@ -46,19 +52,19 @@ export default class CartRouter implements IRouter {
 
   private postCart() {
     this.apiRouter.post('/', authn, async (req, res) => {
-      cartControllerRest.postCart(req, res);
+      cartController.postCart(req, res);
     });
   }
 
   private getCartProducts() {
     this.apiRouter.get('/:id/productos', async (req, res) => {
-      cartControllerRest.getCartProducts(req, res);
+      cartController.getCartProducts(req, res);
     });
   }
 
   private deleteCart() {
     this.apiRouter.delete('/:id', async (req, res) => {
-      cartControllerRest.deleteCart(req, res);
+      cartController.deleteCart(req, res);
     });
   }
 
@@ -69,13 +75,13 @@ export default class CartRouter implements IRouter {
    */
   private postCartProduct() {
     this.apiRouter.post('/:cartId/productos', authn, async (req, res) => {
-      cartControllerRest.postCartProduct(req, res);
+      cartController.postCartProduct(req, res);
     });
   }
 
   private deleteCartProductById() {
     this.apiRouter.delete('/:cartId/productos', async (req, res) => {
-      cartControllerRest.deleteCartProductById(req, res);
+      cartController.deleteCartProductById(req, res);
     });
   }
 }

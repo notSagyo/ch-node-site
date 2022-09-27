@@ -3,19 +3,19 @@ import Message from '../modules/chat/message';
 import Product from '../modules/product/product';
 import User from '../modules/user/user';
 import {
-  CartDtoOptional,
+  CartDtoPayload,
   CartProductDto,
   MessageDto,
-  MessageDtoOptional,
+  MessageDtoPayload,
   ProductDto,
-  ProductDtoOptional,
+  ProductDtoPayload,
   UserDto,
-  UserDtoOptional,
+  UserDtoPayload,
 } from './dtos';
 
 export interface ICartService {
   // Cart methods
-  createCart(cartDto: CartDtoOptional): Promise<Cart>;
+  createCart(cartDto: CartDtoPayload): Promise<Cart>;
   getAllCarts(): Promise<Cart[]>;
   getCartById(id: string): Promise<Cart | null>;
   deleteCartById(cartId: string): Promise<boolean>;
@@ -28,7 +28,7 @@ export interface ICartService {
 }
 
 export interface IProductService {
-  createProduct(productDto: ProductDtoOptional): Promise<Product>;
+  createProduct(productDto: ProductDtoPayload): Promise<Product>;
   getAllProducts(productId: string): Promise<Product[]>;
   getProductById(id: string): Promise<Product | null>;
   deleteProductById(productId: string): Promise<boolean>;
@@ -40,7 +40,7 @@ export interface IProductService {
 }
 
 export interface IChatService {
-  createMessage(messageDto: MessageDtoOptional): Promise<Message>;
+  createMessage(messageDto: MessageDtoPayload): Promise<Message>;
   getAllMessages(): Promise<Message[]>;
   getMessageById(messageId: string): Promise<Message | null>;
   deleteMessageById(messageId: string): Promise<boolean>;
@@ -52,7 +52,7 @@ export interface IChatService {
 }
 
 export interface IUserService {
-  createUser(userDto: UserDtoOptional): Promise<User>;
+  createUser(userDto: UserDtoPayload): Promise<User>;
   getAllUsers(): Promise<User[]>;
   getUserByEmail(userEmail: string): Promise<User | null>;
   getUserById(userId: string): Promise<User | null>;

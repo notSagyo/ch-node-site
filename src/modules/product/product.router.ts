@@ -1,8 +1,10 @@
 import express from 'express';
 import { ejsDefaultData } from '../../config/ejs';
+import { authz } from '../../middlewares/auth';
 import { productSocket } from '../../middlewares/sockets';
 import { IRouter } from '../../types/types';
-import productControllerRest from './product.controller.rest';
+import productController from './product.controller';
+import { gqlMiddleware } from './product.resolver';
 import productService from './product.service';
 
 // TODO: Uncomment authz (disabled for axios)
@@ -22,6 +24,7 @@ export default class ProductRouter implements IRouter {
     this.getProductsPage();
 
     // API Router
+    this.graphql();
     this.getProducts();
     this.getProductsById();
     this.postProduct();
@@ -31,6 +34,10 @@ export default class ProductRouter implements IRouter {
 
     // API router with test data
     this.productsTest();
+  }
+
+  private graphql() {
+    this.apiRouter.all('/graphql', gqlMiddleware);
   }
 
   private getProductsPage() {
@@ -45,43 +52,43 @@ export default class ProductRouter implements IRouter {
 
   private getProducts() {
     this.apiRouter.get('/', async (req, res) => {
-      productControllerRest.getProducts(req, res);
+      productController.getProducts(req, res);
     });
   }
 
   private getProductsById() {
     this.apiRouter.get('/:prodId', async (req, res) => {
-      productControllerRest.getProductsById(req, res);
+      productController.getProductsById(req, res);
     });
   }
 
   private postProduct() {
-    this.apiRouter.post('/', /* authz, */ async (req, res) => {
-      productControllerRest.postProduct(req, res);
+    this.apiRouter.post('/', authz, async (req, res) => {
+      productController.postProduct(req, res);
     });
   }
 
   private deleteProductById() {
-    this.apiRouter.delete('/:prodId', /* authz, */ async (req, res) => {
-      productControllerRest.deleteProductById(req, res);
+    this.apiRouter.delete('/:prodId', authz, async (req, res) => {
+      productController.deleteProductById(req, res);
     });
   }
 
   private deleteAllProducts() {
-    this.apiRouter.delete('/', /* authz, */ async (req, res) => {
-      productControllerRest.deleteAllProducts(req, res);
+    this.apiRouter.delete('/', authz, async (req, res) => {
+      productController.deleteAllProducts(req, res);
     });
   }
 
   private putProductById() {
-    this.apiRouter.put('/:prodId', /* authz, */ async (req, res) => {
-      productControllerRest.getProductsById(req, res);
+    this.apiRouter.put('/:prodId', authz, async (req, res) => {
+      productController.getProductsById(req, res);
     });
   }
 
   private productsTest() {
     this.testRouter.get('/productos-test', async (req, res) => {
-      productControllerRest.productsTest(req, res);
+      productController.productsTest(req, res);
     });
   }
 }

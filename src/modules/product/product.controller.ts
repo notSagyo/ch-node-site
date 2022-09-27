@@ -7,7 +7,7 @@ import { NotFoundError, NullError } from '../error/errors';
 import { HttpErrorHandler } from '../error/http-error-handler';
 import productService from './product.service';
 
-class ProductControllerRest {
+class ProductController {
   async getProducts(req: express.Request, res: express.Response) {
     const prods = await productService.getAllProducts();
     if (prods.length < 1) logger.warn('Empty products list');
@@ -89,5 +89,5 @@ class ProductControllerRest {
   }
 }
 
-const productControllerRest = new ProductControllerRest();
-export default productControllerRest;
+const productController = new ProductController();
+export default productController;

@@ -2,7 +2,7 @@ import express from 'express';
 import { logger } from '../../utils/logger';
 import cartService from './cart.service';
 
-export class CartControllerRest {
+export class CartController {
   async postCart(req: express.Request, res: express.Response) {
     const userId = req.user?.id;
     const success = userId
@@ -73,5 +73,5 @@ export class CartControllerRest {
   }
 }
 
-const cartControllerRest = new CartControllerRest();
-export default cartControllerRest;
+const cartController = new CartController();
+export default cartController;

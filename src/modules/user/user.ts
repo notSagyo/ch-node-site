@@ -1,5 +1,5 @@
 import { v4, validate } from 'uuid';
-import { UserDto, UserDtoOptional } from '../../types/dtos';
+import { UserDto, UserDtoPayload } from '../../types/dtos';
 import { IParser } from '../../types/types';
 import { logger } from '../../utils/logger';
 import { validateEmail } from '../../utils/utils';
@@ -40,7 +40,7 @@ export default class User implements UserDto {
     this.id = id;
   }
 
-  static fromDto(dto: UserDtoOptional): User {
+  static fromDto(dto: UserDtoPayload): User {
     const parsedUser = parseUser(dto);
     if (parsedUser == null) throw new Error('User: error parsing message');
     return new User(

@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { MessageDto, MessageDtoOptional } from '../../types/dtos';
+import { MessageDto, MessageDtoPayload } from '../../types/dtos';
 import { IParser } from '../../types/types';
 import { logger } from '../../utils/logger';
 
@@ -16,7 +16,7 @@ export default class Message implements MessageDto {
     this.id = id;
   }
 
-  static fromDto(dto: MessageDtoOptional): Message {
+  static fromDto(dto: MessageDtoPayload): Message {
     const parsedMessage = parseMessage(dto);
     if (parsedMessage == null)
       throw new Error('Message: error parsing message');
