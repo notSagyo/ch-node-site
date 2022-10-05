@@ -5,5 +5,5 @@ export const sqliteOptions = {
   connection: {
     filename: path.join(__dirname, '../../db/ecommerce.sqlite3'),
   },
-  useNullAsDefault: true
+  useNullAsDefault: true,
 };

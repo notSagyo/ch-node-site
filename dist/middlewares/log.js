@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const logger_1 = require("../utils/logger");
-const log = (req, res, next) => {
-    logger_1.logger.info(`${req.method} ${req.url}`);
+var logger_1 = require("../utils/logger");
+var log = function (req, res, next) {
+    logger_1.logger.info("".concat(req.method, " ").concat(req.url));
     next();
 };
 exports.default = log;
+//# sourceMappingURL=log.js.map

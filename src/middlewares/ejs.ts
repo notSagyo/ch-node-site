@@ -12,7 +12,7 @@ import { uploadsDirLocal } from '../utils/paths';
 export const updateEjsDefaultData: express.RequestHandler = (
   req,
   res,
-  next
+  next,
 ) => {
   res.locals.oldEjsDefaultData = ejsDefaultData;
   ejsDefaultData.user = req.user;

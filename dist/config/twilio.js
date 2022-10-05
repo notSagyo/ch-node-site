@@ -4,8 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.client = exports.twilioNumber = void 0;
-const twilio_1 = __importDefault(require("twilio"));
-const accountSid = process.env.TWILIO_SID;
-const authToken = process.env.TWILIO_TOKEN;
+var twilio_1 = __importDefault(require("twilio"));
+var accountSid = process.env.TWILIO_SID;
+var authToken = process.env.TWILIO_TOKEN;
 exports.twilioNumber = '+12139960300';
 exports.client = (0, twilio_1.default)(accountSid, authToken);
+//# sourceMappingURL=twilio.js.map

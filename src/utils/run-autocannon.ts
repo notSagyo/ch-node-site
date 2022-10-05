@@ -12,7 +12,7 @@ export default async function runAutocannon(url: string) {
       connections: 100,
       duration: 20,
     },
-    console.log
+    console.log,
   );
 
   autocannon.track(inst, { outputStream });

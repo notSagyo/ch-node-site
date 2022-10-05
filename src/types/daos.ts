@@ -1,4 +1,4 @@
-import Cart from '../modules/cart/cart';
+import Cart from 'src/cart/entities/cart.entity';
 
 export interface IDao<T> {
   save(data?: T): Promise<boolean>;
@@ -13,7 +13,7 @@ export interface ICartDao extends IDao<Cart> {
   addProductById(
     cartId: string,
     productId: string,
-    quantity?: number
+    quantity?: number,
   ): Promise<boolean>;
   removeProductById(cartId: string, productId: string): Promise<boolean>;
 }

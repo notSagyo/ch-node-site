@@ -47,7 +47,7 @@ export default class Container<T extends Record<string, any>> {
   async getAll() {
     try {
       const file = await fs.promises.readFile(this.path, 'utf-8');
-      const parsedFile = file.length > 0 ? JSON.parse(file) as T[] : [];
+      const parsedFile = file.length > 0 ? (JSON.parse(file) as T[]) : [];
       return parsedFile;
     } catch (err) {
       console.error(err);
@@ -62,10 +62,8 @@ export default class Container<T extends Record<string, any>> {
       const parsedFile = JSON.parse(file);
 
       const objIndex = parsedFile.findIndex((item: T) => item.id === id);
-      if (objIndex !== -1)
-        parsedFile[objIndex] = obj;
-      else
-        parsedFile.push(obj);
+      if (objIndex !== -1) parsedFile[objIndex] = obj;
+      else parsedFile.push(obj);
 
       const newFile = JSON.stringify(parsedFile, null, 2);
       await fs.promises.writeFile(this.path, newFile);
@@ -98,8 +96,7 @@ export default class Container<T extends Record<string, any>> {
     try {
       fs.promises.writeFile(this.path, '');
       return true;
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
       return null;
     }

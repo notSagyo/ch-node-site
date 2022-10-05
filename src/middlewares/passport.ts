@@ -1,11 +1,12 @@
-import passport from 'passport';
 import bcrypt from 'bcrypt';
+import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import { parseUser } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 import { saltRounds } from '../config/bcrypt';
 import { logger } from '../utils/logger';
-import { parseUser } from '../modules/user/user';
-import userService from '../modules/user/user.service';
 
+const userService = new UserService();
 passport.use(
   'registration',
   new LocalStrategy(
@@ -17,7 +18,7 @@ passport.use(
 
       const hashedPassword = bcrypt.hashSync(
         password,
-        bcrypt.genSaltSync(saltRounds)
+        bcrypt.genSaltSync(saltRounds),
       );
 
       const createdUser = parseUser({
@@ -44,8 +45,8 @@ passport.use(
       }
 
       callback(null, createdUser);
-    }
-  )
+    },
+  ),
 );
 
 passport.use(
@@ -57,8 +58,8 @@ passport.use(
       if (dbUser == null || !bcrypt.compareSync(password, dbUser.password))
         return callback(null, false, { message: 'Invalid email/password' });
       callback(null, dbUser);
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, callback) => {

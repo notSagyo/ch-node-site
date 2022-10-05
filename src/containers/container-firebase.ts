@@ -45,7 +45,7 @@ export default class Container<T extends Record<string, any>> {
 
   async update(
     filter: filterFirebase,
-    data: Partial<T> | { [x: string]: unknown }
+    data: Partial<T> | { [x: string]: unknown },
   ) {
     let success = false;
     try {
@@ -53,7 +53,7 @@ export default class Container<T extends Record<string, any>> {
         filter === '*' ? this.collectionRef : query(this.collectionRef, filter);
       const qSnapshot = await getDocs(q);
       const allPromises = qSnapshot.docs.map(async (docSnap) =>
-        updateDoc(docSnap.ref, data as DocumentData)
+        updateDoc(docSnap.ref, data as DocumentData),
       );
       await Promise.all(allPromises);
       success = true;
@@ -70,7 +70,7 @@ export default class Container<T extends Record<string, any>> {
         filter === '*' ? this.collectionRef : query(this.collectionRef, filter);
       const qSnapshot = await getDocs(q);
       const allPromises = qSnapshot.docs.map(async (docSnap) =>
-        deleteDoc(docSnap.ref)
+        deleteDoc(docSnap.ref),
       );
       await Promise.all(allPromises);
       success = true;

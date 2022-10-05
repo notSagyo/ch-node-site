@@ -41,7 +41,7 @@ export default class Container<T extends Record<string, any>> {
   async find(
     condition: filterSql<T>,
     sortColumn?: string,
-    ascending?: boolean
+    ascending?: boolean,
   ): Promise<T[]> {
     const kn = knex(this.options);
     let rows: T[] = [];

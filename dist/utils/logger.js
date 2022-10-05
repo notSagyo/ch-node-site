@@ -4,11 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testLogger = exports.logger = exports.initLogger = void 0;
-const log4js_1 = __importDefault(require("log4js"));
-const path_1 = __importDefault(require("path"));
-let logger = log4js_1.default.getLogger();
+var log4js_1 = __importDefault(require("log4js"));
+var path_1 = __importDefault(require("path"));
+var paths_1 = require("./paths");
+var logger = log4js_1.default.getLogger();
 exports.logger = logger;
-const initLogger = (outDir) => {
+var initLogger = function (outDir) {
+    if (outDir === void 0) { outDir = paths_1.logsDirLocal; }
     log4js_1.default.configure({
         appenders: {
             console: { type: 'console' },
@@ -35,11 +37,11 @@ const initLogger = (outDir) => {
             },
         },
     });
-    const loggerType = process.env.NODE_ENV === 'production' ? 'production' : 'development';
+    var loggerType = process.env.NODE_ENV === 'production' ? 'production' : 'development';
     exports.logger = logger = log4js_1.default.getLogger(loggerType);
 };
 exports.initLogger = initLogger;
-const testLogger = () => {
+var testLogger = function () {
     logger.log('Testing log');
     logger.debug('Testing debug');
     logger.info('Testing info');
@@ -48,3 +50,4 @@ const testLogger = () => {
     logger.fatal('Testing fatal');
 };
 exports.testLogger = testLogger;
+//# sourceMappingURL=logger.js.map

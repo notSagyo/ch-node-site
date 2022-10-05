@@ -1,9 +1,10 @@
 import Log4js from 'log4js';
 import path from 'path';
+import { logsDirLocal } from './paths';
 
 let logger = Log4js.getLogger();
 
-const initLogger = (outDir: string) => {
+const initLogger = (outDir: string = logsDirLocal) => {
   Log4js.configure({
     appenders: {
       console: { type: 'console' },

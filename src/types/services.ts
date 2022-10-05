@@ -1,7 +1,10 @@
-import Cart from '../modules/cart/cart';
-import Message from '../modules/chat/message';
-import Product from '../modules/product/product';
-import User from '../modules/user/user';
+// import Message from '../modules/chat/message';
+import Cart from 'src/cart/entities/cart.entity';
+import { CreateProductDto } from 'src/product/dto/create-product.dto';
+import { UpdateProductDto } from 'src/product/dto/update-product.dto';
+import User from 'src/user/entities/user.entity';
+import Product from '../product/entities/product.entity';
+// import User from '../modules/user/user';
 import {
   CartDtoPayload,
   CartProductDto,
@@ -28,28 +31,28 @@ export interface ICartService {
 }
 
 export interface IProductService {
-  createProduct(productDto: ProductDtoPayload): Promise<Product>;
-  getAllProducts(productId: string): Promise<Product[]>;
+  createProduct(createProductDto: CreateProductDto): Promise<ProductDto>;
+  getAllProducts(): Promise<Product[]>;
   getProductById(id: string): Promise<Product | null>;
-  deleteProductById(productId: string): Promise<boolean>;
+  deleteProductById(id: string): Promise<boolean>;
   deleteAllProducts(): Promise<boolean>;
   updateProductById(
-    productId: string,
-    data: Partial<ProductDto>
+    id: string,
+    updateProductDto: UpdateProductDto,
   ): Promise<boolean>;
 }
 
-export interface IChatService {
-  createMessage(messageDto: MessageDtoPayload): Promise<Message>;
-  getAllMessages(): Promise<Message[]>;
-  getMessageById(messageId: string): Promise<Message | null>;
-  deleteMessageById(messageId: string): Promise<boolean>;
-  deleteAllMessages(): Promise<boolean>;
-  updateMessageById(
-    messageId: string,
-    data: Partial<MessageDto>
-  ): Promise<boolean>;
-}
+// export interface IChatService {
+//   createMessage(messageDto: MessageDtoPayload): Promise<Message>;
+//   getAllMessages(): Promise<Message[]>;
+//   getMessageById(messageId: string): Promise<Message | null>;
+//   deleteMessageById(messageId: string): Promise<boolean>;
+//   deleteAllMessages(): Promise<boolean>;
+//   updateMessageById(
+//     messageId: string,
+//     data: Partial<MessageDto>,
+//   ): Promise<boolean>;
+// }
 
 export interface IUserService {
   createUser(userDto: UserDtoPayload): Promise<User>;

@@ -4,27 +4,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProcessInfo = void 0;
-const os_1 = __importDefault(require("os"));
-const getProcessInfo = () => {
-    const argvs = process.argv.slice(2);
-    const platform = os_1.default.platform();
-    const nodeVer = process.versions.node;
-    const projectFolder = process.cwd();
-    const execPath = process.argv[1];
-    const rss = `${process.memoryUsage().rss / 1024 ** 2} MB`;
-    const pid = process.pid;
+var os_1 = __importDefault(require("os"));
+var getProcessInfo = function () {
+    var argvs = process.argv.slice(2);
+    var platform = os_1.default.platform();
+    var nodeVer = process.versions.node;
+    var projectFolder = process.cwd();
+    var execPath = process.argv[1];
+    var rss = "".concat(process.memoryUsage().rss / Math.pow(1024, 2), " MB");
+    var pid = process.pid;
     return {
-        argvs,
+        argvs: argvs,
         osPlatform: platform,
-        nodeVer,
-        projectFolder,
-        execPath,
-        rss,
-        pid,
+        nodeVer: nodeVer,
+        projectFolder: projectFolder,
+        execPath: execPath,
+        rss: rss,
+        pid: pid,
     };
 };
 exports.getProcessInfo = getProcessInfo;
-process.on('message', () => {
-    const info = (0, exports.getProcessInfo)();
+process.on('message', function () {
+    var info = (0, exports.getProcessInfo)();
     process.send && process.send(info);
 });
+//# sourceMappingURL=processInfo.js.map

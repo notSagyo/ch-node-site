@@ -1,6 +1,5 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
 import { mongooseOptions } from '../config/mongoose';
-import { ServerError } from '../modules/error/errors';
 import { filterMongo } from '../types/types';
 import { logger } from '../utils/logger';
 
@@ -58,7 +57,7 @@ export default class Container<T> {
       result = await this.model.find(allOrFilter).lean();
       logger.info(
         `Retrieved from "${this.collection}" elements matching:`,
-        filter
+        filter,
       );
     } catch (err) {
       logger.error(err);
@@ -74,7 +73,7 @@ export default class Container<T> {
       success = true;
       logger.info(
         `Updated from "${this.collection}" elements matching:`,
-        filter
+        filter,
       );
     } catch (err) {
       logger.error(err);
@@ -90,10 +89,10 @@ export default class Container<T> {
       success = true;
       logger.info(
         `Deleted from "${this.collection}" elements matching:`,
-        filter
+        filter,
       );
     } catch (err) {
-      if (err instanceof Error) throw new ServerError(err);
+      logger.error(err);
     }
     return success;
   }
