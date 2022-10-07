@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * { font-family: sans-serif; }
+    body {
+      background-color: #1f1f1f;
+      color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <h2>Submit color</h2>
+  <form enctype="multipart/form-data" action="" method="post">
+    <div><label for="colorPicker">COLOR</label></div>
+    <br />
+    <div><input name="colorPicker" type="color"/></div>
+    <br />
+    <button type="submit">Submit</button>
+  </form>
+  <h2>Colors</h2>
+  <ul>
+    {{colors}}
+  </ul>
+</body>
+</html>
