@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { buildSchema, GraphQLSchema } from 'graphql';
+import { baseDirLocal } from './paths';
 
 export const validateEmail = (email: string) => {
   const regex = new RegExp(
@@ -9,8 +10,10 @@ export const validateEmail = (email: string) => {
   return regex.test(email);
 };
 
-export const importGqlSchema = (...schemaPath: string[]): GraphQLSchema => {
-  const schemaString = fs.readFileSync(path.join(...schemaPath)).toString();
+export const importGqlSchema = (schema: string): GraphQLSchema => {
+  const schemaString = fs
+    .readFileSync(path.join(baseDirLocal, 'gql', schema))
+    .toString();
   const schemaCompiled = buildSchema(schemaString);
   return schemaCompiled;
 };

@@ -1,11 +1,13 @@
 {
   "name": "ch-node-site",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=18.8.0"
+  },
   "description": "Sitio desarrollado para la cursada de Backend de Coderhouse",
   "main": "dist/app.js",
   "scripts": {
     "dev": "nodemon --ignore test/* --exec ts-node src/app.ts ",
-    "build": "tsc --build --verbose",
     "preview": "pm2-runtime start ecosystem.config.js --env development",
     "start": "npm run preview",
     "test-axios": "ts-node src/modules/test/axios.test.ts",

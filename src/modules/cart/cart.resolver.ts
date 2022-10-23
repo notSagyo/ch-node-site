@@ -26,7 +26,7 @@ const editCart = async ({ args }: { args: CartDto & { id: string } }) => {
   return await cartService.updateCartById(id, cart);
 };
 
-const schema = importGqlSchema(__dirname, 'cart.gql');
+const schema = importGqlSchema('cart.gql');
 
 export const gqlMiddleware = graphqlHTTP({
   schema,

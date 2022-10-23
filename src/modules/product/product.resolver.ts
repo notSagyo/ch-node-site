@@ -19,7 +19,7 @@ const editProduct = async ({ args }: { args: ProductDto & { id: string } }) => {
   return await productService.updateProductById(id, prod);
 };
 
-const schema = importGqlSchema(__dirname, 'product.gql');
+const schema = importGqlSchema('product.gql');
 
 export const gqlMiddleware = graphqlHTTP({
   schema,

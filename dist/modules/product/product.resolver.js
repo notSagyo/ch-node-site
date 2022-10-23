@@ -14,7 +14,7 @@ const editProduct = async ({ args }) => {
     const { id, ...prod } = args;
     return await product_service_1.default.updateProductById(id, prod);
 };
-const schema = (0, utils_1.importGqlSchema)(__dirname, 'product.gql');
+const schema = (0, utils_1.importGqlSchema)('product.gql');
 exports.gqlMiddleware = (0, express_graphql_1.graphqlHTTP)({
     schema,
     rootValue: { getProductById, getAllProducts, addProduct, editProduct },
