@@ -115,7 +115,7 @@ export default class UserRouter implements IRouter {
             );
         }
 
-        res.redirect('/signup-messages');
+        res.redirect('/signup-notifications');
       }
     );
   }

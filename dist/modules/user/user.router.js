@@ -86,7 +86,7 @@ class UserRouter {
                 imgExtension &&
                     promises_1.default.writeFile(path_1.default.join(paths_1.uploadsDirLocal, `${req.user?.id}.${imgExtension}`), req.file.buffer);
             }
-            res.redirect('/signup-messages');
+            res.redirect('/signup-notifications');
         });
     }
     postLogout() {

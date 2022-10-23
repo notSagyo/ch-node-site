@@ -1,9 +1,9 @@
-import express from 'express';
+import { Request, Response } from 'express';
 import { logger } from '../../utils/logger';
 import cartService from './cart.service';
 
 export class CartController {
-  async postCart(req: express.Request, res: express.Response) {
+  async postCart(req: Request, res: Response) {
     const userId = req.user?.id;
     const success = userId
       ? await cartService.createCart({ id: userId })
@@ -14,13 +14,13 @@ export class CartController {
     res.status(201).send('201: Cart created succesfully');
   }
 
-  async getCartProducts(req: express.Request, res: express.Response) {
+  async getCartProducts(req: Request, res: Response) {
     const cartId = req.params.id;
     const products = await cartService.getAllProducts(cartId);
     res.status(200).json(products);
   }
 
-  async deleteCart(req: express.Request, res: express.Response) {
+  async deleteCart(req: Request, res: Response) {
     const cartId = req.params.id;
     const success = await cartService.deleteCartById(cartId);
 
@@ -34,7 +34,7 @@ export class CartController {
    *
    * cartId = 0 uses the current user's ID as cartId
    */
-  async postCartProduct(req: express.Request, res: express.Response) {
+  async postCartProduct(req: Request, res: Response) {
     const productId = req.body.id;
     const cartId = req.params.cartId == '0' ? req.user?.id : req.params.cartId;
 
@@ -60,7 +60,7 @@ export class CartController {
     res.status(201).send('201: Product added succesfully');
   }
 
-  async deleteCartProductById(req: express.Request, res: express.Response) {
+  async deleteCartProductById(req: Request, res: Response) {
     const cartId = req.params.cartId;
     const productId = req.body.id;
     const success = await cartService.removeProductById(cartId, productId);

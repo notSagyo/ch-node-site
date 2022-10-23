@@ -12,7 +12,7 @@ const product_router_1 = __importDefault(require("../modules/product/product.rou
 const user_router_1 = __importDefault(require("../modules/user/user.router"));
 const logger_1 = require("../utils/logger");
 const paths_1 = require("../utils/paths");
-const notification_router_1 = __importDefault(require("./notification.router"));
+const notification_router_1 = __importDefault(require("../modules/notification/notification.router"));
 const utils_router_1 = __importDefault(require("./utils.router"));
 const router = express_1.default.Router();
 router.use(express_1.default.static(path_1.default.join(paths_1.baseDirLocal, 'public')));

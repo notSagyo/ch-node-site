@@ -2,7 +2,7 @@
   "name": "ch-node-site",
   "version": "1.0.0",
   "description": "Sitio desarrollado para la cursada de Backend de Coderhouse",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "dev": "nodemon --ignore test/* --exec ts-node src/app.ts ",
     "build": "tsc --build --verbose",

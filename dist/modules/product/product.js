@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseProduct = void 0;
 const uuid_1 = require("uuid");
+const logger_1 = require("../../utils/logger");
 class Product {
     id;
     name;
@@ -38,6 +39,10 @@ const parseProduct = (prod) => {
     const price = isValidPrice ? Number(prod.price) : null;
     const thumbnail = isValidThumbnail ? prod.thumbnail : '';
     const description = isValidDescription ? prod.description : '';
+    if (name == null)
+        logger_1.logger.error('Invalid product name:', prod?.name);
+    if (price == null)
+        logger_1.logger.error('Invalid product price:', prod?.price);
     if (name != null && price != null)
         return { id, name, price, thumbnail, description };
     return null;
