@@ -32,7 +32,7 @@ class NotificationController {
   }
 
   async sendCheckout(req: Request, res: Response) {
-    if (!req.user) return res.status(400).send("Error request's reading user");
+    if (!req.user) return res.status(400).send('Error getting active user');
 
     const userCart = await CartDao.dao.getById(req.user.id);
     if (userCart == null)
@@ -59,7 +59,6 @@ class NotificationController {
       await transporter.sendMail(mailOptions);
     } catch (err) {
       logger.error(err);
-      return res.status(400).send('Checkout: error processing email request');
     }
 
     try {
@@ -71,9 +70,9 @@ class NotificationController {
       logger.info('Twilio SMS res:', res);
     } catch (err) {
       logger.error(err);
-      return res.status(400).send('Checkout: error processing SMS request');
     }
 
+    cartService.removeAllProducts(req.user.id);
     res.redirect('/');
   }
 }

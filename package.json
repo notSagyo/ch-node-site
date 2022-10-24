@@ -1,15 +1,11 @@
 {
   "name": "ch-node-site",
   "version": "1.0.0",
-  "engines": {
-    "node": ">=18.8.0"
-  },
   "description": "Sitio desarrollado para la cursada de Backend de Coderhouse",
   "main": "dist/app.js",
   "scripts": {
     "dev": "nodemon --ignore test/* --exec ts-node src/app.ts ",
-    "preview": "pm2-runtime start ecosystem.config.js --env development",
-    "start": "npm run preview",
+    "start": "pm2-runtime start ecosystem.config.js --env development",
     "test-axios": "ts-node src/modules/test/axios.test.ts",
     "test-mocha": "ts-mocha src/modules/test/supertest.test.ts > logs/mocha-results.log",
     "fork": "pm2 start dist/app.js --name app8080 --watch -- --port 8080",
