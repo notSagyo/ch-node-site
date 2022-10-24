@@ -13,6 +13,8 @@ import middlewares from './middlewares/middlewares';
 import router from './routes/routes';
 import { initLogger, logger } from './utils/logger';
 import { baseDirLocal } from './utils/paths';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import types from './types';
 
 // INIT ======================================================================//
 // Get args
@@ -44,8 +46,6 @@ export const ioServer = new IOServer(httpServer);
   // Middlewares & Routes
   app.use(middlewares);
   app.use(router);
-
-  // Websockets ==============================================================//
 
   // Listen ==================================================================//
   httpServer.listen(PORT, () => {

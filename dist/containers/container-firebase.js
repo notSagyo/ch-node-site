@@ -19,7 +19,7 @@ class Container {
         return success;
     }
     async find(filter) {
-        let res = null;
+        let res = [];
         try {
             const q = filter === '*' ? this.collectionRef : (0, firestore_1.query)(this.collectionRef, filter);
             const qSnapshot = await (0, firestore_1.getDocs)(q);

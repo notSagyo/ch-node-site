@@ -1,6 +1,7 @@
 import { v4, validate } from 'uuid';
-import { ProductDto, ProductDtoOptional } from '../../types/dtos';
+import { ProductDto, ProductDtoPayload } from '../../types/dtos';
 import { IParser } from '../../types/types';
+import { logger } from '../../utils/logger';
 
 export default class Product implements ProductDto {
   id: string;
@@ -23,7 +24,7 @@ export default class Product implements ProductDto {
     this.description = description;
   }
 
-  static fromDto(dto: ProductDtoOptional): Product {
+  static fromDto(dto: ProductDtoPayload): Product {
     const parsedProd = parseProduct(dto);
     if (parsedProd == null) throw new Error('Product: error parsing product');
     return new Product(
@@ -55,6 +56,9 @@ export const parseProduct: IParser<ProductDto> = (prod) => {
   const price = isValidPrice ? Number(prod.price) : null;
   const thumbnail = isValidThumbnail ? (prod.thumbnail as string) : '';
   const description = isValidDescription ? (prod.description as string) : '';
+
+  if (name == null) logger.error('Invalid product name:', prod?.name);
+  if (price == null) logger.error('Invalid product price:', prod?.price);
 
   if (name != null && price != null)
     return { id, name, price, thumbnail, description };

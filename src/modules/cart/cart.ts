@@ -1,5 +1,5 @@
 import { validate } from 'uuid';
-import { CartDto, CartDtoOptional, CartProductDto } from '../../types/dtos';
+import { CartDto, CartDtoPayload, CartProductDto } from '../../types/dtos';
 import { IParser } from '../../types/types';
 import { logger } from '../../utils/logger';
 
@@ -14,7 +14,7 @@ export default class Cart implements CartDto {
     this.id = idV4;
   }
 
-  static fromDto(dto: CartDtoOptional): Cart {
+  static fromDto(dto: CartDtoPayload): Cart {
     const parsedCart = parseCart(dto);
     if (parsedCart == null) throw new Error('Cart: error parsing cart');
     return new Cart(parsedCart.id, parsedCart.products, parsedCart.timestamp);

@@ -1,0 +1,30 @@
+type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  thumbnail: String
+  description: String
+}
+
+input EditProductPayload {
+  id: ID!
+  name: String
+  price: Float
+  thumbnail: String
+  description: String
+}
+
+type Query {
+  getProductById(id: ID): Product
+  getAllProducts: [Product]!
+}
+
+type Mutation {
+  addProduct(
+    name: String!
+    price: Float!
+    thumbnail: String
+    description: String
+  ): Product
+  editProduct(product: EditProductPayload): Boolean
+}

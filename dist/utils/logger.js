@@ -27,8 +27,8 @@ const initLogger = (outDir) => {
             },
         },
         categories: {
-            development: { appenders: ['console'], level: 'info' },
-            production: { appenders: ['loggerError', 'loggerWarn'], level: 'debug' },
+            development: { appenders: ['console'], level: 'trace' },
+            production: { appenders: ['loggerError', 'loggerWarn'], level: 'warn' },
             default: {
                 appenders: ['console', 'loggerWarn', 'loggerError'],
                 level: 'info',

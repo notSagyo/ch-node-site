@@ -7,7 +7,7 @@ import ProductRouter from '../modules/product/product.router';
 import UserRouter from '../modules/user/user.router';
 import { logger } from '../utils/logger';
 import { baseDirLocal } from '../utils/paths';
-import NotificationRouter from './notification.router';
+import NotificationRouter from '../modules/notification/notification.router';
 import UtilsRouter from './utils.router';
 
 // Routers

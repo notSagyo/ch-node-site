@@ -29,6 +29,7 @@ passport.use(
         avatar: req.body.avatar,
         phone: req.body.phone,
         password: hashedPassword,
+        isAdmin: req.body.isAdmin,
       });
 
       if (createdUser == null) {

@@ -1,6 +1,6 @@
 import mongoose, { Connection, Model, UpdateQuery } from 'mongoose';
 import { mongooseOptions } from '../config/mongoose';
-import { ServerError } from '../modules/errors/errors';
+import { ServerError } from '../modules/error/errors';
 import { filterMongo } from '../types/types';
 import { logger } from '../utils/logger';
 

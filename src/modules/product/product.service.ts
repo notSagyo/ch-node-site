@@ -1,10 +1,10 @@
-import { ProductDto, ProductDtoOptional } from '../../types/dtos';
+import { ProductDto, ProductDtoPayload } from '../../types/dtos';
 import { IProductService } from '../../types/services';
 import Product, { parseProduct } from './product';
 import ProductDao from './product.dao';
 
 class ProductService implements IProductService {
-  async createProduct(productDto: ProductDtoOptional): Promise<Product> {
+  async createProduct(productDto: ProductDtoPayload): Promise<Product> {
     const prod = Product.fromDto(productDto);
     const success = await ProductDao.dao.save(prod);
     if (!success) throw new Error('Product service: error saving productDto');

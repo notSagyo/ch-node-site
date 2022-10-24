@@ -16,7 +16,7 @@
       <tbody id="cartProductsTableBody">
         <% cartProducts.forEach((elem) => { %>
           <tr class="text-capitalize">
-            <td><img src="<%= elem.thumbnail %>" alt="<%= elem.name %>" class="img-fluid" width="32" /></td>
+            <td><img src="<%= elem.thumbnail || 'https://via.placeholder.com/256' %>" alt="<%= elem.name %>" class="img-fluid" width="32" /></td>
             <td><%= elem.name %></td>
             <th><%= elem.id %></th>
             <td>$<%= elem.price %></td>
@@ -27,7 +27,7 @@
     <form
       id="checkoutForm"
       method="get"
-      action="/checkout-messages"
+      action="/checkout-notifications"
       class="m-3 ms-auto"
     >
       <button class="btn btn-success" type="submit">Confirm purchase ></button>

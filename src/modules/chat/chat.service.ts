@@ -1,10 +1,10 @@
-import { MessageDto, MessageDtoOptional } from '../../types/dtos';
+import { MessageDto, MessageDtoPayload } from '../../types/dtos';
 import { IChatService } from '../../types/services';
 import Message, { parseMessage } from './message';
 import MessageDao from './chat.dao';
 
 class ChatService implements IChatService {
-  async createMessage(messageDto: MessageDtoOptional): Promise<Message> {
+  async createMessage(messageDto: MessageDtoPayload): Promise<Message> {
     const cart = Message.fromDto(messageDto);
     const success = await MessageDao.dao.save(cart);
     if (!success) throw new Error('Message service: error saving messageDto');
